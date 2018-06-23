@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">QuoteSearch</string>
+
+    <string name="quote_of_the_day">Quote of the Day</string>
+    <string name="search_category">Search Category</string>
+    <string name="search_author">Search Author</string>
+    <string name="favorites">Favorites</string>
+    <string name="random_quotes">Random Quotes</string>
+    <string name="settings">Settings</string>
+
+
+
+</resources>
