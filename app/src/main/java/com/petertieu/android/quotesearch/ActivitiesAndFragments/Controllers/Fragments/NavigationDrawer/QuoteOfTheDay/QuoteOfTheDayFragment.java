@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +16,7 @@ public class QuoteOfTheDayFragment extends Fragment{
 
 
 
+
     //Override the onCreateView(..) fragment lifecycle callback method
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -25,6 +26,10 @@ public class QuoteOfTheDayFragment extends Fragment{
         Log.i(TAG, "onCreateView(..) called");
 
         View view = layoutInflater.inflate(R.layout.fragment_quote_of_the_day, viewGroup, false);
+
+
+        getActivity().setTitle("Quote of the Day");
+
 
         return view;
     }
