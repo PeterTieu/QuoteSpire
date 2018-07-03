@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +26,8 @@ public class FavoritesFragment extends Fragment {
         Log.i(TAG, "onCreateView(..) called");
 
         View view = layoutInflater.inflate(R.layout.fragment_favorites, viewGroup, false);
+
+        getActivity().setTitle("Favorites");
 
         return view;
     }
