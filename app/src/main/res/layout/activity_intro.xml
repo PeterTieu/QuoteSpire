@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--Layout of the IntroActivity (Launcher Page)-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,13 +12,14 @@
     android:background="@color/colorPrimaryDark"
     tools:context="com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity">
 
-
+    <!--App logo-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp">
 
+        <!--TODO: Change the ImageView of the intro layout to match that of the logo of the app-->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
