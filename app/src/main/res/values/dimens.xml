@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Dimensions-->
+<resources>
+    <dimen name="navigation_drawer_header_height">260dp</dimen>
+    <dimen name="navigation_drawer_header_image_size">100dp</dimen>
+</resources>
