@@ -12,11 +12,38 @@
         android:textSize="13dp"
         android:textColor="@color/colorAccent"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/song_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:scrollbars="none" />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/song_list"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical"-->
+        <!--android:scrollbars="none" />-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quote_of_the_day_quote"
+        android:padding="16dp"
+        android:textSize="13dp"
+        android:textColor="@color/colorAccent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quote_of_the_day_category"
+        android:padding="16dp"
+        android:textSize="13dp"
+        android:textColor="@color/colorAccent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quote_of_the_day_author"
+        android:padding="16dp"
+        android:textSize="13dp"
+        android:textColor="@color/colorAccent"/>
+
+
+
 
 </LinearLayout>
