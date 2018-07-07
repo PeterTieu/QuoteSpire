@@ -7,6 +7,10 @@
 
 
 
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
     <!--DECLARE APP COMPONENTS-->
     <application
         android:allowBackup="true"
