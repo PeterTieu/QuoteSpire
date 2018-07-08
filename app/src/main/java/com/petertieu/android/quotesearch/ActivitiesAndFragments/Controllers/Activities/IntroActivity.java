@@ -1,6 +1,7 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -26,6 +27,8 @@ public class IntroActivity extends AppCompatActivity {
     //Override onCreate(..) activity lifecycle callback method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Request for "no title" feature, turning off the title at the top of the screen.
         requestWindowFeature(Window.FEATURE_NO_TITLE);

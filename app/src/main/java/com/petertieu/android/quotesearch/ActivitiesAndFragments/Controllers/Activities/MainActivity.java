@@ -1,5 +1,6 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities;
 
+import android.content.pm.ActivityInfo;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,10 +47,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    //================= Define METHODS ===========================================================================
+
     //Override onCreate(..) activity lifecycle callback method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Set layout for the MainActivity
         setContentView(R.layout.activity_main);
