@@ -125,11 +125,14 @@ public class GetQuoteOfTheDay {
 
             quote.setAuthor(quoteJsonObject.getString("author"));
 
+            quote.setId(quoteJsonObject.getString("id"));
+
 
 
             Log.i(TAG, "Quote of the day - method - Quote: " + quote.getQuote());
             Log.i(TAG, "Quote of the day - method  - Category: " + quote.getCategory());
             Log.i(TAG, "Quote of the day - method  - Author: " + quote.getAuthor());
+            Log.i(TAG, "Qutoe of the day - method - ID: " + quote.getId());
         }
     }
 
