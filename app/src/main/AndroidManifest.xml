@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
 
+    <!--Ask for permission to access INFORMATION about the network.
+        This is required to use the getActiveNetworkInfo() method in QuoteOfTheDayIntentService.java-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
     <!--DECLARE APP COMPONENTS-->
     <application
         android:allowBackup="true"
@@ -41,6 +46,36 @@
             android:label="@string/title_activity_main"
 >
         </activity>
+
+
+
+        <!--Declare/register a STANDALONE RECEIVER (a type of broadcast receiver) to the system.
+        A standalone receiver is a BroadcastReceiver that is bound to the system, and therefore, MUST be declared in the Manifest.
+        In this case, when the device boots, it sends a broadcast intent, BOOT_COMPLETED,
+        which can be picked up by the standalone broadcast intent.
+        COMPARE: DYNAMIC RECEIVER (another type of broadcast receiver), which is bound to fragment or activity (i.e. UI component), which
+        listens for broadcast intents from fragment or activity, and does not need to be declared
+        NOTE: A standalone (broadcast) receiver is bound to the system (whereas a DYNAMIC receiver is a receiver of the app).
+            IOW, a standalone receiver is a broadcast receiver of the system.
+            This means that even if the app isn't running, this broadcast receiver still listens and receives broadcast intents from the system
+        -->
+        <receiver android:name=".ActivitiesAndFragments.Controllers.StartupBroadcastReceiver">
+
+            <!--...Then...
+            ...after having registered the StartupReceiver (standalone receiver) to the system...
+            Make the BroadcastReceiver (i.e. StartupReceiver) listen for the BOOT_COMPLETED action sent by the broadcast intent of the system.
+            This action requires a permission (declared above in "<uses-permission...").
+            IOW, a permission from the the system is required in order for the standalone receiver
+            to listen for its actions (e.g. BOOT_COMPLETED).
+            NOTE: Once the system boots up, it sends a broadcast intent that carries the action: ACTION_BOOT_COMPLETED.
+            StartupReceiver will be one of the broadcast receivers to listen and receive this action, even if the app isn't on.
+            This in turn, causes StartupReceiver.onReceive() to run, which then dies when it is done (pg. 563)-->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+
 
 
     </application>
