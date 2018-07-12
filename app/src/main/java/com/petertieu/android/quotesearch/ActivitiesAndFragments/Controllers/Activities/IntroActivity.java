@@ -1,5 +1,6 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -19,6 +20,14 @@ public class IntroActivity extends AppCompatActivity {
     //================= Declare INSTANCE VARIABLES ==============================================================
     private static final String TAG = "IntroActivity";      //Tag for Logcat
     private final int INTRO_ACTIVITY_DISPLAY_TIME = 3000;   //Time to display the activity for (in ms)
+
+
+
+
+    public static Intent newIntent(Context context){
+        return new Intent(context, IntroActivity.class);
+    }
+
 
 
 
