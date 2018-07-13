@@ -17,7 +17,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class QuoteOfTheDayFragment extends Fragment{
+public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
     //Log for Logcat
     private final String TAG = "QuoteOfTheDayFragment";
@@ -34,6 +34,8 @@ public class QuoteOfTheDayFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        Log.i(TAG, "onCreate(..) called");
+
         setRetainInstance(true);
 
         new GetQuoteOfTheDayAsyncTask().execute();
@@ -44,6 +46,8 @@ public class QuoteOfTheDayFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
+
+        Log.i(TAG, "onCreateView(..) called");
 
         //Log in Logcat
         Log.i(TAG, "onCreateView(..) called");
@@ -97,6 +101,7 @@ public class QuoteOfTheDayFragment extends Fragment{
             Log.i(TAG, "Quote of the day - Quote: " + mQuoteOfTheDay.getQuote());
             Log.i(TAG, "Quote of the day - Category: " + mQuoteOfTheDay.getCategory());
             Log.i(TAG, "Quote of the day - Author: " + mQuoteOfTheDay.getAuthor());
+            Log.i(TAG, "Quote of the day - ID: " + mQuoteOfTheDay.getId());
 
 
             displayQuoteOfTheDay();
@@ -122,6 +127,39 @@ public class QuoteOfTheDayFragment extends Fragment{
         }
 
     }
+
+
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        Log.i(TAG, "onStart() called");
+    }
+
+
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        Log.i(TAG, "onResume() called");
+    }
+
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        Log.i(TAG, "onPause() called");
+    }
+
+
+
+
+
 
 
 }
