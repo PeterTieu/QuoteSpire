@@ -154,6 +154,12 @@ public class MainActivity extends AppCompatActivity {
     //Helper method - performs the closing of any current fragments of the R.id.content_frame RelativeLayout and opens the fragment selected in the navigation drawer
     private void openFragment(Fragment fragmentToOpen){
 
+        //If the Fragment that is opened is selected in the navigation drawer, then DO NOTHING.
+        //NOTE: If this conditional block is left out, then the Fragment would disappear if it is opened and selected again in the navigation drawer
+        if (mFragment == fragmentToOpen){
+            return;
+        }
+
         //If a fragment already exists (i.e a fragment is in view)
         if (mFragment != null){
             //Remove the current fragment from the R.id.content_frame RelativeLayout
