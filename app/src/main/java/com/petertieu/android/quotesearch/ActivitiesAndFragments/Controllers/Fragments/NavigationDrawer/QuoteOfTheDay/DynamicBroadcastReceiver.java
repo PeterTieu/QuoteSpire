@@ -41,10 +41,9 @@ public abstract class DynamicBroadcastReceiver extends Fragment {
         super.onStart();
 
 
-        //TODO: Set filters below
-//        IntentFilter filter = new IntentFilter(PushNotificationIntentService.ACTION_SHOW_NOTIFICATION);
+        IntentFilter intentFilter = new IntentFilter(QuoteOfTheDayIntentService.ACTION_SHOW_PUSH_NOTIFICATION);
 
-//        getActivity().registerReceiver(mDynamicBroadcastReceiver, filter, )
+        getActivity().registerReceiver(mDynamicBroadcastReceiver, intentFilter, QuoteOfTheDayIntentService.PRIVATE_PERMISSION, null);
     }
 
 
