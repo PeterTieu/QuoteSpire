@@ -8,12 +8,33 @@
 
 
 
+    <permission android:name="quoteOfTheDay_PRIVATE_PERMISSION"
+                android:protectionLevel="signature"/>
+
+
+
+
     <uses-permission android:name="android.permission.INTERNET"/>
 
 
     <!--Ask for permission to access INFORMATION about the network.
         This is required to use the getActiveNetworkInfo() method in QuoteOfTheDayIntentService.java-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
+
+
+
+    <!--Ask for permission for the STANDALONE receiver (a type of broadcast receiver) to listen for the BOOT_COMPLETED action,
+    sent by the broadcast intent of the system
+    NOTE: The permission protection level that android.permission.RECEIVE_BOOT_COMPLETED uses is: Normal-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+
+    <!--Ask to access the permission that is declared above (in <permission.../>)-->
+    <uses-permission android:name="quoteOfTheDay_PRIVATE_PERMISSION"/>
+
+
 
 
     <!--DECLARE APP COMPONENTS-->
@@ -49,6 +70,9 @@
 
 
 
+
+
+
         <!--Declare/register a STANDALONE RECEIVER (a type of broadcast receiver) to the system.
         A standalone receiver is a BroadcastReceiver that is bound to the system, and therefore, MUST be declared in the Manifest.
         In this case, when the device boots, it sends a broadcast intent, BOOT_COMPLETED,
@@ -74,6 +98,35 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
+
+
+
+
+
+        <service
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService"/>
+
+
+
+
+
+
+
+        <receiver
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayPushNotificationBroadcastReceiver"
+            android:exported="false">
+
+            <intent-filter
+                android:priority="-999">
+                <action android:name="ACTION_SHOW_PUSH_NOTIFICATION"/>
+
+
+            </intent-filter>
+
+
+        </receiver>
+
 
 
 
