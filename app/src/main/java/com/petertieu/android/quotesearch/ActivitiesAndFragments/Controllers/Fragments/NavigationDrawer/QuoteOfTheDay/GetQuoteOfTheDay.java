@@ -36,14 +36,14 @@ public class GetQuoteOfTheDay {
 
             Log.i(TAG, "Received JSON: " + jsonString);
 
-            JSONObject jsonBody = new JSONObject(jsonString);
+            JSONObject jsonObject = new JSONObject(jsonString);
 
 
-            parseJsonBodyToQuoteOfTheDay(quoteOfTheDay, jsonBody);
+            parseJsonObjectToQuoteOfTheDay(quoteOfTheDay, jsonObject);
 
 
         } catch (IOException ioe) {
-            Log.e(TAG, "Failed to obtain JSON string", ioe);
+            Log.e(TAG, "Failed to obtain JSON String", ioe);
         } catch (JSONException je) {
             Log.e(TAG, "Failed to parse JSON String to JSON Objects", je);
         }
@@ -79,7 +79,7 @@ public class GetQuoteOfTheDay {
             InputStream inputStream = httpURLConnection.getInputStream();
 
             if (httpURLConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new IOException(httpURLConnection.getResponseMessage() + " with" + urlString);
+                throw new IOException(httpURLConnection.getResponseMessage() + " with " + urlString);
             }
 
             int bytesRead = 0;
@@ -110,7 +110,7 @@ public class GetQuoteOfTheDay {
     }
 
 
-    public void parseJsonBodyToQuoteOfTheDay(Quote quote, JSONObject jsonObject) throws IOException, JSONException {
+    public void parseJsonObjectToQuoteOfTheDay(Quote quote, JSONObject jsonObject) throws IOException, JSONException {
         JSONObject contentsJSONObject = jsonObject.getJSONObject("contents");
 
         JSONArray quotesJsonArray = contentsJSONObject.getJSONArray("quotes");
@@ -128,8 +128,7 @@ public class GetQuoteOfTheDay {
             quote.setId(quoteJsonObject.getString("id"));
 
 
-
-            Log.i(TAG, "Quote of the day - method - Quote: " + quote.getQuote());
+            Log.i(TAG, "Quote of the day - method - Quote String: " + quote.getQuote());
             Log.i(TAG, "Quote of the day - method  - Category: " + quote.getCategory());
             Log.i(TAG, "Quote of the day - method  - Author: " + quote.getAuthor());
             Log.i(TAG, "Qutoe of the day - method - ID: " + quote.getId());
