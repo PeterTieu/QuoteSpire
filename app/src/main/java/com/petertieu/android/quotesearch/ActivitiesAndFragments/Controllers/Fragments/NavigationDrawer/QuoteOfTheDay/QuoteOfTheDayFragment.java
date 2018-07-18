@@ -4,8 +4,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,6 +37,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
     private Quote mQuoteOfTheDayAuthorQuote = new Quote();
 
+    private TextView mQuoteOfTheDayAuthorQuoteTitle;
     private TextView mQuoteOfTheDayAuthorQuoteTitleAuthorName;
     private TextView mQuoteOfTheDayAuthorQuoteQuote;
     private TextView mQuoteOfTheDayAuthorQuoteAuthor;
@@ -44,6 +49,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
     private Quote mQuoteOfTheDayCategoryQuote = new Quote();
 
+    private TextView mQuoteOfTheDayCategoryQuoteTitle;
     private TextView mQuoteOfTheDayCategoryQuoteTitleCategoryName;
     private TextView mQuoteOfTheDayCategoryQuoteQuote;
     private TextView mQuoteOfTheDayCategoryQuoteAuthor;
@@ -86,12 +92,16 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
         mQuoteOfTheDayAuthor = (TextView) view.findViewById(R.id.quote_of_the_day_author);
 
 
+        mQuoteOfTheDayAuthorQuoteTitle = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_title);
+        mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.GONE);
         mQuoteOfTheDayAuthorQuoteTitleAuthorName = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_title_author_name);
         mQuoteOfTheDayAuthorQuoteQuote = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_quote);
         mQuoteOfTheDayAuthorQuoteAuthor = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_author);
         mQuoteOfTheDayAuthorQuoteCategory = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_category);
 
 
+        mQuoteOfTheDayCategoryQuoteTitle = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_title);
+        mQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.GONE);
         mQuoteOfTheDayCategoryQuoteTitleCategoryName = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_title_category_name);
         mQuoteOfTheDayCategoryQuoteQuote = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_quote);
         mQuoteOfTheDayCategoryQuoteAuthor = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_author);
@@ -106,6 +116,9 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
         displayQuoteOfTheDay();
+
+        //Let the FragmentManager know that it will receive a menu item callback
+        setHasOptionsMenu(true);
 
         getActivity().setTitle("Quote of the Day");
 
@@ -192,7 +205,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
 
 
-                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDayAuthorQuote.getAuthor());
+                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDay.getAuthor());
                 mQuoteOfTheDayAuthorQuoteQuote.setText("\" " + mQuoteOfTheDayAuthorQuote.getQuote() + " \"");
                 mQuoteOfTheDayAuthorQuoteAuthor.setText("-" + mQuoteOfTheDayAuthorQuote.getAuthor());
                 mQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + mQuoteOfTheDayAuthorQuote.getCategory());
@@ -244,7 +257,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
 
 
-                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDayAuthorQuote.getAuthor());
+                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDay.getAuthor());
                 mQuoteOfTheDayAuthorQuoteQuote.setText("\" " + mQuoteOfTheDayAuthorQuote.getQuote() + " \"");
                 mQuoteOfTheDayAuthorQuoteAuthor.setText("-" + mQuoteOfTheDayAuthorQuote.getAuthor());
                 mQuoteOfTheDayAuthorQuoteCategory.setText("Category: " + mQuoteOfTheDayAuthorQuote.getCategory());
@@ -287,7 +300,10 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
         @Override
         protected Quote doInBackground(Void... params){
 
-            mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
+
+
+//            mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
+
 
             return new GetQuoteOfTheDay().getQuoteOfTheDay();
         }
@@ -301,6 +317,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
             Log.i(TAG, "Quote of the day - Category: " + mQuoteOfTheDay.getCategory());
             Log.i(TAG, "Quote of the day - Author: " + mQuoteOfTheDay.getAuthor());
             Log.i(TAG, "Quote of the day - ID: " + mQuoteOfTheDay.getId());
+
 
 
             if (mQuoteOfTheDayQuote != null){
@@ -344,7 +361,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
         protected Quote doInBackground(Void... params){
 
 
-            mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.VISIBLE);
+//            mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.VISIBLE);
 
             return new GetQuoteOfTheDayAuthorQuote().getQuoteOfTheDayAuthorQuote(quoteOfTheDayAuthor);
         }
@@ -370,12 +387,11 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                 mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
 
-                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDayAuthorQuote.getAuthor());
+                mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDay.getAuthor());
                 mQuoteOfTheDayAuthorQuoteQuote.setText("\" " + mQuoteOfTheDayAuthorQuote.getQuote() + " \"");
                 mQuoteOfTheDayAuthorQuoteAuthor.setText("-" + mQuoteOfTheDayAuthorQuote.getAuthor());
                 mQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + mQuoteOfTheDayAuthorQuote.getCategory());
-
-
 
             }
 
@@ -410,7 +426,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
         @Override
         protected Quote doInBackground(Void... params){
 
-            mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.VISIBLE);
+//            mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.VISIBLE);
 
             return new GetQuoteOfTheDayCategoryQuote().getQuoteOfTheDayCategoryQuote(quoteOfTheDayCategory);
         }
@@ -432,6 +448,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                 mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.GONE);
 
+                mQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.VISIBLE);
                 mQuoteOfTheDayCategoryQuoteTitleCategoryName.setText(mQuoteOfTheDay.getCategory());
                 mQuoteOfTheDayCategoryQuoteQuote.setText("\" " + mQuoteOfTheDayCategoryQuote.getQuote() + " \"");
                 mQuoteOfTheDayCategoryQuoteAuthor.setText("-" + mQuoteOfTheDayCategoryQuote.getAuthor());
@@ -448,6 +465,70 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
+
+        super.onCreateOptionsMenu(menu, menuInflater);
+
+        menuInflater.inflate(R.menu.fragment_quote_of_the_day, menu);
+
+        MenuItem refreshItem = menu.findItem(R.id.menu_item_refresh_quote_of_the_day_fragment);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+
+        switch (menuItem.getItemId()){
+            case (R.id.menu_item_refresh_quote_of_the_day_fragment):
+
+
+
+                mQuoteOfTheDayQuote.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayCategory.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayAuthor.setVisibility(View.INVISIBLE);
+
+
+                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.INVISIBLE);
+
+
+                mQuoteOfTheDayCategoryQuoteTitleCategoryName.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayCategoryQuoteQuote.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayCategoryQuoteAuthor.setVisibility(View.INVISIBLE);
+                mQuoteOfTheDayCategoryQuoteCategory.setVisibility(View.INVISIBLE);
+
+
+
+
+
+
+                mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
+                mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.VISIBLE);
+                mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.VISIBLE);
+
+
+
+                new GetQuoteOfTheDayAsyncTask().execute();
+
+
+
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(menuItem);
+
+        }
+
+
+
+
+    }
 
 
 
