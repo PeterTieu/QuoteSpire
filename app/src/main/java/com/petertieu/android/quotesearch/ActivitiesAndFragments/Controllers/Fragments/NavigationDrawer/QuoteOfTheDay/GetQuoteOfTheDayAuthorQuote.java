@@ -27,8 +27,8 @@ public class GetQuoteOfTheDayAuthorQuote {
         Quote quoteOfTheDayAuthorQuote = new Quote();
 
 
-//        String urlString = "http://quotes.rest/quote/search.json?author=" + quoteOfTheDayAuthor + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
-        String urlString = "http://quotes.rest/quote/search.json?author=" + "elon+musk" + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
+        String urlString = "http://quotes.rest/quote/search.json?author=" + quoteOfTheDayAuthor + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
+//        String urlString = "http://quotes.rest/quote/search.json?author=" + "mohamad+ali" + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
 
         try{
             String jsonString = getJsonString(urlString);
