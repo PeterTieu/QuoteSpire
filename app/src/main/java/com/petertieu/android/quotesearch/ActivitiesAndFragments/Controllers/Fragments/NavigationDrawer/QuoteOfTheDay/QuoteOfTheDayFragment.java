@@ -324,6 +324,18 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                 mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
 
+
+
+
+                mQuoteOfTheDayQuote.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayCategory.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthor.setVisibility(View.VISIBLE);
+
+
+
+
+
+
                 mQuoteOfTheDayQuote.setText("\" " + mQuoteOfTheDay.getQuote() + " \"");
                 mQuoteOfTheDayAuthor.setText("- " + mQuoteOfTheDay.getAuthor());
                 mQuoteOfTheDayCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
@@ -387,7 +399,24 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                 mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
 
+
+
+
+
+
                 mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.VISIBLE);
+
+
+
+
+
+
+
+
                 mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDay.getAuthor());
                 mQuoteOfTheDayAuthorQuoteQuote.setText("\" " + mQuoteOfTheDayAuthorQuote.getQuote() + " \"");
                 mQuoteOfTheDayAuthorQuoteAuthor.setText("-" + mQuoteOfTheDayAuthorQuote.getAuthor());
@@ -448,7 +477,21 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                 mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.GONE);
 
+
+
+
                 mQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayCategoryQuoteTitleCategoryName.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayCategoryQuoteQuote.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayCategoryQuoteAuthor.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayCategoryQuoteCategory.setVisibility(View.VISIBLE);
+
+
+
+
+
+
+
                 mQuoteOfTheDayCategoryQuoteTitleCategoryName.setText(mQuoteOfTheDay.getCategory());
                 mQuoteOfTheDayCategoryQuoteQuote.setText("\" " + mQuoteOfTheDayCategoryQuote.getQuote() + " \"");
                 mQuoteOfTheDayCategoryQuoteAuthor.setText("-" + mQuoteOfTheDayCategoryQuote.getAuthor());
@@ -491,12 +534,14 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayAuthor.setVisibility(View.INVISIBLE);
 
 
+                mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.INVISIBLE);
                 mQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.INVISIBLE);
                 mQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.INVISIBLE);
                 mQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.INVISIBLE);
                 mQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.INVISIBLE);
 
 
+                mQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.INVISIBLE);
                 mQuoteOfTheDayCategoryQuoteTitleCategoryName.setVisibility(View.INVISIBLE);
                 mQuoteOfTheDayCategoryQuoteQuote.setVisibility(View.INVISIBLE);
                 mQuoteOfTheDayCategoryQuoteAuthor.setVisibility(View.INVISIBLE);
