@@ -1,16 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+
+
+
+
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+
+
+
+
+<LinearLayout
+
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/quote_of_the_day"
-        android:padding="16dp"
-        android:textSize="13dp"
-        android:textColor="@color/colorAccent"/>
 
     <!--<android.support.v7.widget.RecyclerView-->
         <!--android:id="@+id/song_list"-->
@@ -19,31 +33,442 @@
         <!--android:orientation="vertical"-->
         <!--android:scrollbars="none" />-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/quote_of_the_day_quote"
-        android:padding="16dp"
-        android:textSize="13dp"
-        android:textColor="@color/colorAccent"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/quote_of_the_day_category"
-        android:padding="16dp"
-        android:textSize="13dp"
-        android:textColor="@color/colorAccent"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+
+
+
+    <LinearLayout
+        android:id="@+id/quote_of_the_day_quote_bubble_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/quote_of_the_day_author"
-        android:padding="16dp"
-        android:textSize="13dp"
-        android:textColor="@color/colorAccent"/>
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="-20dp"
+        android:paddingRight="-20dp"
+        android:layout_gravity="center">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="20dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/quote_of_the_day_quote_title"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorAccent"
+                android:text="@string/quote_of_the_day"
+                android:textSize="17dp"
+                android:textStyle="bold"/>
+
+
+
+            <ImageView
+                android:id="@+id/quote_of_the_day_quote_favorite_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_imageview_favorite_on"/>
+
+
+            <Button
+                android:id="@+id/quote_of_the_day_quote_share_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="right"
+                android:background="@drawable/ic_button_share"/>
+
+
+        </LinearLayout>
+
+
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar_quote_of_the_day_quote_quote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textIsSelectable="true"
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_quote_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+            android:textIsSelectable="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="14dp"/>
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_quote_category"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="70dp"
+            android:paddingBottom="20dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="14dp"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/quote_of_the_day_author_bubble_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="-20dp"
+        android:paddingRight="-20dp"
+        android:layout_gravity="center">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp">
+
+
+                <TextView
+                    android:id="@+id/quote_of_the_day_author_quote_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/also_from"
+                    android:textSize="18sp"/>
+
+
+
+                <TextView
+                    android:id="@+id/quote_of_the_day_author_quote_title_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+
+
+
+
+            <ImageView
+                android:id="@+id/quote_of_the_day_author_quote_favorite_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_imageview_favorite_off"/>
+
+
+            <Button
+                android:id="@+id/quote_of_the_day_author_quote_share_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="right"
+                android:background="@drawable/ic_button_share"/>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar_quote_of_the_day_author_quote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_author_quote_quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textIsSelectable="true"
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_author_quote_quote_unavailable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="110dp"
+            android:layout_marginLeft="110dp"
+            android:gravity="center"
+            android:textColor="@color/orange"
+            android:textSize="16dp"
+            android:text="@string/there_are_no_more_quoes_from_this_author"/>
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_author_quote_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+            android:textIsSelectable="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="14dp"/>
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_author_quote_category"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="60dp"
+            android:paddingBottom="20dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="14dp"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/quote_of_the_day_category_bubble_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="-20dp"
+        android:paddingRight="-20dp"
+        android:layout_gravity="center">
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center">
+
+
+            <LinearLayout
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:id="@+id/quote_of_the_day_category_quote_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/also_on"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/quote_of_the_day_category_quote_title_category_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+
+
+            </LinearLayout>
+
+
+
+
+            <ImageView
+                android:id="@+id/quote_of_the_day_category_quote_favorite_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_imageview_favorite_off"/>
+
+
+
+            <Button
+                android:id="@+id/quote_of_the_day_category_quote_share_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="right"
+                android:background="@drawable/ic_button_share"/>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar_quote_of_the_day_category_quote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+
+
+
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_category_quote_quote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:textStyle="italic"
+            android:textIsSelectable="true"
+            android:textColor="@color/white"
+            android:textSize="14dp"/>
+
+
+
+
+
+
+        <TextView
+            android:id="@+id/quote_of_the_day_category_quote_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="50dp"
+            android:textIsSelectable="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="14dp"/>
+
+        <TextView
+            android:id="@+id/quote_of_the_day_category_quote_category"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="60dp"
+            android:paddingBottom="20dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="14dp"/>
+
+    </LinearLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp">
+    </View>
+
+
 
 
 
 
 </LinearLayout>
+
+</ScrollView>
