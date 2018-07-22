@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GetQuoteOfTheDay {
@@ -28,7 +30,7 @@ public class GetQuoteOfTheDay {
 
 
 //        String urlString = "http://quotes.rest/qod.json";
-        String urlString = "http://quotes.rest/qod.json?api_key=eQMFnO84Di1ojF0riK_HfgeF";
+        String urlString = "http://quotes.rest/qod.json?api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
 //        String urlString = "http://quotes.rest/quote/search.json?category=empowering&api_key=eQMFnO84Di1ojF0riK_HfgeF";
 
         try {
@@ -120,11 +122,13 @@ public class GetQuoteOfTheDay {
 
 
             quote.setQuote(quoteJsonObject.getString("quote"));
-
             quote.setCategory(quoteJsonObject.getString("category"));
 
-            quote.setAuthor(quoteJsonObject.getString("author"));
 
+
+
+
+            quote.setAuthor(quoteJsonObject.getString("author"));
             quote.setId(quoteJsonObject.getString("id"));
 
 
@@ -132,6 +136,16 @@ public class GetQuoteOfTheDay {
             Log.i(TAG, "Quote of the day - method  - Category: " + quote.getCategory());
             Log.i(TAG, "Quote of the day - method  - Author: " + quote.getAuthor());
             Log.i(TAG, "Qutoe of the day - method - ID: " + quote.getId());
+
+
+
+
+            String category = quoteJsonObject.getString("category");
+            List<String> categories = new ArrayList<String>();
+            categories.add(category);
+            quote.setCategories(categories);
+            Log.i(TAG, "Quote of the day - method - Quote String ArrayList" + quote.getCategories());
+
         }
     }
 
