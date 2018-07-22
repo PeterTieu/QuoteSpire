@@ -1,5 +1,6 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -163,6 +164,75 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
+        mQuoteOfTheDayQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view){
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+                shareIntent.setType("text/plain");
+
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getQuoteOfTheDayQuoteShareString());
+
+                shareIntent = Intent.createChooser(shareIntent, "Share Quote of the Day via");
+
+                startActivity(shareIntent);
+            }
+        });
+
+
+
+
+        if (mQuoteOfTheDayAuthorQuote.getQuote() != null){
+
+            mQuoteOfTheDayAuthorQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view){
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+                    shareIntent.setType("text/plain");
+
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
+
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getQuoteOfTheDayAuthorQuoteShareString());
+
+                    shareIntent = Intent.createChooser(shareIntent, "Share" + " " + mQuoteOfTheDayAuthorQuote.getAuthor() + "'s" + " " + "quote via");
+
+                    startActivity(shareIntent);
+                }
+            });
+        }
+
+
+
+
+
+
+        mQuoteOfTheDayCategoryQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view){
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+                shareIntent.setType("text/plain");
+
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
+
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getQuoteOfTheDayCategoryQuoteShareString());
+
+                shareIntent = Intent.createChooser(shareIntent, "Share" + " " + mQuoteOfTheDayCategoryQuote.getAuthor() + "'s" + " " + "quote via");
+
+                startActivity(shareIntent);
+            }
+        });
+
+
+
+
         displayQuoteOfTheDay();
 
         //Let the FragmentManager know that it will receive a menu item callback
@@ -177,15 +247,35 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
+    //TODO: After releasing the app and upon releasing the next revision, add the URL string to the app on the Google Play store
+    //TODO: ...at the bottom of the Share string!
+    private String getQuoteOfTheDayQuoteShareString(){
+        String quoteOfTheDayQuoteQuoteString = "\"" + mQuoteOfTheDay.getQuote() + "\"";
+
+        String quoteOfTheDayQuoteAuthorString = "- " + mQuoteOfTheDay.getAuthor();
+
+        return quoteOfTheDayQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
+    }
 
 
 
+    private String getQuoteOfTheDayAuthorQuoteShareString(){
+        String quoteOfTheDayAuthorQuoteString = "\"" + mQuoteOfTheDayAuthorQuote.getQuote() + "\"";
+
+        String quoteOfTheDayQuoteAuthorQuoteAuthorString = "- " + mQuoteOfTheDayAuthorQuote.getAuthor();
+
+        return quoteOfTheDayAuthorQuoteString + quoteOfTheDayQuoteAuthorQuoteAuthorString;
+    }
 
 
 
+    private String getQuoteOfTheDayCategoryQuoteShareString(){
+        String quoteOfTheDayCategoryQuoteString = "\"" + mQuoteOfTheDayCategoryQuote.getQuote() + "\"";
 
+        String quoteOfTheDayQuoteCategoryQuoteAuthorString = "- " + mQuoteOfTheDayCategoryQuote.getAuthor();
 
-
+        return quoteOfTheDayCategoryQuoteString + quoteOfTheDayQuoteCategoryQuoteAuthorString;
+    }
 
 
 
@@ -468,13 +558,17 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
             if (mQuoteOfTheDayAuthorQuote.getQuote() == null){
+
                 mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
-                mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
-                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.GONE);
+                mQuoteOfTheDayAuthorQuoteShareIcon.setVisibility(View.GONE);
                 mQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.GONE);
                 mQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.GONE);
                 mQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.GONE);
 
+
+                mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
+                mQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
                 mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDay.getAuthor());
 
 
@@ -523,31 +617,34 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                 if (mQuoteOfTheDayAuthorQuote.getQuote().equals(mQuoteOfTheDay.getQuote()) && mQuoteOfTheDayAuthorQuoteAutoRefreshed == false){
 
-                    new GetQuoteOfTheDayCategoryQuoteAsyncTask().execute();
 
                     mQuoteOfTheDayAuthorQuoteAutoRefreshed = true;
+
+                    new GetQuoteOfTheDayCategoryQuoteAsyncTask().execute();
+
+
                 }
 
 
 
                 if (mQuoteOfTheDayAuthorQuote.getQuote().equals(mQuoteOfTheDay.getQuote()) && mQuoteOfTheDayAuthorQuoteAutoRefreshed == true){
 
+                    mQuoteOfTheDayAuthorQuoteAutoRefreshed = false;
 
                     mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
-                    mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
-                    mQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
+                    mQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.GONE);
+                    mQuoteOfTheDayAuthorQuoteShareIcon.setVisibility(View.GONE);
                     mQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.GONE);
                     mQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.GONE);
                     mQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.GONE);
 
+
+                    mQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
+                    mQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
                     mQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(mQuoteOfTheDay.getAuthor());
 
 
                     mQutoeOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.VISIBLE);
-
-
-
-                    mQuoteOfTheDayAuthorQuoteAutoRefreshed = false;
                 }
 
 
