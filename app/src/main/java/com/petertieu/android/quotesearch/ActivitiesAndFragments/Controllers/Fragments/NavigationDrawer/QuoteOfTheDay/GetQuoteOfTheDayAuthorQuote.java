@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetQuoteOfTheDayAuthorQuote {
 
@@ -27,8 +29,9 @@ public class GetQuoteOfTheDayAuthorQuote {
         Quote quoteOfTheDayAuthorQuote = new Quote();
 
 
-        String urlString = "http://quotes.rest/quote/search.json?author=" + quoteOfTheDayAuthor + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
+        String urlString = "http://quotes.rest/quote/search.json?author=" + quoteOfTheDayAuthor + "&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
 //        String urlString = "http://quotes.rest/quote/search.json?author=" + "mohamad+ali" + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
+//        String urlString = "http://quotes.rest/quote/search.json?author=" + "brad+pitt" + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
 
         try{
             String jsonString = getJsonString(urlString);
@@ -111,10 +114,42 @@ public class GetQuoteOfTheDayAuthorQuote {
         quote.setId(contentsJSONObject.getString("id"));
 
 
+
+
         Log.i(TAG, "Quote of the day Author Quote - method - Quote String: " + quote.getQuote());
         Log.i(TAG, "Quote of the day Author Quote - method  - Category: " + quote.getCategory());
         Log.i(TAG, "Quote of the day Author Quote - method  - Author: " + quote.getAuthor());
         Log.i(TAG, "Qutoe of the day Author Quote - method - ID: " + quote.getId());
+
+
+
+
+
+
+
+
+
+        JSONArray categoriesJSONArray = contentsJSONObject.getJSONArray("categories");
+
+        Log.i(TAG, "Categoriesss: " + categoriesJSONArray);
+
+        List<String> categoriesArrayList = new ArrayList<String>();
+
+
+        for (int i=0; i<categoriesJSONArray.length(); i++){
+
+            String category = categoriesJSONArray.getString(i);
+
+            categoriesArrayList.add(category);
+        }
+
+
+        quote.setCategories(categoriesArrayList);
+
+        Log.i(TAG, "Quotesss: " + quote.getCategories());
+
+
+
 
     }
 
