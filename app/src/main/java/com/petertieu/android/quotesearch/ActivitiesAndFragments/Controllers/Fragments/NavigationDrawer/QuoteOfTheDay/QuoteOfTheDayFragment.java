@@ -20,8 +20,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
+
+import java.util.List;
+
+import javax.net.ssl.ManagerFactoryParameters;
 
 public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
@@ -78,6 +83,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
     private ProgressBar mProgressBarQuoteOfTheDayQuoteQuote;
     private ProgressBar mProgressBarQuoteOfTheDayAuthorQuote;
     private ProgressBar mProgressBarQuoteOfTheDayCategoryQuote;
+
+
 
 
 
@@ -183,8 +190,40 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDay.setFavorite(isChecked);
 
                 compoundButton.setButtonDrawable(mQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+
+
+                //Save Quote to FavoriteQuotes SQLite database
+                if (isChecked){
+                    FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDay);
+
+                    //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDay);
+                }
+                else{
+                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDay);
+
+                    //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDay);
+                }
+
+
             }
         });
+
+        //If the static QOD Quote from IntroActivity EXISTS.
+        // This only happens when sQuoteOfTheDay is created in IntroActivity BEFORE MainActivity begins
+        if (IntroActivity.sQuoteOfTheDay != null){
+
+            //If the static QOD Quote from IntroActivity is already in the FavoriteQuotes SQLiteDatabase
+            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(IntroActivity.sQuoteOfTheDay.getId()) != null){
+                mQuoteOfTheDayQuoteFavoriteIcon.setChecked(true);
+            }
+            else{
+                mQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
+            }
+        }
+
+
 
 
 
@@ -199,8 +238,32 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayAuthorQuote.setFavorite(isChecked);
 
                 compoundButton.setButtonDrawable(mQuoteOfTheDayAuthorQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+
+
+                //Save Quote to FavoriteQuotes SQLite database
+                if (isChecked){
+                    FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDayAuthorQuote);
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayAuthorQuote);
+                }
+                else{
+                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDayAuthorQuote);
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayAuthorQuote);
+                }
+
             }
         });
+
+
+        if (IntroActivity.sQuoteOfTheDayAuthorQuote != null){
+
+            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(IntroActivity.sQuoteOfTheDayAuthorQuote.getId()) != null){
+                mQuoteOfTheDayQuoteFavoriteIcon.setChecked(true);
+            }
+            else{
+                mQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
+            }
+        }
+
 
 
 
@@ -218,8 +281,32 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
 
                 compoundButton.setButtonDrawable(mQuoteOfTheDayCategoryQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+
+
+                //Save Quote to FavoriteQuotes SQLite database
+                if (isChecked){
+                    FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+                }
+                else{
+                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+                }
+
             }
         });
+
+
+        if (IntroActivity.sQuoteOfTheDayCategoryQuote != null){
+
+            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(IntroActivity.sQuoteOfTheDayCategoryQuote.getId()) != null){
+                mQuoteOfTheDayQuoteFavoriteIcon.setChecked(true);
+            }
+            else{
+                mQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
+            }
+        }
+
 
 
 
@@ -388,8 +475,9 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayQuoteQuote.setText("\" " + mQuoteOfTheDay.getQuote() + " \"");
                 mQuoteOfTheDayQuoteAuthor.setText("- " + mQuoteOfTheDay.getAuthor());
 
-
+                //TODO: Remove "category" variables
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
+
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", mQuoteOfTheDay.getCategories()));
 
 
@@ -445,6 +533,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayQuoteShareIcon.setVisibility(View.VISIBLE);
                 mQuoteOfTheDayQuoteQuote.setText("\" " + mQuoteOfTheDay.getQuote() + " \"");
                 mQuoteOfTheDayQuoteAuthor.setText("- " + mQuoteOfTheDay.getAuthor());
+                //TODO: Remove "category" variables
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", mQuoteOfTheDay.getCategories()));
 
@@ -455,6 +544,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayAuthorQuoteShareIcon.setVisibility(View.VISIBLE);
                 mQuoteOfTheDayCategoryQuoteQuote.setText("\" " + mQuoteOfTheDayCategoryQuote.getQuote() + " \"");
                 mQuoteOfTheDayCategoryQuoteAuthor.setText("- " + mQuoteOfTheDayCategoryQuote.getAuthor());
+                //TODO: Remove "category" variables
                 mQuoteOfTheDayCategoryQuoteCategory.setText("Categories: " + mQuoteOfTheDayCategoryQuote.getCategory());
                 mQuoteOfTheDayCategoryQuoteCategory.setText("Categories: " + TextUtils.join(", ", mQuoteOfTheDayCategoryQuote.getCategories()));
 
@@ -480,6 +570,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayQuoteShareIcon.setVisibility(View.VISIBLE);
                 mQuoteOfTheDayQuoteQuote.setText("\" " + mQuoteOfTheDay.getQuote() + " \"");
                 mQuoteOfTheDayQuoteAuthor.setText("- " + mQuoteOfTheDay.getAuthor());
+                //TODO: Remove "category" variables
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", mQuoteOfTheDay.getCategories()));
 
@@ -490,6 +581,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayAuthorQuoteShareIcon.setVisibility(View.VISIBLE);
                 mQuoteOfTheDayAuthorQuoteQuote.setText("\" " + mQuoteOfTheDayAuthorQuote.getQuote() + " \"");
                 mQuoteOfTheDayAuthorQuoteAuthor.setText("- " + mQuoteOfTheDayAuthorQuote.getAuthor());
+                //TODO: Remove "category" variables
                 mQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + mQuoteOfTheDayAuthorQuote.getCategory());
                 mQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + TextUtils.join(", ", mQuoteOfTheDayAuthorQuote.getCategories()));
 
@@ -500,6 +592,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayCategoryQuoteShareIcon.setVisibility(View.VISIBLE);
                 mQuoteOfTheDayCategoryQuoteQuote.setText("\" " + mQuoteOfTheDayCategoryQuote.getQuote() + " \"");
                 mQuoteOfTheDayCategoryQuoteAuthor.setText("- " + mQuoteOfTheDayCategoryQuote.getAuthor());
+                //TODO: Remove "category" variables
                 mQuoteOfTheDayCategoryQuoteCategory.setText("Other Categories: " + mQuoteOfTheDayCategoryQuote.getCategory());
                 mQuoteOfTheDayCategoryQuoteCategory.setText("Categories: " + TextUtils.join(", ", mQuoteOfTheDayCategoryQuote.getCategories()));
 
@@ -578,6 +671,20 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayQuoteAuthor.setText("- " + mQuoteOfTheDay.getAuthor());
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", mQuoteOfTheDay.getCategories()));
+
+
+
+
+                //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDay.getId()) != null){
+                    mQuoteOfTheDayQuoteFavoriteIcon.setChecked(true);
+                }
+                else{
+                    mQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
+                }
+
+
+
 
             }
 
@@ -688,6 +795,16 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                     mQuoteOfTheDayAuthorQuoteAuthor.setText("- " + mQuoteOfTheDayAuthorQuote.getAuthor());
                     mQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + mQuoteOfTheDayAuthorQuote.getCategory());
                     mQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + TextUtils.join(", ", mQuoteOfTheDayAuthorQuote.getCategories()));
+
+
+
+                    //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayAuthorQuote.getId()) != null){
+                        mQuoteOfTheDayAuthorQuoteFavoriteIcon.setChecked(true);
+                    }
+                    else{
+                        mQuoteOfTheDayAuthorQuoteFavoriteIcon.setChecked(false);
+                    }
 
                 }
 
@@ -812,6 +929,16 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 mQuoteOfTheDayCategoryQuoteAuthor.setText("- " + mQuoteOfTheDayCategoryQuote.getAuthor());
                 mQuoteOfTheDayCategoryQuoteCategory.setText("Other Categories: " + mQuoteOfTheDayCategoryQuote.getCategory());
                 mQuoteOfTheDayCategoryQuoteCategory.setText("Categories: " + TextUtils.join(", ", mQuoteOfTheDayCategoryQuote.getCategories()));
+
+
+
+                //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayCategoryQuote.getId()) != null){
+                    mQuoteOfTheDayCategoryQuoteFavoriteIcon.setChecked(true);
+                }
+                else{
+                    mQuoteOfTheDayCategoryQuoteFavoriteIcon.setChecked(false);
+                }
             }
 
 
