@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/quote_of_the_day_quote_title"
+            android:icon="@drawable/ic_menu_dashboard"
+            android:title="@string/dashboard" />
+
+        <item
+            android:id="@+id/random_quotes"
+            android:icon="@drawable/ic_menu_random_quotes"
+            android:title="@string/random_quotes" />
+
+        <item
+            android:id="@+id/search_quote"
+            android:icon="@drawable/ic_menu_search"
+            android:title="@string/search_quotes" />
+
+
+
+
+
+        <item
+            android:id="@+id/search_pictures_of_quotes"
+            android:icon="@drawable/ic_menu_search"
+            android:title="@string/search_pictures_of_quotes" />
+
+
+        <item
+            android:id="@+id/favorites"
+            android:icon="@drawable/ic_menu_favorites"
+            android:title="@string/favorites" />
+
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_menu_settings"
+            android:title="@string/settings" />
+
+
+    </group>
+</menu>
