@@ -12,12 +12,21 @@ public class Quote {
         //Author (String)
 
 
+
+    String mId;
     String mQuote;
-    int mLenght;
+    String mAuthor;
     String mCategory;
     List<String> mCategories;
-    String mAuthor;
-    String mId;
+    boolean mIsFavorite;
+
+
+    public Quote(){
+    }
+
+    public Quote(String id){
+        mId = id;
+    }
 
 
     public String getQuote(){
@@ -28,9 +37,6 @@ public class Quote {
         mQuote = quote;
     }
 
-    public int getLength(){
-        return mLenght;
-    }
 
     public String getCategory(){
         return mCategory;
@@ -63,6 +69,14 @@ public class Quote {
 
     public void setId(String id){
         mId = id;
+    }
+
+    public void setFavorite(boolean isFavorite){
+        mIsFavorite = isFavorite;
+    }
+
+    public boolean isFavorite(){
+        return mIsFavorite;
     }
 
 }
