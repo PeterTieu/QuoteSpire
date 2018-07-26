@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetQuoteOfTheDayCategoryQuote {
 
@@ -22,7 +25,7 @@ public class GetQuoteOfTheDayCategoryQuote {
 
         Quote quoteOfTheDayCategoryQuote = new Quote();
 
-        String urlString = "http://quotes.rest/quote/search.json?category=" + quoteOfTheDayCategory + "&api_key=eQMFnO84Di1ojF0riK_HfgeF";
+        String urlString = "http://quotes.rest/quote/search.json?category=" + quoteOfTheDayCategory + "&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
 //        String urlString = "http://quotes.rest/quote/search.json?category=empowering&api_key=eQMFnO84Di1ojF0riK_HfgeF";
 //        String urlString = "http://quotes.rest/quote/search.json?author=albert+einstein&api_key=eQMFnO84Di1ojF0riK_HfgeF";
 
@@ -121,6 +124,30 @@ public class GetQuoteOfTheDayCategoryQuote {
         Log.i(TAG, "Quote of the day Category Quote - method  - Category: " + quote.getCategory());
         Log.i(TAG, "Quote of the day Category Quote - method  - Author: " + quote.getAuthor());
         Log.i(TAG, "Qutoe of the day Category Quote - method - ID: " + quote.getId());
+
+
+
+
+
+
+
+
+
+
+        JSONArray categoriesJSONArray = contentsJSONObject.getJSONArray("categories");
+
+        List<String> categoriesArrayList = new ArrayList<String>();
+
+        for (int i=0; i<categoriesJSONArray.length(); i++){
+            String category = categoriesJSONArray.getString(i);
+            categoriesArrayList.add(category);
+        }
+
+        quote.setCategories(categoriesArrayList);
+        Log.i(TAG, "\"Qutoe of the day Author Quote - method - Categories: \" " + quote.getCategories());
+
+
+
 
     }
 
