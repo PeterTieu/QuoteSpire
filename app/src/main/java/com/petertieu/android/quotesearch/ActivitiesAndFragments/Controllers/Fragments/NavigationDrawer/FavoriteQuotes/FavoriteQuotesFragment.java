@@ -1,6 +1,11 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Typeface;
+import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +15,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,19 +33,25 @@ import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQ
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
+
+
 import java.util.List;
 
-public class FavoritesFragment extends Fragment {
+public class FavoriteQuotesFragment extends Fragment {
 
 
     //Log for Logcat
-    private final String TAG = "FavoritesFragment";
+    private final String TAG = "FavoriteQuotesFragment";
 
     private RecyclerView mFavoriteQuotesRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
 
     private FavoriteQuotesAdapter mFavoriteQuotesAdapter;
     private FavoriteQuotesViewHolder mFavoriteQuotesViewHolder;
+
+
+    private TextView mNoFavoriteQuotesText;
+
 
 
 
@@ -53,8 +68,55 @@ public class FavoritesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+
+
+//        if (savedInstanceState != null){
+//
+//            recyclerViewState = savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
+//        }
+
+
+
+
         Log.i(TAG, "onCreate() called");
+
+
+        setHasOptionsMenu(true);
     }
+
+
+
+
+
+
+
+//    // Save state
+//    private Parcelable recyclerViewState;
+//
+//    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
+//
+//
+//
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstaceState){
+//
+//
+//        savedInstaceState.putParcelable(RECYCLER_VIEW_STATE, recyclerViewState);
+//
+//
+//        super.onSaveInstanceState(savedInstaceState);
+//
+//
+//
+//
+//
+//
+//
+//    }
+
+
+
+
 
 
 
@@ -66,18 +128,21 @@ public class FavoritesFragment extends Fragment {
         //Log in Logcat
         Log.i(TAG, "onCreateView(..) called");
 
-        View view = layoutInflater.inflate(R.layout.favorite_quotes_recycler_view, viewGroup, false);
+
+        View view = layoutInflater.inflate(R.layout.fragment_favorite_quotes, viewGroup, false);
 
 
 
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        mLinearLayoutManager.setReverseLayout(true);
-        mLinearLayoutManager.setStackFromEnd(true);
 
 
 
 
         mFavoriteQuotesRecyclerView = (RecyclerView) view.findViewById(R.id.favorite_quotes_recycler_view);
+
+
+        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);
 
 
         mFavoriteQuotesRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -88,15 +153,44 @@ public class FavoritesFragment extends Fragment {
 
 
 
+        mNoFavoriteQuotesText = (TextView) view.findViewById(R.id.no_favorite_quotes_text);
 
-
-        updateUI();
 
 
         getActivity().setTitle("Favorites");
 
+
+
+
+
+        //        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
+//            mNoFavoriteQuotesText.setVisibility(View.GONE);
+//        }
+//        else{
+//            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
+//        }
+
+//        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+//        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
+//        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
+
+
+
+
+//        updateUI();
+
+
+
+
+
         return view;
     }
+
+
+
+
+
+
 
 
 
@@ -104,26 +198,30 @@ public class FavoritesFragment extends Fragment {
 
 
 
-        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+        //Refresh the options menu every time a list item is added/removed, so we could re-evaluate whether the menu item "Remove all" is still appropriate
+        getActivity().invalidateOptionsMenu();
 
-        if (mFavoriteQuotes.size() == 0){
 
-            Log.i(TAG, "No Favorite Quotes");
-            //TODO: Add display "No Quotes have been favorited"
+
+        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
+            mNoFavoriteQuotesText.setVisibility(View.GONE);
         }
         else{
-
-            Log.i(TAG, "There are Favorite Quotes");
-
-            //TODO: Remove view "No Quotes have been favorited"
+            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
         }
 
 
-
-
+        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+//
         mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-
+//
         mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
+
+
+
+
+
+
 
 
 
@@ -134,15 +232,23 @@ public class FavoritesFragment extends Fragment {
 //
 //            mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
 //
-//            mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
+//            mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter); //Resets the RecyclerView
 //        }
 //        else{
+//
 //
 //            Log.i(TAG, "Adapter exists");
 //
 //            mFavoriteQuotesAdapter.setFavoriteQuotes(mFavoriteQuotes);
+////            mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
+//
+//
+//            Log.i(TAG, "Adapter exists:  " + mFavoriteQuotes.get(0).getQuote());
+//
 //            mFavoriteQuotesAdapter.notifyDataSetChanged();
+//
 //        }
+
 
     }
 
@@ -152,8 +258,8 @@ public class FavoritesFragment extends Fragment {
 
     private class FavoriteQuotesAdapter extends RecyclerView.Adapter<FavoriteQuotesViewHolder>{
 
-        private List<Quote> mFavoriteQuotes;
 
+        private List<Quote> mFavoriteQuotes;
 
 
 
@@ -178,6 +284,7 @@ public class FavoritesFragment extends Fragment {
 
 
             mFavoriteQuotesViewHolder = new FavoriteQuotesViewHolder(view);
+
 
             return mFavoriteQuotesViewHolder;
         }
@@ -211,7 +318,7 @@ public class FavoritesFragment extends Fragment {
     private class FavoriteQuotesViewHolder extends RecyclerView.ViewHolder{
 
 
-        private Quote mFavoriteQuote;
+        public Quote mFavoriteQuote;
 
         private LinearLayout mFavoriteQuoteBubbleLayout;
 
@@ -243,7 +350,7 @@ public class FavoritesFragment extends Fragment {
 
 
 
-            mFavoriteQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
+//            mFavoriteQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
 
 
 //            if (mFavoriteQuote.isFavorite() == true){
@@ -290,7 +397,7 @@ public class FavoritesFragment extends Fragment {
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
 
-                                //What to do AFTER the 300ms delay
+                                //What to do AFTER the 100ms delay
                                 @Override
                                 public void run() {
 
@@ -303,8 +410,10 @@ public class FavoritesFragment extends Fragment {
 
 
 
+
+
                                     Snackbar snackbar = Snackbar
-                                            .make(mFavoriteQuotesRecyclerView, "Quote has been removed from Favorites", Snackbar.LENGTH_LONG)
+                                            .make(mFavoriteQuotesRecyclerView, "Quote removed from Favorites", Snackbar.LENGTH_LONG)
 
                                             .setAction("UNDO", new View.OnClickListener() {
                                                 @Override
@@ -312,7 +421,13 @@ public class FavoritesFragment extends Fragment {
 
 
 
-                                                    Snackbar snackbar1 = Snackbar.make(view, "Quote has been re-added to Favorites!", Snackbar.LENGTH_LONG);
+
+                                                    Snackbar snackbar1 = Snackbar.make(view, "Quote re-added to Favorites!", Snackbar.LENGTH_SHORT);
+
+                                                    View snackBarActionView = snackbar1.getView();
+                                                    snackBarActionView.setMinimumHeight(150);
+                                                    snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
+
                                                     snackbar1.show();
 
 
@@ -329,6 +444,10 @@ public class FavoritesFragment extends Fragment {
                                                 }
                                             });
 
+                                    View snackBarView = snackbar.getView();
+                                    snackBarView.setMinimumHeight(150);
+                                    snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
+
                                     snackbar.show();
 
 
@@ -338,7 +457,7 @@ public class FavoritesFragment extends Fragment {
 
 
                                 }
-                            }, 200);
+                            }, 100);
 
 
 
@@ -437,16 +556,213 @@ public class FavoritesFragment extends Fragment {
 //            mFavoriteQuoteShareIcon
 
 
-            mFavoriteQuoteQuote.setText(mFavoriteQuote.getQuote());
+            mFavoriteQuoteQuote.setText("\"" + mFavoriteQuote.getQuote() + "\"");
         }
 
 
 
 
 
+    }
+
+
+
+
+
+
+
+
+    //Override onCreateOptionsMenu(..) fragment lifecycle callback method
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
+        super.onCreateOptionsMenu(menu, menuInflater);
+
+        //Log lifecycle callback
+        Log.i(TAG, "onCreateOptionsMenu(..) called");
+
+        //If there are one or more FavoriteQuotes in the list (i.e. one or more list items)
+        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0) {
+            //Inflate a menu hierarchy from specified resource
+            menuInflater.inflate(R.menu.fragment_favorite_quotes, menu);
+        }
+    }
+
+
+
+
+    //Override onOptionsItemSelected(..) fragment lifecycle callback method
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+
+        //Log lifecycle callback
+        Log.i(TAG, "onOptionsItemsSelected(..) called");
+
+        //Check through all menuItems
+        switch(menuItem.getItemId()){
+
+            //Check the "New Pix" menu item
+            case (R.id.remove_all_favorite_quotes):
+
+
+                removeAllFavoriteQuotesConfirmationDialog();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+
+
+
+
+
+
+    private void removeAllFavoriteQuotesConfirmationDialog(){
+
+
+        TextView dialogTitle = new TextView(getActivity());
+        dialogTitle.setText("Remove all");
+        dialogTitle.setTextSize(22);
+        dialogTitle.setGravity(Gravity.CENTER);
+        dialogTitle.setTypeface(null, Typeface.BOLD);
+        dialogTitle.setTextColor(getResources().getColor(R.color.orange));
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey));
+
+        int favoriteQuotesDatabaseSize = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size();
+
+
+        String dialogMessage = null;
+        if (favoriteQuotesDatabaseSize == 1){
+            dialogMessage = "Are you sure you want to remove this quote from Favorites?";
+        }
+        else if (favoriteQuotesDatabaseSize == 2){
+            dialogMessage = "Are you sure you want to remove these 2 quotes from Favorites?";
+        }
+        else if (favoriteQuotesDatabaseSize > 1){
+            dialogMessage = "Are you sure you want to remove all " + favoriteQuotesDatabaseSize + " quotes from Favorites?";
+        }
+
+
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_remove_all_favorite_quotes, null);
+
+        AlertDialog alertDialog = new AlertDialog
+                .Builder(getActivity())
+                .setView(view)
+                .setCustomTitle(dialogTitle)
+                .setMessage(dialogMessage)
+                .setNegativeButton(android.R.string.cancel, null)
+
+                .setPositiveButton(android.R.string.yes,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                removeAllFavoriteQuotes();
+                            }
+                        })
+                .create();
+
+
+        alertDialog.show();
+
+    }
+
+
+
+
+
+
+
+    private List<Quote> tempFavoriteQuotes;
+
+
+
+    private void removeAllFavoriteQuotes(){
+
+
+        int databaseIndex = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size();
+
+//        tempFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+
+        while (databaseIndex > 0) {
+
+
+
+            List<Quote> favoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+
+            Quote favoriteQuote = favoriteQuotes.get(0);
+
+            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(favoriteQuote);
+
+//            updateUI();
+
+
+            databaseIndex--;
+
+
+
+        }
+
+        updateUI();
+
+
+
+
+
+        Snackbar snackbar = Snackbar
+                .make(mFavoriteQuotesRecyclerView, "All Quotes removed from Favorites", Snackbar.LENGTH_LONG);
+
+//                .setAction("UNDO", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//
+//                        int tempDatabaseIndex = tempFavoriteQuotes.size();
+//
+//
+//                        while (tempDatabaseIndex > 0){
+//
+//                            Quote tempQuote = tempFavoriteQuotes.get(0);
+//
+//                            FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(tempQuote);
+//
+//                            tempDatabaseIndex--;
+//                        }
+//
+//                        mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+//
+//                        updateUI();
+//
+//
+//
+//
+//                        Snackbar snackbar1 = Snackbar.make(view, "All Favorited Quote re-added to Favorites!", Snackbar.LENGTH_SHORT);
+//
+//                        View snackBarActionView = snackbar1.getView();
+//                        snackBarActionView.setMinimumHeight(150);
+//                        snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
+//
+//                        snackbar1.show();
+//
+//                    }
+//                });
+
+        View snackBarView = snackbar.getView();
+        snackBarView.setMinimumHeight(150);
+        snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
+
+        snackbar.show();
+
 
 
     }
+
+
+
+
+
+
 
 
 
@@ -464,7 +780,22 @@ public class FavoritesFragment extends Fragment {
         Log.i(TAG, "onResume() called");
 
 
+
         updateUI();
+    }
+
+
+
+
+
+
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        Log.i(TAG, "onPause() called");
+
     }
 
 
