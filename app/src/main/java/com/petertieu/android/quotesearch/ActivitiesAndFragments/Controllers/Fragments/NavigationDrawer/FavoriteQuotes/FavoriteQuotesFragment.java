@@ -81,38 +81,14 @@ public class FavoriteQuotesFragment extends Fragment {
         Log.i(TAG, "onCreate() called");
 
 
+
+
         setHasOptionsMenu(true);
     }
 
 
 
 
-
-
-
-//    // Save state
-//    private Parcelable recyclerViewState;
-//
-//    private static final String RECYCLER_VIEW_STATE = "recyclerViewState";
-//
-//
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle savedInstaceState){
-//
-//
-//        savedInstaceState.putParcelable(RECYCLER_VIEW_STATE, recyclerViewState);
-//
-//
-//        super.onSaveInstanceState(savedInstaceState);
-//
-//
-//
-//
-//
-//
-//
-//    }
 
 
 
@@ -163,16 +139,27 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-        //        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
-//            mNoFavoriteQuotesText.setVisibility(View.GONE);
-//        }
-//        else{
-//            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
-//        }
 
-//        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
-//        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-//        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
+
+
+
+
+
+
+
+
+        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
+            mNoFavoriteQuotesText.setVisibility(View.GONE);
+        }
+        else{
+            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
+        }
+
+
+
+        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
+        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
 
 
 
@@ -213,9 +200,9 @@ public class FavoriteQuotesFragment extends Fragment {
 
         final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
 //
-        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-//
-        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
+//        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
+////
+//        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
 
 
 
@@ -237,15 +224,12 @@ public class FavoriteQuotesFragment extends Fragment {
 //        else{
 //
 //
-//            Log.i(TAG, "Adapter exists");
-//
-//            mFavoriteQuotesAdapter.setFavoriteQuotes(mFavoriteQuotes);
-////            mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-//
-//
-//            Log.i(TAG, "Adapter exists:  " + mFavoriteQuotes.get(0).getQuote());
-//
-//            mFavoriteQuotesAdapter.notifyDataSetChanged();
+            Log.i(TAG, "Adapter exists");
+
+            mFavoriteQuotesAdapter.setFavoriteQuotes(mFavoriteQuotes);
+//            mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
+
+            mFavoriteQuotesAdapter.notifyDataSetChanged();
 //
 //        }
 
@@ -365,10 +349,17 @@ public class FavoriteQuotesFragment extends Fragment {
             mFavoriteQuoteFavoriteIcon.setChecked(true);
 
 
+
+
+
+
             mFavoriteQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+                    Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() QUOTE: " + FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mFavoriteQuote.getId()).getId());
+
 //                    mFavoriteQuote.setFavorite(false);
 
 //                    mFavoriteQuote.setFavorite(isChecked);
@@ -381,8 +372,18 @@ public class FavoriteQuotesFragment extends Fragment {
 
                     if (isChecked == false){
 
+                        mFavoriteQuote.setFavorite(false);
                         FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mFavoriteQuote);
                         FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mFavoriteQuote);
+
+
+
+                        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mFavoriteQuote.getId()) != null){
+                            Log.i(TAG, "QUOTE STILL EXISTS: " +  mFavoriteQuote.getQuote());
+                        }
+                        else{
+                            Log.i(TAG, "QUOTE DELETED");
+                        }
 
 
                         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mFavoriteQuote.getId()) == null){
@@ -781,7 +782,19 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-        updateUI();
+
+//        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
+//            mNoFavoriteQuotesText.setVisibility(View.GONE);
+//        }
+//        else{
+//            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
+//        }
+//
+//
+//
+//        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+//        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
+//        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
     }
 
 
