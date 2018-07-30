@@ -354,141 +354,67 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
             mFavoriteQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
-                    Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() QUOTE: " + FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mFavoriteQuote.getId()).getId());
-
 //                    mFavoriteQuote.setFavorite(false);
-
-//                    mFavoriteQuote.setFavorite(isChecked);
-
+                    //mFavoriteQuote.setFavorite(isChecked);
                     compoundButton.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-
 
 
 
                     if (isChecked == false){
 
-                        mFavoriteQuote.setFavorite(false);
+
+                        final Quote favoriteQuote = mFavoriteQuote;
+
                         FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mFavoriteQuote);
                         FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mFavoriteQuote);
 
 
 
-                        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mFavoriteQuote.getId()) != null){
-                            Log.i(TAG, "QUOTE STILL EXISTS: " +  mFavoriteQuote.getQuote());
-                        }
-                        else{
-                            Log.i(TAG, "QUOTE DELETED");
-                        }
-
 
                         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mFavoriteQuote.getId()) == null){
-
-
                             compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-
-
 
 
 
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
-
-                                //What to do AFTER the 100ms delay
+                                //What to do AFTER the 300ms delay
                                 @Override
                                 public void run() {
-
-
                                     updateUI();
-
-
-
-
-
-
-
-
-
                                     Snackbar snackbar = Snackbar
-                                            .make(mFavoriteQuotesRecyclerView, "Quote removed from Favorites", Snackbar.LENGTH_LONG)
+                                            .make(mFavoriteQuotesRecyclerView, "Quote has been removed from Favorites", Snackbar.LENGTH_LONG)
+
 
                                             .setAction("UNDO", new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-
-
-
-
-                                                    Snackbar snackbar1 = Snackbar.make(view, "Quote re-added to Favorites!", Snackbar.LENGTH_SHORT);
-
-                                                    View snackBarActionView = snackbar1.getView();
-                                                    snackBarActionView.setMinimumHeight(150);
-                                                    snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
-
+                                                    Snackbar snackbar1 = Snackbar.make(view, "Quote has been re-added to Favorites!", Snackbar.LENGTH_LONG);
                                                     snackbar1.show();
 
 
-
-//                                                    mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-
-                                                    FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mFavoriteQuote);
+                                                    FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(favoriteQuote);
 //                                                    mFavoriteQuote.setFavorite(true);
                                                     mFavoriteQuoteFavoriteIcon.setChecked(true);
-
-//                                                    Log.i(TAG, "UNDO called");
+                                                    //Log.i(TAG, "UNDO called");
 //                                                    bind(mFavoriteQuote);
 //                                                    updateUI();
                                                 }
                                             });
-
-                                    View snackBarView = snackbar.getView();
-                                    snackBarView.setMinimumHeight(150);
-                                    snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
-
                                     snackbar.show();
-
-
-
-
-
-
-
                                 }
                             }, 100);
-
-
-
-
                         }
-
-
-
                     }
-
-
-
-
-
-
                     if (isChecked == true){
-
-//                        bind(mFavoriteQuote);
-
+                        //                        bind(mFavoriteQuote);
                         mFavoriteQuote.setFavorite(true);
-
-//                        compoundButton.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+                        //                        compoundButton.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 //                        Log.i(TAG, "HELOOOOOOOOOOOOOO " + Boolean.toString(mFavoriteQuote.isFavorite()));
-
                         updateUI();
-
                     }
-
-
-
                 }
             });
 
