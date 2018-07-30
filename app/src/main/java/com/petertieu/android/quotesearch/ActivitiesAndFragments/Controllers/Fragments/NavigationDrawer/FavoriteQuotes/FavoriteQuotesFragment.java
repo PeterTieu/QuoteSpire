@@ -294,6 +294,12 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
+    private Snackbar snackbar;
+    private Snackbar snackbar1;
+
+
+
+
 
 
 
@@ -384,14 +390,20 @@ public class FavoriteQuotesFragment extends Fragment {
                                 @Override
                                 public void run() {
                                     updateUI();
-                                    Snackbar snackbar = Snackbar
+                                    snackbar = Snackbar
                                             .make(mFavoriteQuotesRecyclerView, "Quote has been removed from Favorites", Snackbar.LENGTH_LONG)
 
 
                                             .setAction("UNDO", new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                    Snackbar snackbar1 = Snackbar.make(view, "Quote has been re-added to Favorites!", Snackbar.LENGTH_LONG);
+                                                    snackbar1 = Snackbar.make(view, "Quote has been re-added to Favorites!", Snackbar.LENGTH_LONG);
+
+
+                                                    View snackBarActionView = snackbar1.getView();
+                                                    snackBarActionView.setMinimumHeight(150);
+                                                    snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
+
                                                     snackbar1.show();
 
 
@@ -401,8 +413,16 @@ public class FavoriteQuotesFragment extends Fragment {
                                                     //Log.i(TAG, "UNDO called");
 //                                                    bind(mFavoriteQuote);
 //                                                    updateUI();
+
+
+
                                                 }
                                             });
+
+
+                                    View snackBarView = snackbar.getView();
+                                    snackBarView.setMinimumHeight(150);
+                                    snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
                                     snackbar.show();
                                 }
                             }, 100);
@@ -733,7 +753,10 @@ public class FavoriteQuotesFragment extends Fragment {
     public void onPause(){
         super.onPause();
 
+        snackbar.setAction(null, null);
+
         Log.i(TAG, "onPause() called");
+
 
     }
 
