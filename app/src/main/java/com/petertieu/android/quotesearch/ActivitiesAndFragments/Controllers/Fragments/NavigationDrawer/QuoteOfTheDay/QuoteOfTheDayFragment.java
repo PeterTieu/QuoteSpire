@@ -185,6 +185,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 //        mQuoteOfTheDay.setFavorite(false);
         Log.i(TAG, "QUOTE OF THE DAY QUOTE - " + mQuoteOfTheDay.getQuote());
         Log.i(TAG, "QUOTE OF THE DAY QUOTE - " + mQuoteOfTheDay.isFavorite());
+        Log.i(TAG, "QUOTE OF THE DAY QUOTE - " + mQuoteOfTheDay.getId());
 
 
 
@@ -254,7 +255,22 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 }
                 else{
                     Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - INSIDE ON CHECKED CHANGED - mQuoteOfTheDay EXISTS");
+                    Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - ID: " + mQuoteOfTheDay.getId());
                 }
+
+
+
+
+
+                Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked - INSIDE LISTENER: " + isChecked);
+
+
+                Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF CHECKBOX IS PRESSED: " +  mQuoteOfTheDayQuoteFavoriteIcon.isPressed());
+
+
+
+                mQuoteOfTheDay.setFavorite(isChecked);
+
 
 
 
@@ -271,26 +287,14 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-
-                Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked - INSIDE LISTENER: " + isChecked);
-
-
-                Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF CHECKBOX IS PRESSED: " +  mQuoteOfTheDayQuoteFavoriteIcon.isPressed());
-
-
-
-                mQuoteOfTheDay.setFavorite(isChecked);
-
-
-
 //                compoundButton.setButtonDrawable(mQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
                 compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
 
 
                 //Save Quote to FavoriteQuotes SQLite database
-                if ( (isChecked == true && stepFive == true && stepSix == true) || (mQuoteOfTheDayQuoteFavoriteIcon.isPressed())){
-
+//                if ( (isChecked == true && stepFive == true && stepSix == true) || (mQuoteOfTheDayQuoteFavoriteIcon.isPressed())){
+                if ( isChecked == true && isGetQuoteOfTheDayAsyncTaskCompleted == true){
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDay.getId()) == null){
 
 
@@ -1115,8 +1119,41 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public boolean stepFive = false;
     public boolean stepSix = false;
+
+    public boolean isGetQuoteOfTheDayAsyncTaskCompleted = false;
 
 
 
@@ -1134,6 +1171,16 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
         @Override
         protected Quote doInBackground(Void... params){
+
+
+            isGetQuoteOfTheDayAsyncTaskCompleted = false;
+
+
+
+
+
+
+
 
 
 
@@ -1250,7 +1297,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
+            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(quoteOfTheDay.getId()) != null) {
                 Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS IN6 DATABASE");
 
                 stepSix = true;
@@ -1355,8 +1402,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-
-
+            isGetQuoteOfTheDayAsyncTaskCompleted = true;
 
 
 
@@ -1400,7 +1446,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
+            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDay.getId()) != null) {
                 Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS IN8 DATABASE");
             }
             else{
@@ -1456,7 +1502,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
                 //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
-                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
+                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDay.getId()) != null) {
                     Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - 4idFuc8pVqrSmebcJSlRzQeF is INNN DATABASE");
                     Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - Set checked - TRUE");
                     Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() = : " + Boolean.toString(mQuoteOfTheDayQuoteFavoriteIcon.isChecked()));
@@ -1614,12 +1660,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-                if (mQuoteOfTheDayAuthorQuote.getQuote().equals(mQuoteOfTheDay.getQuote()) && mQuoteOfTheDayAuthorQuoteAutoRefreshed == false){
-
-
-                    mQuoteOfTheDayAuthorQuoteAutoRefreshed = true;
-
-//
+                if (mQuoteOfTheDayAuthorQuote.getQuote().equals(mQuoteOfTheDay.getQuote())){
 
                     mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
                     mQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.GONE);
