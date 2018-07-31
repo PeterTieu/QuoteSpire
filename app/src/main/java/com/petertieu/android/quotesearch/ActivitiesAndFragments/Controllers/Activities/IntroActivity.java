@@ -1,5 +1,6 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,6 +16,8 @@ import android.view.WindowManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDay;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDayAuthorQuote;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDayCategoryQuote;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
@@ -25,7 +28,7 @@ public class IntroActivity extends AppCompatActivity {
 
     //================= Declare INSTANCE VARIABLES ==============================================================
     private static final String TAG = "IntroActivity";      //Tag for Logcat
-    private final int INTRO_ACTIVITY_DISPLAY_TIME = 10000;   //Time to display the activity for (in ms)
+    private final int INTRO_ACTIVITY_DISPLAY_TIME = 1200;   //Time to display the activity for (in ms)
 
 
     public static Quote sQuoteOfTheDay;
@@ -73,7 +76,7 @@ public class IntroActivity extends AppCompatActivity {
 
 
 
-        new GetQuoteOfTheDayAsyncTask().execute();
+//        new GetQuoteOfTheDayAsyncTask().execute();
 
 
         //Create a new Handler object - to be run on a thread asynchronously to the main thread.
@@ -83,6 +86,8 @@ public class IntroActivity extends AppCompatActivity {
         new Handler().postDelayed(
 
                 new Runnable() {
+
+                    //Define what to do after the time delay
                     @Override
                     public void run() {
                         Intent startActivityIntent = new Intent(IntroActivity.this, MainActivity.class);
@@ -150,6 +155,7 @@ public class IntroActivity extends AppCompatActivity {
 
 
 
+
         }
     }
 
@@ -184,9 +190,6 @@ public class IntroActivity extends AppCompatActivity {
             Log.i(TAG, "Quote of the day Author Quote - Category: " + sQuoteOfTheDayAuthorQuote.getCategory());
             Log.i(TAG, "Quote of the day Author Quote - Author: " + sQuoteOfTheDayAuthorQuote.getAuthor());
             Log.i(TAG, "Quote of the day Author Quote - ID: " + sQuoteOfTheDayAuthorQuote.getId());
-
-
-
 
 
 
