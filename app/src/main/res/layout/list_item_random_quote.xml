@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/random_quote_bubble_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="25dp"
+    android:orientation="vertical"
+    android:paddingLeft="-20dp"
+    android:paddingRight="-20dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp">
+
+
+        <TextView
+            android:id="@+id/random_quote_number"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/quote_of_the_day"
+            android:textColor="@color/colorAccent"
+            android:textSize="17dp"
+            android:textStyle="bold"/>
+
+
+        <CheckBox
+            android:id="@+id/random_quote_favorite_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_imageview_favorite_on"/>
+
+
+        <Button
+            android:id="@+id/random_quote_share_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/ic_button_share"
+            android:gravity="right"/>
+
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/random_quote_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="35dp"
+        android:paddingBottom="10dp"/>
+
+
+    <TextView
+        android:id="@+id/random_quote_unavailable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="110dp"
+        android:layout_marginRight="110dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/no_internet_connection"
+        android:textColor="@color/orange"
+        android:textSize="16dp"/>
+
+
+
+    <TextView
+        android:id="@+id/random_quote_quote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="-10dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textIsSelectable="true"
+        android:textSize="14dp"
+        android:textStyle="italic"/>
+
+
+
+
+
+    <TextView
+        android:id="@+id/random_quote_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:textColor="@color/colorAccent"
+        android:textIsSelectable="true"
+        android:textSize="14dp"/>
+
+
+    <TextView
+        android:id="@+id/random_quote_category"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="20dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="14dp"/>
+
+</LinearLayout>
