@@ -216,30 +216,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
         mQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(mQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-
-
-
-        Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - ONCREATEVIEW(): " + mQuoteOfTheDayQuoteFavoriteIcon.isChecked());
-
-
-
-
-
-
-
-
-        Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - ONCREATEVIEW(): " + mQuoteOfTheDayQuoteFavoriteIcon.isChecked());
-
-
-
-        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
-            Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS IN1 DATABASE");
-        }
-        else{
-            Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS NOTT1 IN DATABASE");
-
-        }
+        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(mQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
 
@@ -306,48 +283,48 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-//        mQuoteOfTheDayCategoryQuote.setFavorite(false);
-        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(mQuoteOfTheDayCategoryQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(null);
-        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setChecked(mQuoteOfTheDayCategoryQuote.isFavorite());
-
-        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
-//                boolean category = isChecked;
-
-                mQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
-
-                compoundButton.setButtonDrawable(mQuoteOfTheDayCategoryQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-
-                //Save Quote to FavoriteQuotes SQLite database
-                if (isChecked == true && isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted == true){
-
-                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayCategoryQuote.getId()) == null){
-
-//                        mQuoteOfTheDayCategoryQuote.setFavorite(true);
-
-                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDayCategoryQuote);
-                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
-
-                    }
-
-                }
-                if (isChecked == false){
-
-//                    mQuoteOfTheDayCategoryQuote.setFavorite(false);
-
-                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDayCategoryQuote);
-                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
-                }
-
-            }
-        });
+////        mQuoteOfTheDayCategoryQuote.setFavorite(false);
+//        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(mQuoteOfTheDayCategoryQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+//
+//        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(null);
+//        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setChecked(mQuoteOfTheDayCategoryQuote.isFavorite());
+//
+//        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//            //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//
+////                boolean category = isChecked;
+//
+//                mQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
+//
+//                compoundButton.setButtonDrawable(mQuoteOfTheDayCategoryQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+//
+//
+//                //Save Quote to FavoriteQuotes SQLite database
+//                if (isChecked == true && isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted == true){
+//
+//                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayCategoryQuote.getId()) == null){
+//
+////                        mQuoteOfTheDayCategoryQuote.setFavorite(true);
+//
+//                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+//                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+//
+//                    }
+//
+//                }
+//                if (isChecked == false){
+//
+////                    mQuoteOfTheDayCategoryQuote.setFavorite(false);
+//
+//                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+//                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+//                }
+//
+//            }
+//        });
 
 
 
@@ -609,6 +586,10 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
+
+
+
+
             if (mQuoteOfTheDayCategoryQuote.getQuote() != null) {
 
                 mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.GONE);
@@ -635,16 +616,37 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayCategoryQuote.getId()) != null) {
 
                     mQuoteOfTheDayCategoryQuote.setFavorite(true);
-                    mQuoteOfTheDayAuthorQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+                    mQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
 
                 }
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayCategoryQuote.getId()) == null){
 
                     mQuoteOfTheDayCategoryQuote.setFavorite(false);
-                    mQuoteOfTheDayAuthorQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
+                    mQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
 
                 }
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -663,32 +665,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-
-                        Log.i(TAG, "Listener called");
-
-                        if (mQuoteOfTheDay == null){
-                            Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - INSIDE ON CHECKED CHANGED - mQuoteOfTheDay does NOT EXIST");
-                        }
-                        else{
-                            Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - INSIDE ON CHECKED CHANGED - mQuoteOfTheDay EXISTS");
-                            Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked() - ID: " + mQuoteOfTheDay.getId());
-                        }
-
-
-
-
-
-                        Log.i(TAG, "mQuoteOfTheDayFavoriteIcon.isChecked - INSIDE LISTENER: " + isChecked);
-
-
-                        Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF CHECKBOX IS PRESSED: " +  mQuoteOfTheDayQuoteFavoriteIcon.isPressed());
-
-
-
                         mQuoteOfTheDay.setFavorite(isChecked);
-
-
-
 
 
                         compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
@@ -699,11 +676,9 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                         // GetQuoteOfTheDay().getQuoteOfTheDay() is completed in doInBackground() of the isGetQuoteOfTheDayAsyncTask class.
                         // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
                         if ( isChecked == true && isGetQuoteOfTheDayAsyncTaskCompleted == true){
-//                    if ( isChecked == true){
+
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDay.getId()) == null){
 
-
-                                Log.i(TAG, "mQuoteOfTheDayQuoteFavoriteIcon.isChecked(true) called");
 
 
                                 mQuoteOfTheDay.setFavorite(true);
@@ -720,8 +695,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                         }
                         if (isChecked == false){
 
-                            Log.i(TAG, "mQuoteOfTheDayQuoteFavoriteIcon.isChecked(false) called");
-
                             mQuoteOfTheDay.setFavorite(false);
 
                             FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDay);
@@ -733,6 +706,80 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                     }
                 });
+
+
+
+
+
+
+
+
+
+
+
+                mQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                    //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+
+                        mQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
+
+
+                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+
+
+                        //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
+                        //This is added because for some weird & mysterious reason, mQuoteOfTheDayQuoteFavoriteIcon.setChecked(true) is called everytime after
+                        // GetQuoteOfTheDay().getQuoteOfTheDay() is completed in doInBackground() of the isGetQuoteOfTheDayAsyncTask class.
+                        // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
+                        if ( isChecked == true && isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted == true){
+//                    if ( isChecked == true){
+                            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayCategoryQuote.getId()) == null){
+
+                                mQuoteOfTheDayCategoryQuote.setFavorite(true);
+
+                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+
+                                //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
+                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+                            }
+                            else{
+                                //Do nothing
+                            }
+
+                        }
+                        if (isChecked == false){
+
+                            mQuoteOfTheDayCategoryQuote.setFavorite(false);
+
+                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+
+                            //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+                        }
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1346,7 +1393,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-    public boolean isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted = false;
+    public boolean isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted = true;
 
 
 
@@ -1632,10 +1679,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 //                    if ( isChecked == true){
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDay.getId()) == null){
 
-
-                        Log.i(TAG, "mQuoteOfTheDayQuoteFavoriteIcon.isChecked(true) called");
-
-
                         mQuoteOfTheDay.setFavorite(true);
 
                         FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDay);
@@ -1650,8 +1693,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 }
                 if (isChecked == false){
 
-                    Log.i(TAG, "mQuoteOfTheDayQuoteFavoriteIcon.isChecked(false) called");
-
                     mQuoteOfTheDay.setFavorite(false);
 
                     FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDay);
@@ -1661,6 +1702,108 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
                 }
             }
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setChecked(false);
+
+        mQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+
+                mQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
+
+
+                compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+
+
+                //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
+                //This is added because for some weird & mysterious reason, mQuoteOfTheDayQuoteFavoriteIcon.setChecked(true) is called everytime after
+                // GetQuoteOfTheDay().getQuoteOfTheDay() is completed in doInBackground() of the isGetQuoteOfTheDayAsyncTask class.
+                // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
+                if ( isChecked == true && isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted == true){
+//                    if ( isChecked == true){
+                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayCategoryQuote.getId()) == null){
+
+                        mQuoteOfTheDayCategoryQuote.setFavorite(true);
+
+                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+
+                        //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
+                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+                    }
+                    else{
+                        //Do nothing
+                    }
+
+                }
+                if (isChecked == false){
+
+                    mQuoteOfTheDayCategoryQuote.setFavorite(false);
+
+                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mQuoteOfTheDayCategoryQuote);
+
+                    //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mQuoteOfTheDayCategoryQuote);
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
