@@ -20,6 +20,9 @@ public class Quote {
     List<String> mCategories;
     boolean mIsFavorite;
 
+    //Only used for RandomQuotesFragment
+    int mRandomQuotePosition;
+
 
     public Quote(){
     }
@@ -79,4 +82,12 @@ public class Quote {
         return mIsFavorite;
     }
 
+
+    public int getRandomQuotePosition() {
+        return mRandomQuotePosition;
+    }
+
+    public void setRandomQuotePosition(int randomQuotePosition){
+        mRandomQuotePosition = randomQuotePosition;
+    }
 }
