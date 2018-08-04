@@ -1,33 +1,40 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotes;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class RandomQuotesFragment extends Fragment {
 
 
-    private final int NUMBER_OF_RANDOM_QUOTES = 8;
+    private final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 4;
 
     //Log for Logcat
     private final String TAG = "RandomQuotesFragment";
@@ -35,9 +42,13 @@ public class RandomQuotesFragment extends Fragment {
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRandomQuotesRecyclerView;
     private RandomQuotesAdaper mRandomQuotesAdaper;
+    private RandomQuotesViewHolder mRandomQuotesViewHolder;
 
-    private List<Quote> mRandomQuotes = new ArrayList<>();
-//    private List<Quote> mRandomQuotes = Arrays.asList(new Quote[8]);
+//    private List<Quote> mRandomQuotes = new ArrayList<>();
+
+    //Declare and INITIALISE the List of Quote objects to size 8
+    private List<Quote> mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]);
+
 
 
 
@@ -88,7 +99,7 @@ public class RandomQuotesFragment extends Fragment {
 
         mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes);
 
-//        mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes);
+        mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes);
 
         mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper);
 
@@ -103,9 +114,20 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-        for (int i=0; i<NUMBER_OF_RANDOM_QUOTES; i++){
-            new GetRandomQuoteAsyncTask().execute();
+        for (int i = 0; i < NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++) {
+
+
+            if (mRandomQuotes.get(i) == null){
+
+
+                Integer randomQuotePosition = i;
+
+                new GetRandomQuoteAsyncTask().execute(randomQuotePosition);
+            }
+
         }
+
+
 
 
 
@@ -126,13 +148,19 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-    private class GetRandomQuoteAsyncTask extends AsyncTask<Void, Void, Quote>{
+    private class GetRandomQuoteAsyncTask extends AsyncTask<Integer, Void, Quote>{
+
+
+        //NOTE: mQuotePosition is an ARRAY of Integer!
+        Integer mQuotePosition[];
 
         public GetRandomQuoteAsyncTask(){
         }
 
         @Override
-        protected Quote doInBackground(Void... params){
+        protected Quote doInBackground(Integer... quoteNumber){
+
+            mQuotePosition = quoteNumber;
 
             Quote randomQuote = new GetRandomQuote().getRandomQuote();
 
@@ -150,8 +178,11 @@ public class RandomQuotesFragment extends Fragment {
             Log.i(TAG, "Random Quote - method - ID: " + randomQuote.getId());
 
 
-            mRandomQuotes.add(randomQuote);
-//            mRandomQuotes.set(i, randomQuote);
+//            mRandomQuotes.add(randomQuote);
+            mRandomQuotes.set(mQuotePosition[0], randomQuote);
+
+
+            mRandomQuotes.get(mQuotePosition[0]).setRandomQuotePosition(mQuotePosition[0] + 1);
 
 
 
@@ -189,9 +220,6 @@ public class RandomQuotesFragment extends Fragment {
 
     private class RandomQuotesAdaper extends RecyclerView.Adapter<RandomQuotesViewHolder>{
 
-        private RandomQuotesViewHolder mRandomQuotesViewHolder;
-
-
 
         public RandomQuotesAdaper(List<Quote> randomQuotes){
             mRandomQuotes = randomQuotes;
@@ -224,6 +252,9 @@ public class RandomQuotesFragment extends Fragment {
         public void onBindViewHolder(RandomQuotesViewHolder randomQuotesViewHolder, int position){
             Quote randomQuote = mRandomQuotes.get(position);
 
+//            int randomQuotePosition = position + 1;
+//            mRandomQuotesViewHolder.mRandomQuotePositionText.setText("Random Quote #" + randomQuotePosition);
+
             randomQuotesViewHolder.bind(randomQuote);
 
         }
@@ -252,28 +283,57 @@ public class RandomQuotesFragment extends Fragment {
     private class RandomQuotesViewHolder extends RecyclerView.ViewHolder{
 
 
-        TextView mRandomQuoteNumber;
+        Quote mRandomQuote;
+
+        LinearLayout mRandomQuoteBubbleLayout;
+        TextView mRandomQuotePositionText;
         CheckBox mRandomQuoteFavoriteIcon;
         Button mRandomQuoteShareIcon;
         ProgressBar mRandomQuoteProgressBar;
         TextView mRandomQuoteUnavailable;
         TextView mRandomQuoteQuote;
         TextView mRandomQuoteAuthor;
-        TextView mRandomQuoteCategory;
+        TextView mRandomQuoteCategories;
 
 
 
         public RandomQuotesViewHolder(View view){
             super(view);
 
-            mRandomQuoteNumber = (TextView) view.findViewById(R.id.random_quote_number);
+            mRandomQuoteBubbleLayout = (LinearLayout) view.findViewById(R.id.random_quote_bubble_layout);
+            mRandomQuotePositionText = (TextView) view.findViewById(R.id.random_quote_position);
             mRandomQuoteFavoriteIcon = (CheckBox) view.findViewById(R.id.random_quote_favorite_icon);
             mRandomQuoteShareIcon = (Button) view.findViewById(R.id.random_quote_share_icon);
             mRandomQuoteProgressBar = (ProgressBar) view.findViewById(R.id.random_quote_progress_bar);
-            mRandomQuoteUnavailable = (TextView) view.findViewById(R.id.random_quote_unavailable);
             mRandomQuoteQuote = (TextView) view.findViewById(R.id.random_quote_quote);
             mRandomQuoteAuthor = (TextView) view.findViewById(R.id.random_quote_author);
-            mRandomQuoteCategory = (TextView) view.findViewById(R.id.random_quote_category);
+            mRandomQuoteCategories = (TextView) view.findViewById(R.id.random_quote_categories);
+            mRandomQuoteUnavailable = (TextView) view.findViewById(R.id.random_quote_unavailable);
+
+
+
+
+
+
+
+            mRandomQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
+            mRandomQuoteProgressBar.setVisibility(View.VISIBLE);
+
+            mRandomQuotePositionText.setVisibility(View.GONE);
+            mRandomQuoteFavoriteIcon.setVisibility(View.GONE);
+            mRandomQuoteShareIcon.setVisibility(View.GONE);
+            mRandomQuoteUnavailable.setVisibility(View.GONE);
+            mRandomQuoteQuote.setVisibility(View.GONE);
+            mRandomQuoteAuthor.setVisibility(View.GONE);
+            mRandomQuoteCategories.setVisibility(View.GONE);
+
+
+
+
+
+
+
+
 
         }
 
@@ -283,9 +343,122 @@ public class RandomQuotesFragment extends Fragment {
         public void bind(Quote randomQuote){
 
             if (randomQuote != null){
-                mRandomQuoteQuote.setText(randomQuote.getQuote());
+
+                mRandomQuote = randomQuote;
+
+//                mRandomQuotePositionText.setText("Random Quote #" + mRandomQuotesViewHolder.getLayoutPosition());
+
+
+                mRandomQuoteProgressBar.setVisibility(View.GONE);
+                mRandomQuoteUnavailable.setVisibility(View.GONE);
+
+                mRandomQuotePositionText.setVisibility(View.VISIBLE);
+                mRandomQuoteFavoriteIcon.setVisibility(View.VISIBLE);
+                mRandomQuoteShareIcon.setVisibility(View.VISIBLE);
+                mRandomQuoteQuote.setVisibility(View.VISIBLE);
+                mRandomQuoteAuthor.setVisibility(View.VISIBLE);
+                mRandomQuoteCategories.setVisibility(View.VISIBLE);
+
+
+
+
+
+                mRandomQuotePositionText.setText("Random Quote #" + mRandomQuote.getRandomQuotePosition());
+                mRandomQuoteQuote.setText("\" " + randomQuote.getQuote() + " \"");
+                mRandomQuoteAuthor.setText(mRandomQuote.getAuthor());
+
+                if (mRandomQuote.getCategories() == null){
+                    mRandomQuoteCategories.setText("Categories: *No categories*");
+                }
+                else{
+                    mRandomQuoteCategories.setText("Categories: " + TextUtils.join(", ", mRandomQuote.getCategories()));
+                }
+
+
+                mRandomQuoteFavoriteIcon.setButtonDrawable(mRandomQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+
+
+
+
+
+
+
+                //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) != null) {
+
+                    mRandomQuote.setFavorite(true);
+                    mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
+                }
+                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) == null){
+
+                    mRandomQuote.setFavorite(false);
+                    mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
+
+                }
+
+
+
+
+
+
+                mRandomQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+
+                        mRandomQuote.setFavorite(isChecked);
+
+
+                        mRandomQuoteFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+
+
+                        if (isChecked == true){
+
+                            if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) == null){
+                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mRandomQuote);
+                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mRandomQuote);
+                            }
+                            else{
+                                //Do nothing
+                            }
+
+                        }
+
+                        if (isChecked == false){
+                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mRandomQuote);
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mRandomQuote);
+
+                        }
+                    }
+                });
             }
 
+
+
+
+
+
+
+            mRandomQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view){
+
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+                    shareIntent.setType("text/plain");
+
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
+
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getRandomQuoteShareString());
+
+                    shareIntent = Intent.createChooser(shareIntent, "Share Quote of the Day via");
+
+                    startActivity(shareIntent);
+                }
+            });
 
 
         }
@@ -293,7 +466,96 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
+        private String getRandomQuoteShareString(){
+            String randomQuoteString = "\"" + mRandomQuote.getQuote() + "\"";
+
+            String randomQuoteAuthorString = " - " + mRandomQuote.getAuthor();
+
+            return randomQuoteString + randomQuoteAuthorString;
+        }
+
+
+
+
     }
+
+
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
+
+        super.onCreateOptionsMenu(menu, menuInflater);
+
+        menuInflater.inflate(R.menu.fragment_random_quotes, menu);
+
+        MenuItem randomiseItem = menu.findItem(R.id.menu_item_randomise_random_quotes_fragment);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+
+        switch (menuItem.getItemId()){
+            case (R.id.menu_item_randomise_random_quotes_fragment):
+
+                menuItem.setEnabled(false);
+
+//                for (int i=0; i<NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++){
+//                    if (mRandomQuotes.get(i) != null){
+//                        menuItem.setEnabled(true);
+//                    }
+//                }
+
+
+
+
+                mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]);
+                mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes);
+                mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes);
+                mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper);
+
+
+
+                for (int i = 0; i < NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++) {
+
+                    if (mRandomQuotes.get(i) == null){
+
+
+                        Integer randomQuotePosition = i;
+
+                        new GetRandomQuoteAsyncTask().execute(randomQuotePosition);
+                    }
+
+                }
+
+
+
+
+
+
+
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(menuItem);
+
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
 
 
 
