@@ -84,6 +84,13 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
+    //========= Flags for Enabling/Disabling the "Refresh" toolbar nenu button
+    private boolean shouldEnebleRefreshButtonCheckpointOne = false; //Condition #1/2 to be met - when the AsyncTask to fetch the Author Quote is completed
+    private boolean shouldEnableRefreshButtonCheckpointTwo = false; //Conidition #2/2 to be met - when the AsyncTask to fetch the Category Quote is completed
+
+
+
+
 
 
     @Override
@@ -692,7 +699,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-//                mQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
                 mQuoteOfTheDayQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 
@@ -751,10 +757,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-
-
-
-//                mQuoteOfTheDayAuthorQuoteFavoriteIcon.setChecked(false);
                 mQuoteOfTheDayAuthorQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 
@@ -817,7 +819,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-//                mQuoteOfTheDayCategoryQuoteFavoriteIcon.setChecked(false);
                 mQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                     //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
@@ -1128,6 +1129,9 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
+
+
+
     private class GetQuoteOfTheDayAuthorQuoteAsyncTask extends AsyncTask<Void, Void, Quote>{
 
 
@@ -1141,6 +1145,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
         @Override
         protected Quote doInBackground(Void... params){
+
 
 
             isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted = false;
@@ -1160,6 +1165,25 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
             mQuoteOfTheDayAuthorQuote = quoteOfTheDayAuthorQuote;
+
+
+
+            shouldEnebleRefreshButtonCheckpointOne = true; //Condition #1/2 to enable the "Refresh" menu button has been met - as the AsyncTask to fetch the Author Quote has been completed
+            //Try risky task - as getActivity().invalidateOptionsMenu() throws a NullPointerException if another navigation drawer is opened
+            try{
+                //If both conditions to enable the "Refresh" menu button is passed
+                if (shouldEnebleRefreshButtonCheckpointOne == true && shouldEnableRefreshButtonCheckpointTwo == true){
+                    getActivity().invalidateOptionsMenu(); //Refresh the options menu (i.e. call onCreateOptionsMenu(..))
+
+                }
+            }
+            catch (NullPointerException npe) {
+                Log.e(TAG, "invalideOptionsMenu() method calls null object - because QuoteOfTheDayFragment has been closed");
+            }
+
+
+
+
 
 
 
@@ -1297,7 +1321,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-
     public boolean isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted = true;
 
 
@@ -1316,6 +1339,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
             isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted = false;
+
+
 
 
 //            mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.VISIBLE);
@@ -1338,7 +1363,33 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
             Log.i(TAG, "Quote of the day Category Quote - ID: " + mQuoteOfTheDayCategoryQuote.getId());
 
 
+
+
+
+
+            shouldEnableRefreshButtonCheckpointTwo = true; //Condition #1/2 to enable the "Refresh" menu button has been met - as the AsyncTask to fetch the Category Quote has been completed
+            //Try risky task - as getActivity().invalidateOptionsMenu() throws a NullPointerException if another navigation drawer is opened
+            try{
+                //If both conditions to enable the "Refresh" menu button is passed
+                if (shouldEnebleRefreshButtonCheckpointOne == true && shouldEnableRefreshButtonCheckpointTwo == true){
+                    getActivity().invalidateOptionsMenu(); //Refresh the options menu (i.e. call onCreateOptionsMenu(..))
+                }
+            }
+            catch (NullPointerException npe){
+                Log.e(TAG, "invalideOptionsMenu() method calls null object - because QuoteOfTheDayFragment has been closed");
+            }
+
+
+
+
+
+
+
+
             if (mQuoteOfTheDayCategoryQuote != null) {
+
+
+
 
                 mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.GONE);
 
@@ -1435,24 +1486,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-            if (mQuoteOfTheDay.getQuote() != null){
-
-
-                if (! latestQuoteOfTheDay.getQuote().equals(mQuoteOfTheDay.getQuote())){
-                    mQuoteOfTheDay = latestQuoteOfTheDay;
-
-                    mQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(mQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-                    Toast.makeText(getActivity(), "Quote Of The Day updated", Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-
-
-
-
-
             mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
 
             mQuoteOfTheDayQuoteTitle.setVisibility(View.VISIBLE);
@@ -1464,6 +1497,30 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
             try{
+
+
+
+                if (mQuoteOfTheDay.getQuote() != null){
+
+
+                    if (! latestQuoteOfTheDay.getQuote().equals(mQuoteOfTheDay.getQuote())){
+                        mQuoteOfTheDay = latestQuoteOfTheDay;
+
+                        mQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(mQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+
+                        Toast.makeText(getActivity(), "Quote Of The Day updated", Toast.LENGTH_LONG).show();
+
+                        new GetQuoteOfTheDayAuthorQuoteAsyncTask().execute();
+                        new GetQuoteOfTheDayCategoryQuoteAsyncTask().execute();
+
+                    }
+
+                }
+
+
+
+
+
                 mQuoteOfTheDayQuoteQuote.setText("\" " + mQuoteOfTheDay.getQuote() + " \"");
                 mQuoteOfTheDayQuoteAuthor.setText("- " + mQuoteOfTheDay.getAuthor());
                 mQuoteOfTheDayQuoteCategory.setText("Category: " + mQuoteOfTheDay.getCategory());
@@ -1502,50 +1559,11 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1567,6 +1585,14 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
         menuInflater.inflate(R.menu.fragment_quote_of_the_day, menu);
 
         MenuItem refreshItem = menu.findItem(R.id.menu_item_refresh_quote_of_the_day_fragment);
+
+
+
+        refreshItem.setEnabled(true); //Enable the "Refresh" menu item button
+        refreshItem.getIcon().setAlpha(255); //Set the "Refresh" menu item button to 'full color' (i.e. white)
+
+
+
     }
 
 
@@ -1575,6 +1601,25 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
         switch (menuItem.getItemId()){
             case (R.id.menu_item_refresh_quote_of_the_day_fragment):
+
+
+                shouldEnebleRefreshButtonCheckpointOne = false; //Reset the Condition #1/2 that is used for enabling the "Refresh" menu item button
+                shouldEnableRefreshButtonCheckpointTwo = false; //Reset the Condition #2/3 that is used for enabling the "Refresh" menu item button
+                menuItem.setEnabled(false); //Disable the "Refresh" menu item button
+                menuItem.getIcon().setAlpha(130); //Set the "Refresh" menu item button to 'disabled' color (i.e. grey)
+
+
+//                if (shouldEnableRefreshButton == true){
+//                    menuItem.setEnabled(true);
+//                    menuItem.getIcon().setAlpha(255);
+//                }
+//                else{
+//                    menuItem.setEnabled(false);
+//                    menuItem.getIcon().setAlpha(130);
+//                }
+
+
+
 
 
 
