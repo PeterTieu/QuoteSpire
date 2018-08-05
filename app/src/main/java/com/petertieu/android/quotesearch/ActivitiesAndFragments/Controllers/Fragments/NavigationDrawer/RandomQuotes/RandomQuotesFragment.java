@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
@@ -34,7 +33,7 @@ import java.util.List;
 public class RandomQuotesFragment extends Fragment {
 
 
-    private final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 4;
+    private final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 7;
 
     //Log for Logcat
     private final String TAG = "RandomQuotesFragment";
@@ -48,6 +47,9 @@ public class RandomQuotesFragment extends Fragment {
 
     //Declare and INITIALISE the List of Quote objects to size 8
     private List<Quote> mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]);
+
+    //Flag to decide whether the "Randomise" menut item button should be enabled or disabled
+    boolean shouldEnableRandomiseMenuItem = false;
 
 
 
@@ -164,6 +166,7 @@ public class RandomQuotesFragment extends Fragment {
 
             Quote randomQuote = new GetRandomQuote().getRandomQuote();
 
+
             return randomQuote;
 
         }
@@ -186,7 +189,31 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-            setupAdapter();
+            //Decide whether to enable or disable the "Randomise" menu item button
+                //If the last Random Quote has been creted
+
+            try{
+
+                if (mQuotePosition[0] == NUMBER_OF_RANDOM_QUOTES_TO_LOAD-1){
+                    shouldEnableRandomiseMenuItem = true;
+                    getActivity().invalidateOptionsMenu();
+                }
+                //If the last Random Quote has NOT been created yet
+                else{
+                    shouldEnableRandomiseMenuItem = false;
+                    getActivity().invalidateOptionsMenu();
+                }
+
+            }
+            catch (NullPointerException npe){
+                Log.e(TAG, "invalideOptionsMenu() method calls null object - because RandomQuotesFragment has been closed");
+            }
+
+
+
+
+
+            updateUI();
         }
 
 
@@ -196,13 +223,15 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-    public void setupAdapter(){
+    public void updateUI(){
 
 //        mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes);
 
 //        mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper);
 
         mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes);
+
+
         mRandomQuotesAdaper.notifyDataSetChanged();
 
     }
@@ -327,14 +356,6 @@ public class RandomQuotesFragment extends Fragment {
             mRandomQuoteAuthor.setVisibility(View.GONE);
             mRandomQuoteCategories.setVisibility(View.GONE);
 
-
-
-
-
-
-
-
-
         }
 
 
@@ -364,8 +385,27 @@ public class RandomQuotesFragment extends Fragment {
 
 
                 mRandomQuotePositionText.setText("Random Quote #" + mRandomQuote.getRandomQuotePosition());
-                mRandomQuoteQuote.setText("\" " + randomQuote.getQuote() + " \"");
-                mRandomQuoteAuthor.setText(mRandomQuote.getAuthor());
+
+
+                if (mRandomQuote.getQuote() != null){
+                    mRandomQuoteQuote.setText("\" " + randomQuote.getQuote() + " \"");
+                }
+                else{
+                    mRandomQuoteQuote.setText("* No Quote to View *");
+                }
+
+
+                if (mRandomQuote.getAuthor() != null){
+                    mRandomQuoteAuthor.setText(mRandomQuote.getAuthor());
+                }
+                else{
+                    mRandomQuoteAuthor.setText("* No Author *");
+                }
+
+
+
+
+
 
                 if (mRandomQuote.getCategories() == null){
                     mRandomQuoteCategories.setText("Categories: *No categories*");
@@ -383,17 +423,37 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-                //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
-                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) != null) {
+                try {
 
-                    mRandomQuote.setFavorite(true);
-                    mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
+                    //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) != null) {
+
+                        mRandomQuote.setFavorite(true);
+                        mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
+                    }
+                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) == null) {
+
+                        mRandomQuote.setFavorite(false);
+                        mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
+
+                    }
+
 
                 }
-                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) == null){
+                catch (NullPointerException npe){
 
-                    mRandomQuote.setFavorite(false);
-                    mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
+                    mRandomQuoteProgressBar.setVisibility(View.GONE);
+                    mRandomQuotePositionText.setVisibility(View.GONE);
+                    mRandomQuoteFavoriteIcon.setVisibility(View.GONE);
+                    mRandomQuoteShareIcon.setVisibility(View.GONE);
+                    mRandomQuoteQuote.setVisibility(View.GONE);
+                    mRandomQuoteAuthor.setVisibility(View.GONE);
+                    mRandomQuoteCategories.setVisibility(View.GONE);
+
+
+                    mRandomQuoteUnavailable.setVisibility(View.VISIBLE);
 
                 }
 
@@ -483,14 +543,38 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 
         super.onCreateOptionsMenu(menu, menuInflater);
 
         menuInflater.inflate(R.menu.fragment_random_quotes, menu);
 
         MenuItem randomiseItem = menu.findItem(R.id.menu_item_randomise_random_quotes_fragment);
+
+
+
+        //If the flag to enable the "Randomise" menu item is TRUE
+        if (shouldEnableRandomiseMenuItem == true){
+
+            randomiseItem.setEnabled(true);
+
+        }
+        //If the flag to enable the "Randomise" menu item is FALSE
+        else{
+            randomiseItem.setEnabled(false);
+        }
     }
 
 
@@ -501,39 +585,40 @@ public class RandomQuotesFragment extends Fragment {
         switch (menuItem.getItemId()){
             case (R.id.menu_item_randomise_random_quotes_fragment):
 
+                //Disable the "Randomise" menu item button (the moment it is pressed)
                 menuItem.setEnabled(false);
 
-//                for (int i=0; i<NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++){
-//                    if (mRandomQuotes.get(i) != null){
-//                        menuItem.setEnabled(true);
-//                    }
-//                }
+
+                //Set the flag to enable "Randomise" menu item button to FALSE (i.e. DISABLE "Randomise" menu item button)
+                shouldEnableRandomiseMenuItem = false;
+
+                //'Reset' the instance variables
+                mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]); //Re-assign mRandomQuotes to a new object
+                mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes); //Re-assign the RecyclerView Adapter
+                mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes); //Set the re-assigned RecyclerView Adapter to the re-assigned mRandomQuotes reference variable
+                mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper); //Re-assign the RecyclerView to the re-assigned RecyclerView Adapter
 
 
 
 
-                mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]);
-                mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes);
-                mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes);
-                mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper);
-
-
-
+                //Perform fetching of new Random Quotes via the AsyncTask
                 for (int i = 0; i < NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++) {
 
                     if (mRandomQuotes.get(i) == null){
-
 
                         Integer randomQuotePosition = i;
 
                         new GetRandomQuoteAsyncTask().execute(randomQuotePosition);
                     }
-
                 }
 
 
 
-
+                //If the flag to enable the "Randomise" menu item is TRUE.
+                // Called when the last Random Quote has been created in the AsyncTask
+                if (shouldEnableRandomiseMenuItem == true){
+                    menuItem.setEnabled(true);
+                }
 
 
 
@@ -549,6 +634,25 @@ public class RandomQuotesFragment extends Fragment {
 
 
     }
+
+
+
+
+
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu){
+//
+//        MenuItem randomiseItem = menu.findItem(R.id.menu_item_randomise_random_quotes_fragment);
+//
+//        if (shouldEnableRandomiseMenuItem){
+//
+//            randomiseItem.setEnabled(true);
+//        }
+//
+//        return true;
+//    }
+
+
 
 
 
