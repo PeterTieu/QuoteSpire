@@ -23,6 +23,9 @@ public class Quote {
     //Only used for RandomQuotesFragment
     int mRandomQuotePosition;
 
+    //Only used for SearchQuotesByKeywordFragment
+    int mSearchQuotesByKeywordQuotePosition;
+
 
     public Quote(){
     }
@@ -89,5 +92,13 @@ public class Quote {
 
     public void setRandomQuotePosition(int randomQuotePosition){
         mRandomQuotePosition = randomQuotePosition;
+    }
+
+    public int getSearchQuotesByKeywordQuotePosition(){
+        return mSearchQuotesByKeywordQuotePosition;
+    }
+
+    public void setSearchQuotesByKeywordQuotePosition(int searchQuotesByKeywordQuotePosition){
+        mSearchQuotesByKeywordQuotePosition = searchQuotesByKeywordQuotePosition;
     }
 }
