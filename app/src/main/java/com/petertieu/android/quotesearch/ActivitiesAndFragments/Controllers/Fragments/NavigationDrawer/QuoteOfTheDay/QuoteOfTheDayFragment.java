@@ -398,7 +398,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
+//        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
 
 
 
@@ -572,9 +572,12 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
                     //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mQuoteOfTheDayAuthorQuote.getId()) != null) {
-                        mQuoteOfTheDayAuthorQuoteFavoriteIcon.setChecked(true);
+
+                        mQuoteOfTheDayAuthorQuote.setFavorite(true);
+                        mQuoteOfTheDayAuthorQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
                     } else {
-                        mQuoteOfTheDayAuthorQuoteFavoriteIcon.setChecked(false);
+                        mQuoteOfTheDayAuthorQuote.setFavorite(false);
+                        mQuoteOfTheDayAuthorQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
                     }
 
                 }
@@ -1588,7 +1591,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-        refreshItem.setEnabled(true); //Enable the "Refresh" menu item button
+//        refreshItem.setEnabled(true); //Enable the "Refresh" menu item button
         refreshItem.getIcon().setAlpha(255); //Set the "Refresh" menu item button to 'full color' (i.e. white)
 
 
