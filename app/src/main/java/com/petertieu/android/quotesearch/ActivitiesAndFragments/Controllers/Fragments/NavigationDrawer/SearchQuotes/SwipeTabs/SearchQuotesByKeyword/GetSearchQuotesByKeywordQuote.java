@@ -21,11 +21,15 @@ public class GetSearchQuotesByKeywordQuote {
     private static final String TAG = "GetRandomQuote";
 
 
-    public Quote getSearchQuotesByKeywordQuote(){
+    public Quote getSearchQuotesByKeywordQuote(String searchQuery){
 
         Quote randomQuote = new Quote();
 
-        String urlString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=apple&private=false&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
+//        String urlString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=apple&private=false&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
+//        String urlString = "http://quotes.rest/quote/search.json?author=albert+einstein&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
+
+        String urlString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + searchQuery + "&private=false&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
+
 
         try {
             String jsonString = getJsonString(urlString);
