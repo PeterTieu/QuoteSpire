@@ -279,6 +279,8 @@ public class FavoriteQuotesFragment extends Fragment {
             Quote favoriteQuote = mFavoriteQuotes.get(position);
             favoriteQuotesViewHolder.bind(favoriteQuote);
 
+            favoriteQuotesViewHolder.mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
             Log.i(TAG, "ADAPTER - favoriteQuote: " + favoriteQuote.getQuote());
         }
 
@@ -352,6 +354,8 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
+            mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
             mFavoriteQuoteFavoriteIcon.setChecked(true);
 
 
@@ -361,7 +365,7 @@ public class FavoriteQuotesFragment extends Fragment {
 
             mFavoriteQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
 //                    mFavoriteQuote.setFavorite(false);
                     //mFavoriteQuote.setFavorite(isChecked);
                     compoundButton.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
@@ -373,6 +377,7 @@ public class FavoriteQuotesFragment extends Fragment {
 
                         final Quote favoriteQuote = mFavoriteQuote;
 
+                        mFavoriteQuote.setFavorite(false);
                         FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mFavoriteQuote);
                         FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mFavoriteQuote);
 
@@ -407,9 +412,12 @@ public class FavoriteQuotesFragment extends Fragment {
                                                     snackbar1.show();
 
 
+                                                    mFavoriteQuote.setFavorite(true);
                                                     FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(favoriteQuote);
+
 //                                                    mFavoriteQuote.setFavorite(true);
-                                                    mFavoriteQuoteFavoriteIcon.setChecked(true);
+//                                                    mFavoriteQuoteFavoriteIcon.setChecked(true);
+                                                    compoundButton.setChecked(true);
                                                     //Log.i(TAG, "UNDO called");
 //                                                    bind(mFavoriteQuote);
 //                                                    updateUI();
@@ -428,13 +436,26 @@ public class FavoriteQuotesFragment extends Fragment {
                             }, 100);
                         }
                     }
+
+
                     if (isChecked == true){
                         //                        bind(mFavoriteQuote);
                         mFavoriteQuote.setFavorite(true);
-                        //                        compoundButton.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+                        compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
+//                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 //                        Log.i(TAG, "HELOOOOOOOOOOOOOO " + Boolean.toString(mFavoriteQuote.isFavorite()));
+
                         updateUI();
+                        compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
+
+
                     }
+
+
+
+
                 }
             });
 
@@ -488,6 +509,8 @@ public class FavoriteQuotesFragment extends Fragment {
         public void bind(Quote favoriteQuote){
 
             mFavoriteQuote = favoriteQuote;
+
+            mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
 
 
             Log.i(TAG, "VIEWHOLDER - mFavoriteQuote: " + mFavoriteQuote.getQuote());
@@ -640,6 +663,7 @@ public class FavoriteQuotesFragment extends Fragment {
 
             Quote favoriteQuote = favoriteQuotes.get(0);
 
+            favoriteQuote.setFavorite(false);
             FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(favoriteQuote);
 
 //            updateUI();
@@ -753,7 +777,14 @@ public class FavoriteQuotesFragment extends Fragment {
     public void onPause(){
         super.onPause();
 
-        snackbar.setAction(null, null);
+        try{
+
+            snackbar.setAction(null, null);
+        }
+        catch (NullPointerException npe){
+            Log.e(TAG, "Hmmm");
+        }
+
 
         Log.i(TAG, "onPause() called");
 
