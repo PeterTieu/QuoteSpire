@@ -43,5 +43,16 @@
     <string name="no_favorite_quotes_text">There are no Favorite quotes...</string>
 
 
+    <!--RandomQuotesFragment-->
+    <string name="randomise">Randomise</string>
+
+
+
+    <!--SearchQuotesByKeywordFragment-->
+    <string name="clear_all">Clear All</string>
+    <string name="search_suggestions">Search Suggestions...</string>
+    <string name="unable_to_fetch_quote">* Unable to Fetch Quote *</string>
+
+
 
 </resources>
