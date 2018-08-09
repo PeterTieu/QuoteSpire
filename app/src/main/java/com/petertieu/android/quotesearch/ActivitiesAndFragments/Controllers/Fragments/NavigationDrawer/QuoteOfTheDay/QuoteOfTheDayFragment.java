@@ -398,7 +398,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-//        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
+        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
 
 
 
