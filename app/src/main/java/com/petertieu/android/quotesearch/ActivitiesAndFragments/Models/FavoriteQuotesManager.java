@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Database.FavoriteQuotesDatabaseCursorWrapper;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Database.FavoriteQuotesDatabaseHelper;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class FavoriteQuotesManager {
 
+    private final String TAG = "FavoriteQuotesManager";
 
     private static FavoriteQuotesManager sFavoriteQuotesManager;
 
@@ -35,10 +37,31 @@ public class FavoriteQuotesManager {
     }
 
 
-    private FavoriteQuotesManager(Context context){
-        mContext = context.getApplicationContext();
 
-        sSQLiteDatabase = new FavoriteQuotesDatabaseHelper(mContext).getWritableDatabase();
+
+    private FavoriteQuotesManager(Context context){
+
+        try{
+
+//            if (context.getApplicationContext() != null){
+//                Log.i(TAG, "context.getApplicationContext() exists");
+//            }
+//            else{
+//                Log.i(TAG, "context.getApplicationContext() does NOT exist");
+//            }
+
+            mContext = context.getApplicationContext();
+
+            sSQLiteDatabase = new FavoriteQuotesDatabaseHelper(mContext).getWritableDatabase();
+        }
+
+
+        catch (NullPointerException npe){
+            Log.e(TAG, "Another fragment is loaded before QOD fragment completed AsyncTasks");
+            Log.e(TAG, "NullPointException caught, since mContext refers to a null object");
+            Log.e(TAG, "i.e. context.getApplicationContext() is null!");
+        }
+
     }
 
 
