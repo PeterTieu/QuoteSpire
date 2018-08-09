@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class SearchQuotesByKeywordFragment extends Fragment {
+public class SearchQuotesByKeywordFragment extends Fragment implements View.OnClickListener {
 
     //Log for Logcat
     private final String TAG = "SQBKFragment";
@@ -146,14 +146,11 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
-
-
-
-
-
         //Display the list of Quotes IF and ONLY IF a search has begun.
         //Otherwise, display the list of suggestions
         if (shouldDisplaySearchItemsWhenFragmentIsReloaded == true) {
+
+            getActivity().invalidateOptionsMenu();
 
             mKeywordSearchedString.setVisibility(View.VISIBLE);
             mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.VISIBLE);
@@ -179,8 +176,6 @@ public class SearchQuotesByKeywordFragment extends Fragment {
             mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter);
 
 
-
-
         }
         else{
 
@@ -204,7 +199,7 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
-            mRandomSearchSuggstions = getRandomSearchSuggstions();
+            mRandomSearchSuggstions = getRandomSearchSuggestions();
 //            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggstions);
 
 
@@ -230,57 +225,12 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
-//        for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++){
-//
-//            if (sSearchQuotesByKeywordQuotes.get(i) != null){
-//                sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes);
-//                sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
-//                mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter);
-//
-//            }
-//        }
-
-
-//        if (!sSearchQuotesByKeywordQuotes.isEmpty()){
-//            sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes);
-//            sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
-//            mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter);
-//        }
-
-
-
-
-//        sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes);
-//        sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
-//        mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter);
-
-
-
-
-
-
-
-
         getActivity().invalidateOptionsMenu();
 
 
 
         getActivity().setTitle("Search Quotes");
 
-
-
-//        for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
-//
-//
-//            if (sSearchQuotesByKeywordQuotes.get(i) == null){
-//
-//
-//                Integer quotePosition = i;
-//
-//                new GetSearchQuotesByKeywordAsyncTask().execute(quotePosition);
-//            }
-//
-//        }
 
 
 
@@ -295,21 +245,35 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
+
+
+
+
+
+
+
+
+
     List<String> mRandomSearchSuggstions;
 
 
 
 
-    public List<String> getRandomSearchSuggstions() {
-        List<String> mSearchSuggestionsFullList = Arrays.asList("Dog", "Cat", "Power", "Strong", "Imaginations", "Strong",
+    public List<String> getRandomSearchSuggestions() {
+        List<String> mSearchSuggestionsFullList = Arrays.asList("Dog", "Cat", "Power", "Strong", "Imagination", "Strong",
                 "Past", "Present", "Man", "Woman", "House", "Luck", "Weak", "Water", "Metal", "Fire", "Random", "Events",
                 "Fast", "Slow", "Learn", "Teach", "Student", "Humanity", "Fortune", "Rich", "Food", "Famine", "Hot", "Cold",
                 "Small", "Term", "Long", "Understand", "Wise", "Coward", "Forgive", "Happy", "Sad", "Emotion", "Ambition", "Rain",
                 "Mental", "Artist", "Expert", "Universe", "Give", "More", "Movement", "Healthy", "Culture", "Heart", "Amazing",
-                "Remarkable", "Interest", "Desire", "Drink", "Time", "Sun", "Infinity", "Human", "Robot", "Machine", "Society",
+                "Remarkable", "Interest", "Desire", "Time", "Sun", "Infinity", "Human", "Robot", "Machine", "Society", "Anthropology",
                 "Cog", "Wall", "Divide", "Unity", "Wheel", "Invent", "Normal", "Strange", "Weird", "Adult", "Children", "Future",
                 "Conquer", "Loss", "Success", "Defeat", "Win", "Lose", "Fly", "Run", "Walk", "Courage", "Brave", "King", "Queen",
-                "Royal", "Equality", "Greed", "Commitment", "Spirituality", "War", "Peace", "Utopia", "Distopia", "Seek", "Friend");
+                "Royal", "Equality", "Greed", "Commitment", "Spirituality", "War", "Peace", "Utopia", "Distopia", "Seek", "Friend",
+                "Friendship", "Happiness", "Love", "Fear", "Good", "Connect", "Family", "Relationship", "Education", "Sentience",
+                "Empathy", "Sadness", "Loneliness", "Joy", "Castle", "Humility", "World", "Hisotry", "Change", "Experience", "Perspective",
+                "Money", "Values", "Patience", "Mind", "Body", "Spirit", "Reality", "Illusion", "Dream", "Life", "Wealth", "Luck", "Business",
+                "Coffee", "Spring", "Summer", "Autumn", "Winter", "Young", "Old", "Generation", "Baby-boomers", "Millennials", "Lust",
+                "Gratitude", "Create", "Art", "Fitness", "Milkyway", "Food", "Morals", "Memories", "Moon");
 
         Collections.shuffle(mSearchSuggestionsFullList);
 
@@ -331,6 +295,11 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
     public static boolean shouldDisplaySearchItemsWhenFragmentIsReloaded;
 
+    public SearchView mSearchView;
+
+
+
+
 
 
 
@@ -344,15 +313,32 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
-        final MenuItem searchItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment);
+        final MenuItem searchItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_search);
 
 
-        final SearchView searchView = (SearchView) searchItem.getActionView();
+        mSearchView = (SearchView) searchItem.getActionView();
 
-        searchView.setQueryHint("Search by Keyword");
+        mSearchView.setQueryHint("Search by Keyword");
 
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+
+        mSearchSuggestionOne.setOnClickListener(this); //Call onClick(..) method
+        mSearchSuggestionTwo.setOnClickListener(this);
+        mSearchSuggestionThree.setOnClickListener(this);
+        mSearchSuggestionFour.setOnClickListener(this);
+        mSearchSuggestionFive.setOnClickListener(this);
+        mSearchSuggestionSix.setOnClickListener(this);
+        mSearchSuggestionSeven.setOnClickListener(this);
+        mSearchSuggestionEight.setOnClickListener(this);
+        mSearchSuggestionNine.setOnClickListener(this);
+        mSearchSuggestionTen.setOnClickListener(this);
+
+
+
+
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextChange(String searchQuery) {
@@ -375,10 +361,12 @@ public class SearchQuotesByKeywordFragment extends Fragment {
                 sSearchQuery = searchQuery;
 
 
-                searchView.onActionViewCollapsed();
+                mSearchView.onActionViewCollapsed();
 
 
                 shouldDisplaySearchItemsWhenFragmentIsReloaded = true;
+
+                getActivity().invalidateOptionsMenu();
 
 
 
@@ -457,6 +445,18 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
+
+        final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_clear_all);
+
+        if (shouldDisplaySearchItemsWhenFragmentIsReloaded == true){
+            clearAllItem.setVisible(true);
+        }
+        else{
+            clearAllItem.setVisible(false);
+        }
+
+
+
     }
 
 
@@ -469,7 +469,7 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
         switch (menuItem.getItemId()){
-            case (R.id.menu_item_search_quotes_by_keyword_fragment):
+            case (R.id.menu_item_search_quotes_by_keyword_fragment_search):
 
                 //Disable the "Randomise" menu item button (the moment it is pressed)
                 menuItem.setEnabled(false);
@@ -477,9 +477,11 @@ public class SearchQuotesByKeywordFragment extends Fragment {
                 return true;
 
 
-            case (R.id.menu_item_clear_all_quotes_by_keyword_fragment):
+            case (R.id.menu_item_search_quotes_by_keyword_fragment_clear_all):
 
                 shouldDisplaySearchItemsWhenFragmentIsReloaded = false;
+
+                getActivity().invalidateOptionsMenu();
 
                 mKeywordSearchedString.setVisibility(View.GONE);
                 mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.GONE);
@@ -499,7 +501,7 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
-                mRandomSearchSuggstions = getRandomSearchSuggstions();
+                mRandomSearchSuggstions = getRandomSearchSuggestions();
 //            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggstions);
 
 
@@ -552,6 +554,72 @@ public class SearchQuotesByKeywordFragment extends Fragment {
 
 
 
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.search_quotes_by_keyword_search_suggestion_one:
+                mSearchView.setQuery(mSearchSuggestionOne.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_two:
+                mSearchView.setQuery(mSearchSuggestionTwo.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_three:
+                mSearchView.setQuery(mSearchSuggestionThree.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_four:
+                mSearchView.setQuery(mSearchSuggestionFour.getText(), true);
+                break;
+            case R.id.search_quotes_by_keyword_search_suggestion_five:
+                mSearchView.setQuery(mSearchSuggestionFive.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_six:
+                mSearchView.setQuery(mSearchSuggestionSix.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_seven:
+                mSearchView.setQuery(mSearchSuggestionSeven.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_eight:
+                mSearchView.setQuery(mSearchSuggestionEight.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_nine:
+                mSearchView.setQuery(mSearchSuggestionNine.getText(), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_ten:
+                mSearchView.setQuery(mSearchSuggestionTen.getText(), true);
+                break;
+
+
+        }
 
     }
 
