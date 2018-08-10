@@ -41,7 +41,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
     private final String TAG = "SQBKFragment";
 
 
-    private static final int NUMBER_OF_QUOTES_TO_LOAD = 7;
+    private static final int NUMBER_OF_QUOTES_TO_LOAD = 12;
 
 
     private static String sSearchQuery;
@@ -63,6 +63,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
     private TextView mSearchSuggestionsText;
+    private Button mSearchSuggestionsRefresh;
+
     private Button mSearchSuggestionOne;
     private Button mSearchSuggestionTwo;
     private Button mSearchSuggestionThree;
@@ -128,10 +130,9 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mSearchQuotesByKeywordQuoteRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-
-
-
         mSearchSuggestionsText = (TextView) view.findViewById(R.id.search_quotes_by_keyword_search_suggestions_text);
+        mSearchSuggestionsRefresh = (Button) view.findViewById(R.id.search_quotes_by_keyword_search_suggestions_refresh);
+
         mSearchSuggestionOne = (Button) view.findViewById(R.id.search_quotes_by_keyword_search_suggestion_one);
         mSearchSuggestionTwo = (Button) view.findViewById(R.id.search_quotes_by_keyword_search_suggestion_two);
         mSearchSuggestionThree = (Button) view.findViewById(R.id.search_quotes_by_keyword_search_suggestion_three);
@@ -146,6 +147,33 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+
+
+        mSearchSuggestionsRefresh.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view){
+
+                mRandomSearchSuggestions = getRandomSearchSuggestions();
+//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggestions);
+
+
+                mSearchSuggestionOne.setText(mRandomSearchSuggestions.get(0));
+                mSearchSuggestionTwo.setText(mRandomSearchSuggestions.get(1));
+                mSearchSuggestionThree.setText(mRandomSearchSuggestions.get(2));
+                mSearchSuggestionFour.setText(mRandomSearchSuggestions.get(3));
+                mSearchSuggestionFive.setText(mRandomSearchSuggestions.get(4));
+                mSearchSuggestionSix.setText(mRandomSearchSuggestions.get(5));
+                mSearchSuggestionSeven.setText(mRandomSearchSuggestions.get(6));
+                mSearchSuggestionEight.setText(mRandomSearchSuggestions.get(7));
+                mSearchSuggestionNine.setText(mRandomSearchSuggestions.get(8));
+                mSearchSuggestionTen.setText(mRandomSearchSuggestions.get(9));
+
+            }
+        });
+
+
+
         //Display the list of Quotes IF and ONLY IF a search has begun.
         //Otherwise, display the list of suggestions
         if (shouldDisplaySearchItemsWhenFragmentIsReloaded == true) {
@@ -156,6 +184,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
             mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.VISIBLE);
 
             mSearchSuggestionsText.setVisibility(View.GONE);
+            mSearchSuggestionsRefresh.setVisibility(View.GONE);
+
             mSearchSuggestionOne.setVisibility(View.GONE);
             mSearchSuggestionTwo.setVisibility(View.GONE);
             mSearchSuggestionThree.setVisibility(View.GONE);
@@ -184,6 +214,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
             mSearchSuggestionsText.setVisibility(View.VISIBLE);
+            mSearchSuggestionsRefresh.setVisibility(View.VISIBLE);
+
             mSearchSuggestionOne.setVisibility(View.VISIBLE);
             mSearchSuggestionTwo.setVisibility(View.VISIBLE);
             mSearchSuggestionThree.setVisibility(View.VISIBLE);
@@ -199,20 +231,20 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-            mRandomSearchSuggstions = getRandomSearchSuggestions();
-//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggstions);
+            mRandomSearchSuggestions = getRandomSearchSuggestions();
+//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggestions);
 
 
-            mSearchSuggestionOne.setText(mRandomSearchSuggstions.get(0));
-            mSearchSuggestionTwo.setText(mRandomSearchSuggstions.get(1));
-            mSearchSuggestionThree.setText(mRandomSearchSuggstions.get(2));
-            mSearchSuggestionFour.setText(mRandomSearchSuggstions.get(3));
-            mSearchSuggestionFive.setText(mRandomSearchSuggstions.get(4));
-            mSearchSuggestionSix.setText(mRandomSearchSuggstions.get(5));
-            mSearchSuggestionSeven.setText(mRandomSearchSuggstions.get(6));
-            mSearchSuggestionEight.setText(mRandomSearchSuggstions.get(7));
-            mSearchSuggestionNine.setText(mRandomSearchSuggstions.get(8));
-            mSearchSuggestionTen.setText(mRandomSearchSuggstions.get(9));
+            mSearchSuggestionOne.setText(mRandomSearchSuggestions.get(0));
+            mSearchSuggestionTwo.setText(mRandomSearchSuggestions.get(1));
+            mSearchSuggestionThree.setText(mRandomSearchSuggestions.get(2));
+            mSearchSuggestionFour.setText(mRandomSearchSuggestions.get(3));
+            mSearchSuggestionFive.setText(mRandomSearchSuggestions.get(4));
+            mSearchSuggestionSix.setText(mRandomSearchSuggestions.get(5));
+            mSearchSuggestionSeven.setText(mRandomSearchSuggestions.get(6));
+            mSearchSuggestionEight.setText(mRandomSearchSuggestions.get(7));
+            mSearchSuggestionNine.setText(mRandomSearchSuggestions.get(8));
+            mSearchSuggestionTen.setText(mRandomSearchSuggestions.get(9));
 
 
 
@@ -254,7 +286,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-    List<String> mRandomSearchSuggstions;
+    List<String> mRandomSearchSuggestions;
 
 
 
@@ -268,12 +300,13 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                 "Remarkable", "Interest", "Desire", "Time", "Sun", "Infinity", "Human", "Robot", "Machine", "Society", "Anthropology",
                 "Cog", "Wall", "Divide", "Unity", "Wheel", "Invent", "Normal", "Strange", "Weird", "Adult", "Children", "Future",
                 "Conquer", "Loss", "Success", "Defeat", "Win", "Lose", "Fly", "Run", "Walk", "Courage", "Brave", "King", "Queen",
-                "Royal", "Equality", "Greed", "Commitment", "Spirituality", "War", "Peace", "Utopia", "Distopia", "Seek", "Friend",
+                "Royal", "Equality", "Greed", "Commitment", "Spirituality", "War", "Peace", "Utopia", "Seek", "Friend", "Evolution",
                 "Friendship", "Happiness", "Love", "Fear", "Good", "Connect", "Family", "Relationship", "Education", "Sentience",
                 "Empathy", "Sadness", "Loneliness", "Joy", "Castle", "Humility", "World", "Hisotry", "Change", "Experience", "Perspective",
                 "Money", "Values", "Patience", "Mind", "Body", "Spirit", "Reality", "Illusion", "Dream", "Life", "Wealth", "Luck", "Business",
-                "Coffee", "Spring", "Summer", "Autumn", "Winter", "Young", "Old", "Generation", "Baby-boomers", "Millennials", "Lust",
-                "Gratitude", "Create", "Art", "Fitness", "Milkyway", "Food", "Morals", "Memories", "Moon");
+                "Coffee", "Spring", "Summer", "Autumn", "Winter", "Young", "Old", "Generation", "Baby-boomers", "Lust", "Perfection",
+                "Gratitude", "Create", "Art", "Fitness", "Milkyway", "Food", "Morals", "Memories", "Moon", "Reflection", "Machine Learning", "Cosmos",
+                "Technology", "Morality");
 
         Collections.shuffle(mSearchSuggestionsFullList);
 
@@ -488,6 +521,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
                 mSearchSuggestionsText.setVisibility(View.VISIBLE);
+                mSearchSuggestionsRefresh.setVisibility(View.VISIBLE);
+
                 mSearchSuggestionOne.setVisibility(View.VISIBLE);
                 mSearchSuggestionTwo.setVisibility(View.VISIBLE);
                 mSearchSuggestionThree.setVisibility(View.VISIBLE);
@@ -501,20 +536,20 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-                mRandomSearchSuggstions = getRandomSearchSuggestions();
-//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggstions);
+                mRandomSearchSuggestions = getRandomSearchSuggestions();
+//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggestions);
 
 
-                mSearchSuggestionOne.setText(mRandomSearchSuggstions.get(0));
-                mSearchSuggestionTwo.setText(mRandomSearchSuggstions.get(1));
-                mSearchSuggestionThree.setText(mRandomSearchSuggstions.get(2));
-                mSearchSuggestionFour.setText(mRandomSearchSuggstions.get(3));
-                mSearchSuggestionFive.setText(mRandomSearchSuggstions.get(4));
-                mSearchSuggestionSix.setText(mRandomSearchSuggstions.get(5));
-                mSearchSuggestionSeven.setText(mRandomSearchSuggstions.get(6));
-                mSearchSuggestionEight.setText(mRandomSearchSuggstions.get(7));
-                mSearchSuggestionNine.setText(mRandomSearchSuggstions.get(8));
-                mSearchSuggestionTen.setText(mRandomSearchSuggstions.get(9));
+                mSearchSuggestionOne.setText(mRandomSearchSuggestions.get(0));
+                mSearchSuggestionTwo.setText(mRandomSearchSuggestions.get(1));
+                mSearchSuggestionThree.setText(mRandomSearchSuggestions.get(2));
+                mSearchSuggestionFour.setText(mRandomSearchSuggestions.get(3));
+                mSearchSuggestionFive.setText(mRandomSearchSuggestions.get(4));
+                mSearchSuggestionSix.setText(mRandomSearchSuggestions.get(5));
+                mSearchSuggestionSeven.setText(mRandomSearchSuggestions.get(6));
+                mSearchSuggestionEight.setText(mRandomSearchSuggestions.get(7));
+                mSearchSuggestionNine.setText(mRandomSearchSuggestions.get(8));
+                mSearchSuggestionTen.setText(mRandomSearchSuggestions.get(9));
 
 
 
