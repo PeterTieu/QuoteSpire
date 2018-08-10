@@ -5,9 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesAdvancedFragment;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesAuthorFragment;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesCategoryFragment;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesKeywordFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByAuthorFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByCategoryFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByKeyword.SearchQuotesByKeywordFragment;
 
 
 //Adapter for the ViewPager of the "Search Quotes" navigation drawer fragment item.
@@ -34,11 +34,11 @@ public class SearchQuotesFragmentPagerAdapter extends FragmentPagerAdapter {
         //Scan through the position numbers of the Swipe Tabs selected, and return the associated Fragments
         switch (position){
             case 0:
-                return new SearchQuotesKeywordFragment();
+                return new SearchQuotesByKeywordFragment();
             case 1:
-                return new SearchQuotesCategoryFragment();
+                return new SearchQuotesByCategoryFragment();
             case 2:
-                return new SearchQuotesAuthorFragment();
+                return new SearchQuotesByAuthorFragment();
             case 3:
                 return new SearchQuotesAdvancedFragment();
         }
