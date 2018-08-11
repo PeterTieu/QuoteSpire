@@ -15,7 +15,7 @@
     <string name="dashboard">Dashboard</string>
     <string name="also_from">Also from </string>
     <string name="also_on">Also on </string>
-    <string name="no_internet_connection">* No internet connection. Unable to fetch quote! *</string>
+    <string name="no_internet_connection">* Unable to fetch quote! *</string>
     <string name="no_quotes_from_author">* There are no more quotes from this author *</string>
 
     <string name="search_quotes_keyword">Search Keyword</string>
@@ -49,9 +49,11 @@
 
 
     <!--SearchQuotesByKeywordFragment-->
+    <string name="search_quotes_by_keyword_fragment_title">Search Quotes</string>
+    <string name="search_view_hint">Search by keyword or phrase</string>
     <string name="clear_all">Clear All</string>
-    <string name="search_suggestions">Search Suggestions...</string>
-    <string name="unable_to_fetch_quote">* Unable to Fetch Quote *</string>
+    <string name="keyword_search_suggestions">KEYWORD search suggestions...</string>
+    <string name="unable_to_fetch_quote">* Unable to Fetch quote! *</string>
 
 
 
