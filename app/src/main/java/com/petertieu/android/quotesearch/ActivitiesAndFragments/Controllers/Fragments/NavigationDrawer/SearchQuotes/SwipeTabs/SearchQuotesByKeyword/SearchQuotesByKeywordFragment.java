@@ -36,67 +36,80 @@ import java.util.Collections;
 import java.util.List;
 
 
+
 @SuppressWarnings({"RedundantCast", "FieldCanBeLocal", "deprecation", "ConstantConditions"})
+
+//Fragment for searching quotes by keyword OR phrase
 public class SearchQuotesByKeywordFragment extends Fragment implements View.OnClickListener {
 
-    //Log for Logcat
-    private final String TAG = "SQBKFragment";
 
 
-    private static final int NUMBER_OF_QUOTES_TO_LOAD = 12;
+    //================== DECLARE/DEFINE INSTANCE VARIABLES =========================================================
 
+    private final String TAG = "SQBKFragment"; //Log for Logcat
 
+    //-------------- SEARCH variables ------------------------------------
+    private static final int NUMBER_OF_QUOTES_TO_LOAD = 10; //Number of quotes to load upon search
     private static String sSearchQuery;
-    private TextView mKeywordSearchedString;
+    private TextView mKeywordSearchedText;
 
 
-    //Declare and INITIALISE the List of Quote objects to size 8
-    private static List<Quote> sSearchQuotesByKeywordQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]);
-
-    private RecyclerView mSearchQuotesByKeywordQuoteRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
-    private static SearchQuotesByKeywordAdapter sSearchQuotesByKeywordQuoteAdapter;
-    private SearchQuotesByKeywordQuoteViewHolder mSearchQuotesByKeywordQuoteViewHolder;
+    //-------------- LIST variables ------------------------------------
+    private static List<Quote> sSearchQuotesByKeywordQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]); //List of Quote objects (of size 12)
+    private List<String> mRandomSearchSuggestions; //List of Search Suggestions. They are 10 Strings that are randomly picked from a larger list of Strings
+    @SuppressWarnings("CanBeFinal") private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTasksList = Arrays.asList(new GetSearchQuotesByKeywordAsyncTask[NUMBER_OF_QUOTES_TO_LOAD]); //List of AsyncTass for fetching the Quote (of size 12)
 
 
+    //-------------- FLAG variables ------------------------------------
+    private static boolean shouldDisplaySearchResultsWhenFragmentIsReloaded; //Flag that is activated when a search has begun or the search items are in View.
 
 
-    private boolean shouldEnableSearchMenuItem = false;
+    //-------------- VIEW variables ------------------------------------
+    private LinearLayoutManager mLinearLayoutManager; //LinearLayoutManager for RecyclerView
+    private RecyclerView mSearchQuotesByKeywordQuoteRecyclerView; //RecyclerView to store list of Quote items
+    private static SearchQuotesByKeywordAdapter sSearchQuotesByKeywordQuoteAdapter; //RecyclerView Adapter
+    private SearchQuotesByKeywordQuoteViewHolder mSearchQuotesByKeywordQuoteViewHolder; //RecyclerView ViewHolder for storing single Quote items
+
+    private SearchView mSearchView; //Search button in the options menu
+
+    private TextView mSearchSuggestionsText; //Search suggestions text
+    private Button mSearchSuggestionsRefresh; //Search suggestions refresh button
+
+    private Button mSearchSuggestionOne;    //Search suggestion #1
+    private Button mSearchSuggestionTwo;    //Search suggestion #2
+    private Button mSearchSuggestionThree;  //Search suggestion #3
+    private Button mSearchSuggestionFour;   //Search suggestion #4
+    private Button mSearchSuggestionFive;   //Search suggestion #5
+    private Button mSearchSuggestionSix;    //Search suggestion #6
+    private Button mSearchSuggestionSeven;  //Search suggestion #7
+    private Button mSearchSuggestionEight;  //Search suggestion #8
+    private Button mSearchSuggestionNine;   //Search suggestion #9
+    private Button mSearchSuggestionTen;    //Search suggestion #10
 
 
-    private TextView mSearchSuggestionsText;
-    private Button mSearchSuggestionsRefresh;
-
-    private Button mSearchSuggestionOne;
-    private Button mSearchSuggestionTwo;
-    private Button mSearchSuggestionThree;
-    private Button mSearchSuggestionFour;
-    private Button mSearchSuggestionFive;
-    private Button mSearchSuggestionSix;
-    private Button mSearchSuggestionSeven;
-    private Button mSearchSuggestionEight;
-    private Button mSearchSuggestionNine;
-    private Button mSearchSuggestionTen;
 
 
 
+    //================== DEFINE METHODS ===================================================================================
 
-
+    //Override onAttach(..) fragment lifecycle callback method
     @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
 
-        Log.i(TAG, "onAttached(..) called");
-
+        Log.i(TAG, "onAttached(..) called"); //Log to Logcat
     }
 
 
+
+
+    //Override onCreate(..) fragment lifecycle callback method
     @Override
     public void onCreate(Bundle onSavedInstanceState){
         super.onCreate(onSavedInstanceState);
 
-        Log.i(TAG, "onCreate(..) called");
+        Log.i(TAG, "onCreate(..) called"); //Log to Logcat
 
         setHasOptionsMenu(true);
     }
@@ -104,30 +117,20 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-
-
-
-
-
-
-
-
-
-
     //Override the onCreateView(..) fragment lifecycle callback method
+    @SuppressWarnings("NullableProblems")
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
 
-        //Log in Logcat
-        Log.i(TAG, "onCreateView(..) called");
+        Log.i(TAG, "onCreateView(..) called"); //Log to Logcat
 
-        View view = layoutInflater.inflate(R.layout.fragment_search_quotes_by_keyword, viewGroup, false);
+        getActivity().setTitle(getResources().getString(R.string.search_quotes_by_keyword_fragment_title)); //Set title for fragment
+
+        View view = layoutInflater.inflate(R.layout.fragment_search_quotes_by_keyword, viewGroup, false); //Inflate fragment layout
 
 
-        mKeywordSearchedString = (TextView) view.findViewById(R.id.search_quotes_by_keyword_keyword_searched);
-        mKeywordSearchedString.setVisibility(View.GONE);
-
+        mKeywordSearchedText = (TextView) view.findViewById(R.id.search_quotes_by_keyword_keyword_searched);
 
         mSearchQuotesByKeywordQuoteRecyclerView = (RecyclerView) view.findViewById(R.id.search_quotes_by_keyword_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
@@ -149,41 +152,25 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-
-
-
+        //Set listener for Search Suggestions Refresh button
         mSearchSuggestionsRefresh.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view){
-
-                mRandomSearchSuggestions = getRandomSearchSuggestions();
-//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggestions);
-
-
-                mSearchSuggestionOne.setText(mRandomSearchSuggestions.get(0));
-                mSearchSuggestionTwo.setText(mRandomSearchSuggestions.get(1));
-                mSearchSuggestionThree.setText(mRandomSearchSuggestions.get(2));
-                mSearchSuggestionFour.setText(mRandomSearchSuggestions.get(3));
-                mSearchSuggestionFive.setText(mRandomSearchSuggestions.get(4));
-                mSearchSuggestionSix.setText(mRandomSearchSuggestions.get(5));
-                mSearchSuggestionSeven.setText(mRandomSearchSuggestions.get(6));
-                mSearchSuggestionEight.setText(mRandomSearchSuggestions.get(7));
-                mSearchSuggestionNine.setText(mRandomSearchSuggestions.get(8));
-                mSearchSuggestionTen.setText(mRandomSearchSuggestions.get(9));
-
+                setUpRandomSearchSuggestions(); //Get a new set of Search Suggestions
             }
+
         });
 
 
 
-        //Display the list of Quotes IF and ONLY IF a search has begun.
-        //Otherwise, display the list of suggestions
-        if (shouldDisplaySearchItemsWhenFragmentIsReloaded) {
+        //IF a Search has begun/is in place, then display the RESULT (i.e. search items)
+        if (shouldDisplaySearchResultsWhenFragmentIsReloaded) {
 
-            getActivity().invalidateOptionsMenu();
+            getActivity().invalidateOptionsMenu(); //Update the options menu
 
-            mKeywordSearchedString.setVisibility(View.VISIBLE);
+            //---------- Configure View variables ----------------------
+            mKeywordSearchedText.setVisibility(View.VISIBLE);
             mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.VISIBLE);
 
             mSearchSuggestionsText.setVisibility(View.GONE);
@@ -201,20 +188,19 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
             mSearchSuggestionTen.setVisibility(View.GONE);
 
 
+            //---------- Configure View variables ----------------------
+            mKeywordSearchedText.setText(Html.fromHtml("Keyword searched: " + " " + " \"" +"<i>" + sSearchQuery.toUpperCase() + "</i>" + "\"")); //Text for displaying the Keyword Searched
 
-            mKeywordSearchedString.setText(Html.fromHtml("Keyword searched: " + " " + " \"" +"<i>" + sSearchQuery.toUpperCase() + "</i>" + "\""));
-
-            sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes);
-            sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
-            mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter);
-
-
+            sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes); //Create a new RecyclerView Adapter
+            sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes); //Link the RecyclerView adapter to the List of Quotes from the search result
+            mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter); //Set up the RecyclerView to the RecyclerView Adapter
         }
+
+        //If a Search has not begun/is in place, then display the SEARCH SUGGESTIONS
         else{
-
-            mKeywordSearchedString.setVisibility(View.GONE);
+            //---------- Configure View variables ----------------------
+            mKeywordSearchedText.setVisibility(View.GONE);
             mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.GONE);
-
 
             mSearchSuggestionsText.setVisibility(View.VISIBLE);
             mSearchSuggestionsRefresh.setVisibility(View.VISIBLE);
@@ -230,44 +216,10 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
             mSearchSuggestionNine.setVisibility(View.VISIBLE);
             mSearchSuggestionTen.setVisibility(View.VISIBLE);
 
-
-
-
-
-            mRandomSearchSuggestions = getRandomSearchSuggestions();
-//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggestions);
-
-
-            mSearchSuggestionOne.setText(mRandomSearchSuggestions.get(0));
-            mSearchSuggestionTwo.setText(mRandomSearchSuggestions.get(1));
-            mSearchSuggestionThree.setText(mRandomSearchSuggestions.get(2));
-            mSearchSuggestionFour.setText(mRandomSearchSuggestions.get(3));
-            mSearchSuggestionFive.setText(mRandomSearchSuggestions.get(4));
-            mSearchSuggestionSix.setText(mRandomSearchSuggestions.get(5));
-            mSearchSuggestionSeven.setText(mRandomSearchSuggestions.get(6));
-            mSearchSuggestionEight.setText(mRandomSearchSuggestions.get(7));
-            mSearchSuggestionNine.setText(mRandomSearchSuggestions.get(8));
-            mSearchSuggestionTen.setText(mRandomSearchSuggestions.get(9));
-
-
-
-
-
-
-            //TODO: Create layout for "Keyword search suggestions: "
+            setUpRandomSearchSuggestions(); //Get a new set of Search Suggestions from a List of ALL possible Search Suggestions
         }
 
-
-
-
-        getActivity().invalidateOptionsMenu();
-
-
-
-        getActivity().setTitle("Search Quotes");
-
-
-
+        getActivity().invalidateOptionsMenu(); //Result options menu
 
         return view;
     }
@@ -275,29 +227,13 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private List<String> mRandomSearchSuggestions;
-
-
-
-
+    //Method for setting up the set of Search Suggestions - randomly picked from a List of Strings of ALL possible Search Suggestions
     @SuppressWarnings("UnnecessaryLocalVariable")
-    private List<String> getRandomSearchSuggestions() {
+    private void setUpRandomSearchSuggestions() {
+
+        //List of all possible Search Suggestions
         List<String> mSearchSuggestionsFullList = Arrays.asList("Dog", "Cat", "Power", "Strong", "Imagination", "Strong",
-                "Past", "Present", "Man", "Woman", "House", "Luck", "Weak", "Water", "Metal", "Fire", "Random", "Events",
+                "Past", "Present", "Man", "Woman", "House", "Luck", "Weak", "Water", "Metal", "Fire", "Random", "Events", "Politics",
                 "Fast", "Slow", "Learn", "Teach", "Student", "Humanity", "Fortune", "Rich", "Food", "Famine", "Hot", "Cold",
                 "Small", "Term", "Long", "Understand", "Wise", "Coward", "Forgive", "Happy", "Sad", "Emotion", "Ambition", "Rain",
                 "Mental", "Artist", "Expert", "Universe", "Give", "More", "Movement", "Healthy", "Culture", "Heart", "Amazing",
@@ -305,63 +241,34 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                 "Cog", "Wall", "Divide", "Unity", "Wheel", "Invent", "Normal", "Strange", "Weird", "Adult", "Children", "Future",
                 "Conquer", "Loss", "Success", "Defeat", "Win", "Lose", "Fly", "Run", "Walk", "Courage", "Brave", "King", "Queen",
                 "Royal", "Equality", "Greed", "Commitment", "Spirituality", "War", "Peace", "Utopia", "Seek", "Friend", "Evolution",
-                "Friendship", "Happiness", "Love", "Fear", "Good", "Connect", "Family", "Relationship", "Education", "Sentience",
+                "Friendship", "Happiness", "Love", "Fear", "Good", "Connect", "Family", "Relationship", "Education", "Sentience", "Character",
                 "Empathy", "Sadness", "Loneliness", "Joy", "Castle", "Humility", "World", "History", "Change", "Experience", "Perspective",
                 "Money", "Values", "Patience", "Mind", "Body", "Spirit", "Reality", "Illusion", "Dream", "Life", "Wealth", "Luck", "Business",
                 "Coffee", "Spring", "Summer", "Autumn", "Winter", "Young", "Old", "Generation", "Baby-boomers", "Lust", "Perfection",
                 "Gratitude", "Create", "Art", "Fitness", "Milkyway", "Food", "Morals", "Memories", "Moon", "Reflection", "Machine Learning", "Cosmos",
                 "Technology", "Morality");
 
+        //Shuffle the List of al possible Search Suggestions
         Collections.shuffle(mSearchSuggestionsFullList);
 
-        int randomSeriesLength = 10;
+        int randomSeriesLength = 10; //Length of the List containing the Search Suggestions
 
-        List<String> mRandomSearchSuggestions = mSearchSuggestionsFullList.subList(0, randomSeriesLength);
+        mRandomSearchSuggestions = mSearchSuggestionsFullList.subList(0, randomSeriesLength); //Get the List of 10 random Search Suggestions
 
-        return mRandomSearchSuggestions;
-    }
+        //Set the Search Suggestion variables  to each of the Search Suggestion Buttons
+        mSearchSuggestionOne.setText(mRandomSearchSuggestions.get(0));
+        mSearchSuggestionTwo.setText(mRandomSearchSuggestions.get(1));
+        mSearchSuggestionThree.setText(mRandomSearchSuggestions.get(2));
+        mSearchSuggestionFour.setText(mRandomSearchSuggestions.get(3));
+        mSearchSuggestionFive.setText(mRandomSearchSuggestions.get(4));
+        mSearchSuggestionSix.setText(mRandomSearchSuggestions.get(5));
+        mSearchSuggestionSeven.setText(mRandomSearchSuggestions.get(6));
+        mSearchSuggestionEight.setText(mRandomSearchSuggestions.get(7));
+        mSearchSuggestionNine.setText(mRandomSearchSuggestions.get(8));
+        mSearchSuggestionTen.setText(mRandomSearchSuggestions.get(9));
 
-
-
-
-
-
-
-//    GetSearchQuotesByKeywordAsyncTask mGetSearchQuotesByKeywordAsyncTask;
-private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTasksList = Arrays.asList(new GetSearchQuotesByKeywordAsyncTask[NUMBER_OF_QUOTES_TO_LOAD]);
-
-    private static boolean shouldDisplaySearchItemsWhenFragmentIsReloaded;
-
-    private SearchView mSearchView;
-
-
-
-
-
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-
-        super.onCreateOptionsMenu(menu, menuInflater);
-
-        menuInflater.inflate(R.menu.fragment_search_quotes_by_keyword, menu);
-
-
-
-
-        final MenuItem searchItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_search);
-
-
-        mSearchView = (SearchView) searchItem.getActionView();
-
-        mSearchView.setQueryHint("Search by Keyword");
-
-
-
-
-
-        mSearchSuggestionOne.setOnClickListener(this); //Call onClick(..) method
+        //Link to the Search Suggestion buttons to an overriden onClick(..) method
+        mSearchSuggestionOne.setOnClickListener(this);
         mSearchSuggestionTwo.setOnClickListener(this);
         mSearchSuggestionThree.setOnClickListener(this);
         mSearchSuggestionFour.setOnClickListener(this);
@@ -371,15 +278,82 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
         mSearchSuggestionEight.setOnClickListener(this);
         mSearchSuggestionNine.setOnClickListener(this);
         mSearchSuggestionTen.setOnClickListener(this);
+    }
 
 
 
 
+    //Override onClick(..) method that this class implements
+    @Override
+    public void onClick(View view) {
+
+        //When a Search Suggestion button is pressed, set the SearchView query to what it says on the Button
+        switch (view.getId()) {
+
+            case R.id.search_quotes_by_keyword_search_suggestion_one:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(0), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_two:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(1), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_three:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(2), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_four:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(3), true);
+                break;
+            case R.id.search_quotes_by_keyword_search_suggestion_five:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(4), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_six:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(5), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_seven:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(6), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_eight:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(7), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_nine:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(8), true);
+                break;
+
+            case R.id.search_quotes_by_keyword_search_suggestion_ten:
+                mSearchView.setQuery(mRandomSearchSuggestions.get(9), true);
+                break;
+        }
+    }
+
+
+
+
+    //Override onCreateOptionsMenu(..) fragment lifecycle callback method
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+
+        menuInflater.inflate(R.menu.fragment_search_quotes_by_keyword, menu); //Inflate options menu layout
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_search); //Menu item for "Search"
+
+        mSearchView = (SearchView) searchItem.getActionView(); //Assign SearchView instance variable to this menu item
+        mSearchView.setQueryHint(getResources().getString(R.string.search_view_hint)); //Set hint to SearchView
+
+
+        //Set listeners to the query Text of the SearchView
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
+            //When SearchView query text is changed
             @Override
             public boolean onQueryTextChange(String searchQuery) {
-                Log.d(TAG, searchQuery);
+                Log.d(TAG, searchQuery); //Log to Logcat
 
                 //Return a boolean:
                 //true: If this method has been handled
@@ -388,20 +362,20 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
                 return false;
             }
 
-
-
-
+            //When SearchView query text is submitted
             @Override
             public boolean onQueryTextSubmit(String searchQuery){
                 Log.d(TAG, "Submitted query: " + searchQuery);
 
-                sSearchQuery = searchQuery;
+                sSearchQuery = searchQuery; //Assign static instance variable to the local variable
+
+                SearchQuotesByKeywordSharedPreferences.setSearchQuotesByKeywordStoredQuery(getActivity(), searchQuery); //
 
 
                 mSearchView.onActionViewCollapsed();
 
 
-                shouldDisplaySearchItemsWhenFragmentIsReloaded = true;
+                shouldDisplaySearchResultsWhenFragmentIsReloaded = true;
 
                 getActivity().invalidateOptionsMenu();
 
@@ -433,8 +407,8 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
 
-                mKeywordSearchedString.setVisibility(View.VISIBLE);
-                mKeywordSearchedString.setText(Html.fromHtml("Keyword searched: " + " " + " \"" +"<i>" +  searchQuery.toUpperCase() + "</i>" + "\""));
+                mKeywordSearchedText.setVisibility(View.VISIBLE);
+                mKeywordSearchedText.setText(Html.fromHtml("Keyword searched: " + " " + " \"" +"<i>" +  searchQuery.toUpperCase() + "</i>" + "\""));
 
 
                 mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.VISIBLE);
@@ -445,12 +419,6 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
                 sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
                 sSearchQuotesByKeywordQuoteAdapter.notifyDataSetChanged();
                 mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter);
-
-
-//                updateUI();
-
-
-
 
 
 
@@ -465,13 +433,7 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
                     mGetSearchQuotesByKeywordAsyncTasksList.get(i).execute(quotePosition);
 
 
-
-
-
-
                 }
-
-
 
                 //Return a boolean...
                 //true: if an action is handled by the listener (as is the case)
@@ -483,9 +445,25 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
 
+        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchQuery = SearchQuotesByKeywordSharedPreferences.getSearchQuotesByKeywordStoredQuery(getActivity());
+
+                mSearchView.setQuery(searchQuery, false);
+            }
+        });
+
+
+//        mSearchView.setQuery("hello", false);
+
+
+
+
+
         final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_clear_all);
 
-        if (shouldDisplaySearchItemsWhenFragmentIsReloaded){
+        if (shouldDisplaySearchResultsWhenFragmentIsReloaded){
             clearAllItem.setVisible(true);
         }
         else{
@@ -499,28 +477,26 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
 
         switch (menuItem.getItemId()){
+
             case (R.id.menu_item_search_quotes_by_keyword_fragment_search):
 
-                //Disable the "Randomise" menu item button (the moment it is pressed)
-                menuItem.setEnabled(false);
 
                 return true;
 
 
             case (R.id.menu_item_search_quotes_by_keyword_fragment_clear_all):
 
-                shouldDisplaySearchItemsWhenFragmentIsReloaded = false;
+
+                shouldDisplaySearchResultsWhenFragmentIsReloaded = false;
 
                 getActivity().invalidateOptionsMenu();
 
-                mKeywordSearchedString.setVisibility(View.GONE);
+                mKeywordSearchedText.setVisibility(View.GONE);
                 mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.GONE);
 
 
@@ -540,21 +516,7 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
 
-                mRandomSearchSuggestions = getRandomSearchSuggestions();
-//            Log.i(TAG, "Search suggestions: " + mRandomSearchSuggestions);
-
-
-                mSearchSuggestionOne.setText(mRandomSearchSuggestions.get(0));
-                mSearchSuggestionTwo.setText(mRandomSearchSuggestions.get(1));
-                mSearchSuggestionThree.setText(mRandomSearchSuggestions.get(2));
-                mSearchSuggestionFour.setText(mRandomSearchSuggestions.get(3));
-                mSearchSuggestionFive.setText(mRandomSearchSuggestions.get(4));
-                mSearchSuggestionSix.setText(mRandomSearchSuggestions.get(5));
-                mSearchSuggestionSeven.setText(mRandomSearchSuggestions.get(6));
-                mSearchSuggestionEight.setText(mRandomSearchSuggestions.get(7));
-                mSearchSuggestionNine.setText(mRandomSearchSuggestions.get(8));
-                mSearchSuggestionTen.setText(mRandomSearchSuggestions.get(9));
-
+                setUpRandomSearchSuggestions();
 
 
 
@@ -595,85 +557,6 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @Override
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.search_quotes_by_keyword_search_suggestion_one:
-                mSearchView.setQuery(mSearchSuggestionOne.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_two:
-                mSearchView.setQuery(mSearchSuggestionTwo.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_three:
-                mSearchView.setQuery(mSearchSuggestionThree.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_four:
-                mSearchView.setQuery(mSearchSuggestionFour.getText(), true);
-                break;
-            case R.id.search_quotes_by_keyword_search_suggestion_five:
-                mSearchView.setQuery(mSearchSuggestionFive.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_six:
-                mSearchView.setQuery(mSearchSuggestionSix.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_seven:
-                mSearchView.setQuery(mSearchSuggestionSeven.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_eight:
-                mSearchView.setQuery(mSearchSuggestionEight.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_nine:
-                mSearchView.setQuery(mSearchSuggestionNine.getText(), true);
-                break;
-
-            case R.id.search_quotes_by_keyword_search_suggestion_ten:
-                mSearchView.setQuery(mSearchSuggestionTen.getText(), true);
-                break;
-
-
-        }
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -725,38 +608,11 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
 
-
-
-//            try{
-//
-//                if (mQuotePosition[0] == NUMBER_OF_QUOTES_TO_LOAD-1){
-//                    shouldEnableSearchMenuItem = true;
-//                    getActivity().invalidateOptionsMenu();
-//                }
-//
-//                //If the final Quote has NOT been created yet
-//                else{
-//                    shouldEnableSearchMenuItem = false;
-//                    getActivity().invalidateOptionsMenu();
-//                }
-//
-//            }
-//            catch (NullPointerException npe){
-//                Log.e(TAG, "invalidOptionsMenu() method calls null object - because SearchQuotesByKeywordFragment has been closed");
-//            }
-
-
-
-
-
             updateUI();
         }
 
 
     }
-
-
-
 
 
 
@@ -798,6 +654,7 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
 
+        @SuppressWarnings("NullableProblems")
         @Override
         public SearchQuotesByKeywordQuoteViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
 
@@ -811,6 +668,7 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
         }
 
 
+        @SuppressWarnings("NullableProblems")
         @Override
         public void onBindViewHolder(SearchQuotesByKeywordQuoteViewHolder searchQuotesByKeywordQuoteViewHolder, int position){
 
@@ -893,6 +751,7 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
 
+        @SuppressWarnings("WeakerAccess")
         @SuppressLint("SetTextI18n")
         public void bind(Quote searchQuotesByKeywordQuote){
 
@@ -1067,26 +926,6 @@ private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTa
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
