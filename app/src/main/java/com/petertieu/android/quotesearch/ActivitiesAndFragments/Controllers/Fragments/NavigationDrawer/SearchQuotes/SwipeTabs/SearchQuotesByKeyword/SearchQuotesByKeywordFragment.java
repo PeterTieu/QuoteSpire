@@ -1,5 +1,6 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByKeyword;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -35,6 +36,7 @@ import java.util.Collections;
 import java.util.List;
 
 
+@SuppressWarnings({"RedundantCast", "FieldCanBeLocal", "deprecation", "ConstantConditions"})
 public class SearchQuotesByKeywordFragment extends Fragment implements View.OnClickListener {
 
     //Log for Logcat
@@ -80,6 +82,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
@@ -93,7 +96,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
     public void onCreate(Bundle onSavedInstanceState){
         super.onCreate(onSavedInstanceState);
 
-        Log.i(TAG, "onCreate(..) caled");
+        Log.i(TAG, "onCreate(..) called");
 
         setHasOptionsMenu(true);
     }
@@ -176,7 +179,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
         //Display the list of Quotes IF and ONLY IF a search has begun.
         //Otherwise, display the list of suggestions
-        if (shouldDisplaySearchItemsWhenFragmentIsReloaded == true) {
+        if (shouldDisplaySearchItemsWhenFragmentIsReloaded) {
 
             getActivity().invalidateOptionsMenu();
 
@@ -286,12 +289,13 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-    List<String> mRandomSearchSuggestions;
+    private List<String> mRandomSearchSuggestions;
 
 
 
 
-    public List<String> getRandomSearchSuggestions() {
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    private List<String> getRandomSearchSuggestions() {
         List<String> mSearchSuggestionsFullList = Arrays.asList("Dog", "Cat", "Power", "Strong", "Imagination", "Strong",
                 "Past", "Present", "Man", "Woman", "House", "Luck", "Weak", "Water", "Metal", "Fire", "Random", "Events",
                 "Fast", "Slow", "Learn", "Teach", "Student", "Humanity", "Fortune", "Rich", "Food", "Famine", "Hot", "Cold",
@@ -302,7 +306,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                 "Conquer", "Loss", "Success", "Defeat", "Win", "Lose", "Fly", "Run", "Walk", "Courage", "Brave", "King", "Queen",
                 "Royal", "Equality", "Greed", "Commitment", "Spirituality", "War", "Peace", "Utopia", "Seek", "Friend", "Evolution",
                 "Friendship", "Happiness", "Love", "Fear", "Good", "Connect", "Family", "Relationship", "Education", "Sentience",
-                "Empathy", "Sadness", "Loneliness", "Joy", "Castle", "Humility", "World", "Hisotry", "Change", "Experience", "Perspective",
+                "Empathy", "Sadness", "Loneliness", "Joy", "Castle", "Humility", "World", "History", "Change", "Experience", "Perspective",
                 "Money", "Values", "Patience", "Mind", "Body", "Spirit", "Reality", "Illusion", "Dream", "Life", "Wealth", "Luck", "Business",
                 "Coffee", "Spring", "Summer", "Autumn", "Winter", "Young", "Old", "Generation", "Baby-boomers", "Lust", "Perfection",
                 "Gratitude", "Create", "Art", "Fitness", "Milkyway", "Food", "Morals", "Memories", "Moon", "Reflection", "Machine Learning", "Cosmos",
@@ -324,11 +328,11 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 //    GetSearchQuotesByKeywordAsyncTask mGetSearchQuotesByKeywordAsyncTask;
-    List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTasksList = Arrays.asList(new GetSearchQuotesByKeywordAsyncTask[NUMBER_OF_QUOTES_TO_LOAD]);
+private List<GetSearchQuotesByKeywordAsyncTask> mGetSearchQuotesByKeywordAsyncTasksList = Arrays.asList(new GetSearchQuotesByKeywordAsyncTask[NUMBER_OF_QUOTES_TO_LOAD]);
 
-    public static boolean shouldDisplaySearchItemsWhenFragmentIsReloaded;
+    private static boolean shouldDisplaySearchItemsWhenFragmentIsReloaded;
 
-    public SearchView mSearchView;
+    private SearchView mSearchView;
 
 
 
@@ -389,7 +393,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
             @Override
             public boolean onQueryTextSubmit(String searchQuery){
-                Log.d(TAG, "Submited query: " + searchQuery);
+                Log.d(TAG, "Submitted query: " + searchQuery);
 
                 sSearchQuery = searchQuery;
 
@@ -481,7 +485,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
         final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_clear_all);
 
-        if (shouldDisplaySearchItemsWhenFragmentIsReloaded == true){
+        if (shouldDisplaySearchItemsWhenFragmentIsReloaded){
             clearAllItem.setVisible(true);
         }
         else{
@@ -676,19 +680,21 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+    @SuppressLint("StaticFieldLeak")
     private class GetSearchQuotesByKeywordAsyncTask extends AsyncTask<Integer, Void, Quote> {
 
 
         //NOTE: mQuotePosition is an ARRAY of Integer!
         Integer mQuotePosition[];
 
-        String mSearchQuery;
+        final String mSearchQuery;
 
 
-        public GetSearchQuotesByKeywordAsyncTask(String searchQeury) {
-            mSearchQuery = searchQeury;
+        GetSearchQuotesByKeywordAsyncTask(String searchQuery) {
+            mSearchQuery = searchQuery;
         }
 
+        @SuppressWarnings("UnnecessaryLocalVariable")
         @Override
         protected Quote doInBackground(Integer... quotePosition){
 
@@ -736,7 +742,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 //
 //            }
 //            catch (NullPointerException npe){
-//                Log.e(TAG, "invalideOptionsMenu() method calls null object - because SearchQuotesByKeywordFragment has been closed");
+//                Log.e(TAG, "invalidOptionsMenu() method calls null object - because SearchQuotesByKeywordFragment has been closed");
 //            }
 
 
@@ -758,7 +764,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-    public void updateUI(){
+    private void updateUI(){
 
 
         sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
@@ -778,8 +784,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
     private class SearchQuotesByKeywordAdapter extends RecyclerView.Adapter<SearchQuotesByKeywordQuoteViewHolder>{
 
 
-        public SearchQuotesByKeywordAdapter(List<Quote> searchQuotesByKewordQuotes){
-            sSearchQuotesByKeywordQuotes = searchQuotesByKewordQuotes;
+        SearchQuotesByKeywordAdapter(List<Quote> searchQuotesByKeywordQuotes){
+            sSearchQuotesByKeywordQuotes = searchQuotesByKeywordQuotes;
             Log.i(TAG, "ADAPTER - sSearchQuotesByKeywordQuotes: " + sSearchQuotesByKeywordQuotes);
         }
 
@@ -817,7 +823,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         }
 
 
-        public void setSearchQuotesByKeywordQuotes(List<Quote> searchQuotesByKeywordQuotes){
+        void setSearchQuotesByKeywordQuotes(List<Quote> searchQuotesByKeywordQuotes){
             sSearchQuotesByKeywordQuotes = searchQuotesByKeywordQuotes;
         }
 
@@ -835,24 +841,25 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+    @SuppressWarnings("ConstantConditions")
     private class SearchQuotesByKeywordQuoteViewHolder extends RecyclerView.ViewHolder{
 
 
         Quote mSearchQuotesByKeywordQuote;
 
-        LinearLayout mSearchQuotesByKeywordQuoteBubbleLayout;
-        TextView mSearchQuotesByKeywordQuotePositionText;
-        CheckBox mSearchQuotesByKeywordQuoteFavoriteIcon;
-        Button mSearchQuotesByKeywordQuoteShareIcon;
-        ProgressBar mSearchQuotesByKeywordQuoteProgressBar;
-        TextView mSearchQuotesByKeywordQuoteUnavailable;
-        TextView mSearchQuotesByKeywordQuoteQuote;
-        TextView mSearchQuotesByKeywordQuoteAuthor;
-        TextView mSearchQuotesByKeywordQuoteCategories;
+        final LinearLayout mSearchQuotesByKeywordQuoteBubbleLayout;
+        final TextView mSearchQuotesByKeywordQuotePositionText;
+        final CheckBox mSearchQuotesByKeywordQuoteFavoriteIcon;
+        final Button mSearchQuotesByKeywordQuoteShareIcon;
+        final ProgressBar mSearchQuotesByKeywordQuoteProgressBar;
+        final TextView mSearchQuotesByKeywordQuoteUnavailable;
+        final TextView mSearchQuotesByKeywordQuoteQuote;
+        final TextView mSearchQuotesByKeywordQuoteAuthor;
+        final TextView mSearchQuotesByKeywordQuoteCategories;
 
 
 
-        public SearchQuotesByKeywordQuoteViewHolder(View view){
+        SearchQuotesByKeywordQuoteViewHolder(View view){
             super(view);
 
             mSearchQuotesByKeywordQuoteBubbleLayout = (LinearLayout) view.findViewById(R.id.search_quotes_by_keyword_quote_bubble_layout);
@@ -886,6 +893,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+        @SuppressLint("SetTextI18n")
         public void bind(Quote searchQuotesByKeywordQuote){
 
             if (searchQuotesByKeywordQuote != null){
@@ -998,19 +1006,16 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                         mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
-                        if (isChecked == true){
+                        if (isChecked){
 
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mSearchQuotesByKeywordQuote.getId()) == null){
                                 FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mSearchQuotesByKeywordQuote);
                                 FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mSearchQuotesByKeywordQuote);
                             }
-                            else{
-                                //Do nothing
-                            }
 
                         }
 
-                        if (isChecked == false){
+                        if (!isChecked){
                             FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mSearchQuotesByKeywordQuote);
                             FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mSearchQuotesByKeywordQuote);
 
@@ -1160,7 +1165,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
     public void onDetach(){
         super.onDetach();
 
-        Log.i(TAG, "onDeatch() caled");
+        Log.i(TAG, "onDetach() called");
     }
 
 
