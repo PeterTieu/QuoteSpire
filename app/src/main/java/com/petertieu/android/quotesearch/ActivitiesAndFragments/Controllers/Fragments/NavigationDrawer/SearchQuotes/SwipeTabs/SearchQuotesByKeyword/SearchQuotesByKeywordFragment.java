@@ -39,7 +39,7 @@ import java.util.List;
 
 @SuppressWarnings({"RedundantCast", "FieldCanBeLocal", "deprecation", "ConstantConditions"})
 
-//Fragment for searching quotes by keyword OR phrase
+//Fragment for searching Quotes by keyword OR phrase
 public class SearchQuotesByKeywordFragment extends Fragment implements View.OnClickListener {
 
 
@@ -130,6 +130,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         View view = layoutInflater.inflate(R.layout.fragment_search_quotes_by_keyword, viewGroup, false); //Inflate fragment layout
 
 
+        //Assign View instance variables to their associated resource files
         mKeywordSearchedText = (TextView) view.findViewById(R.id.search_quotes_by_keyword_keyword_searched);
 
         mSearchQuotesByKeywordQuoteRecyclerView = (RecyclerView) view.findViewById(R.id.search_quotes_by_keyword_recycler_view);
@@ -341,6 +342,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
         menuInflater.inflate(R.menu.fragment_search_quotes_by_keyword, menu); //Inflate options menu layout
 
+
+        //---------------- Configure SEARCH menu item -------------------------------------------------------------------------------
         MenuItem searchItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_search); //Menu item for "Search"
 
         mSearchView = (SearchView) searchItem.getActionView(); //Assign SearchView instance variable to this menu item
@@ -369,136 +372,93 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
                 sSearchQuery = searchQuery; //Assign static instance variable to the local variable
 
-                SearchQuotesByKeywordSharedPreferences.setSearchQuotesByKeywordStoredQuery(getActivity(), searchQuery); //
+                SearchQuotesByKeywordSharedPref.setSearchQuotesByKeywordStoredQuery(getActivity(), searchQuery); //Set the search query to the Shraed Preferences - to be retrieved later
+
+                mSearchView.onActionViewCollapsed(); //Collapse the SearchView
+
+                shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
+
+                getActivity().invalidateOptionsMenu(); //Update the options menu
 
 
-                mSearchView.onActionViewCollapsed();
+                cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the keyword query
 
 
-                shouldDisplaySearchResultsWhenFragmentIsReloaded = true;
-
-                getActivity().invalidateOptionsMenu();
-
+                mKeywordSearchedText.setVisibility(View.VISIBLE); //Show the "Searched Text" TextView
+                mKeywordSearchedText.setText(Html.fromHtml("Keyword searched: " + " " + " \"" +"<i>" +  searchQuery.toUpperCase() + "</i>" + "\"")); //Update the "Searched Text" text
 
 
-//                //Cancel any existing and running AsyncTasks that are fetching Quotes based on the keyword query
-//                if (mGetSearchQuotesByKeywordAsyncTask != null){
-//                    mGetSearchQuotesByKeywordAsyncTask.cancel(true);
-//                }
-                //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the keyword query
-                if (!mGetSearchQuotesByKeywordAsyncTasksList.isEmpty()) {
-
-                    for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
-
-                        try{
-                            mGetSearchQuotesByKeywordAsyncTasksList.get(i).cancel(true);
-                        }
-                        catch (NullPointerException npe){
-                            Log.e(TAG, "GetSearchQuotesByKeywordAsyncTask AsyncTask is not running. Therefore, cannot be cancelled");
-                        }
+                mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.VISIBLE); //Show the RecyclerView
+                sSearchQuotesByKeywordQuotes = null; //Nullify the List of all Quotes if they already point to an existing set from the previuos search
+                sSearchQuotesByKeywordQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]); //Re-initialise the size of the List of all Quotes
+                sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes); //Create a new RecyclerView Adapter
+                sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);  //Link the RecyclerView adapter to the List of Quotes from the search result
+                sSearchQuotesByKeywordQuoteAdapter.notifyDataSetChanged(); //Update the RecyclerView Adapter
+                mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter); //Set the RecyclerView to the new RecyclerView Adapter
 
 
-                    }
-
-                }
-
-
-
-
-
-
-                mKeywordSearchedText.setVisibility(View.VISIBLE);
-                mKeywordSearchedText.setText(Html.fromHtml("Keyword searched: " + " " + " \"" +"<i>" +  searchQuery.toUpperCase() + "</i>" + "\""));
-
-
-                mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.VISIBLE);
-
-                sSearchQuotesByKeywordQuotes = null;
-                sSearchQuotesByKeywordQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]);
-                sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes);
-                sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
-                sSearchQuotesByKeywordQuoteAdapter.notifyDataSetChanged();
-                mSearchQuotesByKeywordQuoteRecyclerView.setAdapter(sSearchQuotesByKeywordQuoteAdapter);
-
-
-
+                //Begin a new set of AsyncTasks to fetch a new set of Quotes from the search query
                 for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
 
+                    Integer quotePosition = i; //Let the quote position equal the index
 
-                    Integer quotePosition = i;
-
-//                    mGetSearchQuotesByKeywordAsyncTask = new GetSearchQuotesByKeywordAsyncTask(searchQuery);
-//                    mGetSearchQuotesByKeywordAsyncTask.execute(quotePosition);
-                    mGetSearchQuotesByKeywordAsyncTasksList.set(i, new GetSearchQuotesByKeywordAsyncTask(searchQuery));
-                    mGetSearchQuotesByKeywordAsyncTasksList.get(i).execute(quotePosition);
-
-
+                    mGetSearchQuotesByKeywordAsyncTasksList.set(i, new GetSearchQuotesByKeywordAsyncTask(searchQuery)); //Assign the AsyncTask reference in the List to a new AsyncTask object
+                    mGetSearchQuotesByKeywordAsyncTasksList.get(i).execute(quotePosition); //Execut the AsyncTask object (i.e. begin fetching the Quote)
                 }
 
-                //Return a boolean...
-                //true: if an action is handled by the listener (as is the case)
-                //false: if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
+                //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
                 return true;
             }
         });
 
 
-
-
+        //Set listener to the SearchView - make it load/retrieve the search query in the SharedPreferences when pressed on
         mSearchView.setOnSearchClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                String searchQuery = SearchQuotesByKeywordSharedPreferences.getSearchQuotesByKeywordStoredQuery(getActivity());
-
-                mSearchView.setQuery(searchQuery, false);
+                String searchQuery = SearchQuotesByKeywordSharedPref.getSearchQuotesByKeywordStoredQuery(getActivity()); //Load/retrieve search query from SharedPreferences
+                mSearchView.setQuery(searchQuery, false); //Set the search query to the SearchView, but not load it yet
             }
         });
 
 
-//        mSearchView.setQuery("hello", false);
+        //---------------- Configure CLEAR ALL menu item -------------------------------------------------------------------------------
+        final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_clear_all); //Menu item for "Clear All"
 
-
-
-
-
-        final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_clear_all);
-
+        //Show the "Clar All" menu item IF and ONLY IF the flag indicating that the search results are displayed is TRUE
         if (shouldDisplaySearchResultsWhenFragmentIsReloaded){
             clearAllItem.setVisible(true);
         }
         else{
             clearAllItem.setVisible(false);
         }
-
-
-
     }
 
 
 
 
+    //Define what happens when the menu items are selected
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
-
         switch (menuItem.getItemId()){
 
+            //"SEARCH" menu item
             case (R.id.menu_item_search_quotes_by_keyword_fragment_search):
-
-
+                //Do nothing. All covered in onCreateOptionsMenu(..) method
                 return true;
 
-
+            //"CLEAR ALL" menu item
             case (R.id.menu_item_search_quotes_by_keyword_fragment_clear_all):
 
+                shouldDisplaySearchResultsWhenFragmentIsReloaded = false; //Toggle flag to display the search results to FALSE
 
-                shouldDisplaySearchResultsWhenFragmentIsReloaded = false;
+                getActivity().invalidateOptionsMenu(); //Update options menu - i.e. call onCreateOptionsMenu() in order to make the "CLEAR ALL" menu item disapear
 
-                getActivity().invalidateOptionsMenu();
-
+                //Configure visibilities of each of the Views
                 mKeywordSearchedText.setVisibility(View.GONE);
                 mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.GONE);
-
 
                 mSearchSuggestionsText.setVisibility(View.VISIBLE);
                 mSearchSuggestionsRefresh.setVisibility(View.VISIBLE);
@@ -514,47 +474,39 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                 mSearchSuggestionNine.setVisibility(View.VISIBLE);
                 mSearchSuggestionTen.setVisibility(View.VISIBLE);
 
+                setUpRandomSearchSuggestions(); //Get a new set of Search Suggestions from a List of ALL possible Search Suggestions, now they are to be displayed
 
+                cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the keyword query
 
-                setUpRandomSearchSuggestions();
-
-
-
-
-
-
-
-                if (!mGetSearchQuotesByKeywordAsyncTasksList.isEmpty()) {
-
-                    for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
-
-                        try{
-                            mGetSearchQuotesByKeywordAsyncTasksList.get(i).cancel(true);
-                        }
-                        catch (NullPointerException npe){
-                            Log.e(TAG, "GetSearchQuotesByKeywordAsyncTask AsyncTask is not running. Therefore, cannot be cancelled");
-                        }
-
-
-                    }
-
-                }
-
-
-                Toast.makeText(getActivity(), "Cleared Search Results", Toast.LENGTH_LONG).show();
-
-
+                Toast.makeText(getActivity(), "Cleared Search Results for: " + sSearchQuery.toUpperCase(), Toast.LENGTH_LONG).show(); //Create Toast notifying that the search results have been cleraed
 
                 return true;
-
 
             default:
                 return super.onOptionsItemSelected(menuItem);
 
         }
 
+    }
 
 
+
+
+    //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the keyword query
+    private void cancelAllCurrentAsyncTasks(){
+
+        if (!mGetSearchQuotesByKeywordAsyncTasksList.isEmpty()) {
+
+            for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
+                //Try rusky task - mGetSearchQuotesByKeywordAsyncTasksList.get(i).cancel() may throw a NullPointerException if the AsyncTask is not running
+                try{
+                    mGetSearchQuotesByKeywordAsyncTasksList.get(i).cancel(true);
+                }
+                catch (NullPointerException npe){
+                    Log.e(TAG, "GetSearchQuotesByKeywordAsyncTask AsyncTask is not running. Therefore, cannot be cancelled");
+                }
+            }
+        }
 
     }
 
@@ -563,36 +515,44 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+    //AsyncTask for fetching a Quote baed on the search query
+    //GENERIC TYPES:
+        //#1: PARAMS:   Integer: Type passed to execute(). NOTE: It could be passed in multiples (e.g. ..execute(1, 2, 3, 4))
+        //#2: PROGRESS: Void: Type published during background computation
+        //#3: RESULTS:  Quote: Type returned from doInBackground()
     @SuppressLint("StaticFieldLeak")
     private class GetSearchQuotesByKeywordAsyncTask extends AsyncTask<Integer, Void, Quote> {
 
-
-        //NOTE: mQuotePosition is an ARRAY of Integer!
-        Integer mQuotePosition[];
-
-        final String mSearchQuery;
+        //================== DECLARE/DEFINE INSTANCE VARIABLES =========================================================
+        Integer mQuotePosition[]; //NOTE: mQuotePosition is an ARRAY of type Integer
+        final String mSearchQuery; //Search query
 
 
+        //================== DEFINE METHODS ===================================================================================
+        //Constructor
         GetSearchQuotesByKeywordAsyncTask(String searchQuery) {
-            mSearchQuery = searchQuery;
+            mSearchQuery = searchQuery; //Stash search query to the instance variable (mSearchQuery)
         }
 
+
+
+        //Perform the main work of the asynchronous task - fetch the Quote
         @SuppressWarnings("UnnecessaryLocalVariable")
         @Override
         protected Quote doInBackground(Integer... quotePosition){
 
-            mQuotePosition = quotePosition;
+            mQuotePosition = quotePosition; //Stash the quote psotion to the instance variable (mQuotePosition)
 
-            Quote searchQuotesByKeywordQuote = new GetSearchQuotesByKeywordQuote().getSearchQuotesByKeywordQuote(mSearchQuery);
+            Quote searchQuotesByKeywordQuote = new GetSearchQuotesByKeywordQuote().getSearchQuotesByKeywordQuote(mSearchQuery); //Fetch the Quote baed on the search query
 
-
-            return searchQuotesByKeywordQuote;
-
+            return searchQuotesByKeywordQuote; //Return the fetched Quote - to be pased to onPostExecute()
         }
 
 
+
+        //Perform work after the Quote is fetched - save the fetched Quote to the List of Quotes
         @Override
-        protected void onPostExecute(Quote searchQuotesByKeywordQuote){
+        protected void onPostExecute(Quote searchQuotesByKeywordQuote) {
 
             Log.i(TAG, "Search Quote by Keyword Quotes - method - Quote String: " + searchQuotesByKeywordQuote.getQuote());
             Log.i(TAG, "Search Quote by Keyword Quotes - method  - Category: " + searchQuotesByKeywordQuote.getCategory());
@@ -600,52 +560,31 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
             Log.i(TAG, "Search Quote by Keyword Quotes - method - ID: " + searchQuotesByKeywordQuote.getId());
 
 
-//            mRandomQuotes.add(randomQuote);
-            sSearchQuotesByKeywordQuotes.set(mQuotePosition[0], searchQuotesByKeywordQuote);
+            searchQuotesByKeywordQuote.setSearchQuotesByKeywordQuotePosition(mQuotePosition[0] + 1); //Set the position member variable of the fetched Quote
 
+            sSearchQuotesByKeywordQuotes.set(mQuotePosition[0], searchQuotesByKeywordQuote); //Save the fetched Quote to the list of Quotes, to the index in this list based on the quote position
 
-            sSearchQuotesByKeywordQuotes.get(mQuotePosition[0]).setSearchQuotesByKeywordQuotePosition(mQuotePosition[0] + 1);
+            sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes); //Set the RecyclerView Adapter to the newly updated List of Quotes
 
-
-
-            updateUI();
+            sSearchQuotesByKeywordQuoteAdapter.notifyDataSetChanged(); //Update the RecyclerView Adapter
         }
 
-
     }
 
 
 
 
-
-
-
-    private void updateUI(){
-
-
-        sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);
-
-
-        sSearchQuotesByKeywordQuoteAdapter.notifyDataSetChanged();
-
-    }
-
-
-
-
-
-
-
-
+    //RecyclerView Adapter
     private class SearchQuotesByKeywordAdapter extends RecyclerView.Adapter<SearchQuotesByKeywordQuoteViewHolder>{
 
-
+        //Constructor
         SearchQuotesByKeywordAdapter(List<Quote> searchQuotesByKeywordQuotes){
-            sSearchQuotesByKeywordQuotes = searchQuotesByKeywordQuotes;
-            Log.i(TAG, "ADAPTER - sSearchQuotesByKeywordQuotes: " + sSearchQuotesByKeywordQuotes);
+            sSearchQuotesByKeywordQuotes = searchQuotesByKeywordQuotes; //Stash passed List of Quotes to the instance variable (sSearchQuotesByKeywordQuotes)
         }
 
 
+
+        //Get count of the size of the List of Quotes
         @Override
         public int getItemCount(){
             return sSearchQuotesByKeywordQuotes.size();
@@ -653,58 +592,52 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-
+        //Create the RecyclerView ViewHolder
         @SuppressWarnings("NullableProblems")
         @Override
         public SearchQuotesByKeywordQuoteViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
 
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Create LayoutInflater
 
-            View view = layoutInflater.inflate(R.layout.list_item_search_quotes_by_keyword_quote, viewGroup, false);
+            View listItemView = layoutInflater.inflate(R.layout.list_item_search_quotes_by_keyword_quote, viewGroup, false); //Obtain list-item view
 
-            mSearchQuotesByKeywordQuoteViewHolder = new SearchQuotesByKeywordQuoteViewHolder(view);
+            mSearchQuotesByKeywordQuoteViewHolder = new SearchQuotesByKeywordQuoteViewHolder(listItemView); //Send list-item view to the RecyclerView ViewHolder
 
-            return mSearchQuotesByKeywordQuoteViewHolder;
+            return mSearchQuotesByKeywordQuoteViewHolder; //Return ReyclerView ViewHolder
         }
 
 
+
+        //Bind RecyclerView ViewHolder to the data of the Quote
         @SuppressWarnings("NullableProblems")
         @Override
         public void onBindViewHolder(SearchQuotesByKeywordQuoteViewHolder searchQuotesByKeywordQuoteViewHolder, int position){
 
-            Quote searchQuotesByKeywordQuote = sSearchQuotesByKeywordQuotes.get(position);
+            Quote searchQuotesByKeywordQuote = sSearchQuotesByKeywordQuotes.get(position); //Get the Quote
 
-
-
-            searchQuotesByKeywordQuoteViewHolder.bind(searchQuotesByKeywordQuote);
-
+            searchQuotesByKeywordQuoteViewHolder.bind(searchQuotesByKeywordQuote); //Bind RecyclerView ViewHolder to the data of the Quote
         }
 
 
+
+        //Stash the List of Quotes to the instance variable
         void setSearchQuotesByKeywordQuotes(List<Quote> searchQuotesByKeywordQuotes){
             sSearchQuotesByKeywordQuotes = searchQuotesByKeywordQuotes;
         }
-
 
     }
 
 
 
 
-
-
-
-
-
-
-
-
+    //RecyclerView ViewHolder
     @SuppressWarnings("ConstantConditions")
     private class SearchQuotesByKeywordQuoteViewHolder extends RecyclerView.ViewHolder{
 
+        //================== DECLARE/DEFINE INSTANCE VARIABLES =========================================================
+        Quote mSearchQuotesByKeywordQuote; //Quote - contains data for the list item
 
-        Quote mSearchQuotesByKeywordQuote;
-
+        //-------------- VIEW variables of the list item ------------------------------------
         final LinearLayout mSearchQuotesByKeywordQuoteBubbleLayout;
         final TextView mSearchQuotesByKeywordQuotePositionText;
         final CheckBox mSearchQuotesByKeywordQuoteFavoriteIcon;
@@ -716,10 +649,12 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         final TextView mSearchQuotesByKeywordQuoteCategories;
 
 
-
+        //================== DEFINE METHODS ===================================================================================
+        //Constructor
         SearchQuotesByKeywordQuoteViewHolder(View view){
             super(view);
 
+            //Assign list item view instance variables to their associated resource files
             mSearchQuotesByKeywordQuoteBubbleLayout = (LinearLayout) view.findViewById(R.id.search_quotes_by_keyword_quote_bubble_layout);
             mSearchQuotesByKeywordQuotePositionText = (TextView) view.findViewById(R.id.search_quotes_by_keyword_quote_position);
             mSearchQuotesByKeywordQuoteFavoriteIcon = (CheckBox) view.findViewById(R.id.search_quotes_by_keyword_quote_favorite_icon);
@@ -730,14 +665,10 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
             mSearchQuotesByKeywordQuoteAuthor = (TextView) view.findViewById(R.id.search_quotes_by_keyword_quote_author);
             mSearchQuotesByKeywordQuoteCategories = (TextView) view.findViewById(R.id.search_quotes_by_keyword_quote_categories);
 
+            mSearchQuotesByKeywordQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges)); //Set background drawable for each list item
 
-
-
-
-
-            mSearchQuotesByKeywordQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
+            //Set visibilities of each of the list item views - set all list item views to GONE (except for the ProgressBar) as they have only just been created
             mSearchQuotesByKeywordQuoteProgressBar.setVisibility(View.VISIBLE);
-
             mSearchQuotesByKeywordQuotePositionText.setVisibility(View.GONE);
             mSearchQuotesByKeywordQuoteFavoriteIcon.setVisibility(View.GONE);
             mSearchQuotesByKeywordQuoteShareIcon.setVisibility(View.GONE);
@@ -745,22 +676,21 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
             mSearchQuotesByKeywordQuoteQuote.setVisibility(View.GONE);
             mSearchQuotesByKeywordQuoteAuthor.setVisibility(View.GONE);
             mSearchQuotesByKeywordQuoteCategories.setVisibility(View.GONE);
-
         }
 
 
 
-
+        //Bind the RecyclerView ViewHolder to the data from the Quote
         @SuppressWarnings("WeakerAccess")
         @SuppressLint("SetTextI18n")
         public void bind(Quote searchQuotesByKeywordQuote){
 
+            //If the Quote object exists
             if (searchQuotesByKeywordQuote != null){
 
-                mSearchQuotesByKeywordQuote = searchQuotesByKeywordQuote;
+                mSearchQuotesByKeywordQuote = searchQuotesByKeywordQuote; //Stash passed Quote parameter to instance variable
 
-
-
+                //Configure visibilities of the list item views
                 mSearchQuotesByKeywordQuoteProgressBar.setVisibility(View.GONE);
                 mSearchQuotesByKeywordQuoteUnavailable.setVisibility(View.GONE);
 
@@ -772,69 +702,62 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                 mSearchQuotesByKeywordQuoteCategories.setVisibility(View.VISIBLE);
 
 
+                mSearchQuotesByKeywordQuotePositionText.setText("Quote #" + mSearchQuotesByKeywordQuote.getSearchQuotesByKeywordQuotePosition()); //Set the text of the position of the Quote
 
-
-
-                mSearchQuotesByKeywordQuotePositionText.setText("Quote #" + mSearchQuotesByKeywordQuote.getSearchQuotesByKeywordQuotePosition());
-
-
-                if (mSearchQuotesByKeywordQuote.getQuote() != null){
-                    mSearchQuotesByKeywordQuoteQuote.setText("\" " + searchQuotesByKeywordQuote.getQuote() + " \"");
-                }
-                else{
-                    mSearchQuotesByKeywordQuoteQuote.setText("* No Quote to View *");
-                }
-
-
-                if (mSearchQuotesByKeywordQuote.getAuthor() != null){
-                    mSearchQuotesByKeywordQuoteAuthor.setText(mSearchQuotesByKeywordQuote.getAuthor());
-                }
-                else{
-                    mSearchQuotesByKeywordQuoteAuthor.setText("* No Author *");
-                }
-
-
-
-
-
-
-                if (mSearchQuotesByKeywordQuote.getCategories() == null){
-                    mSearchQuotesByKeywordQuoteCategories.setText("Categories: *No categories*");
-                }
-                else{
-                    mSearchQuotesByKeywordQuoteCategories.setText("Categories: " + TextUtils.join(", ", mSearchQuotesByKeywordQuote.getCategories()));
-                }
-
-
+                //Set drawable for Quote favorite icon, based on whether it is favorited or not
                 mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(mSearchQuotesByKeywordQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
+                //If the Quote text exists
+                if (mSearchQuotesByKeywordQuote.getQuote() != null){
+                    mSearchQuotesByKeywordQuoteQuote.setText("\" " + searchQuotesByKeywordQuote.getQuote() + " \""); //Set the Quote text
+                }
+                //If the Quote text DOES NOT exist
+                else{
+                    mSearchQuotesByKeywordQuoteQuote.setText("* No Quote to View *"); //Set message to say Quote text could not be obtained
+                }
 
 
+                //If the Quote author exists
+                if (mSearchQuotesByKeywordQuote.getAuthor() != null){
+                    mSearchQuotesByKeywordQuoteAuthor.setText(mSearchQuotesByKeywordQuote.getAuthor()); //Set the Quote author text
+                }
+                //If the Quote author DOES NOT exist
+                else{
+                    mSearchQuotesByKeywordQuoteAuthor.setText("* No Author *"); //Set message to say Quote author could not be obtained
+                }
 
 
+                //If the Quote category exists
+                if (mSearchQuotesByKeywordQuote.getCategories() != null){
+                    mSearchQuotesByKeywordQuoteCategories.setText("Categories: " + TextUtils.join(", ", mSearchQuotesByKeywordQuote.getCategories())); //Set the Quote category text
+                }
+                else{
+                    mSearchQuotesByKeywordQuoteCategories.setText("Categories: *No categories*"); //Set message to say Quote author could not be obtained
+                }
 
+
+                //Try risky task - mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable() may throw NullPointerException if it does not exist IF there is no internet connection
                 try {
 
-
-                    //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                    //If the Quote is in the FavoriteQuotes SQLite database
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mSearchQuotesByKeywordQuote.getId()) != null) {
 
-                        mSearchQuotesByKeywordQuote.setFavorite(true);
-                        mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+                        mSearchQuotesByKeywordQuote.setFavorite(true); //Set favorite field of the Quote to TRUE
+                        mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on); //Display the favorite icon to 'active'
 
                     }
+                    //If the Quote is NOT in the FavoriteQuotes SQLite database
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mSearchQuotesByKeywordQuote.getId()) == null) {
 
-                        mSearchQuotesByKeywordQuote.setFavorite(false);
-                        mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-
+                        mSearchQuotesByKeywordQuote.setFavorite(false); //Set favorite field of the Quote to FALSE
+                        mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off); //Display the favorite icon to 'inactive'
                     }
-
-
                 }
+                //Catch the NullPointerException - when there are no internet connections
                 catch (NullPointerException npe){
 
+                    //Remove visibility of all list item views, except for the view indicating that the quotes are unavailable
                     mSearchQuotesByKeywordQuoteProgressBar.setVisibility(View.GONE);
                     mSearchQuotesByKeywordQuotePositionText.setVisibility(View.GONE);
                     mSearchQuotesByKeywordQuoteFavoriteIcon.setVisibility(View.GONE);
@@ -843,40 +766,36 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                     mSearchQuotesByKeywordQuoteAuthor.setVisibility(View.GONE);
                     mSearchQuotesByKeywordQuoteCategories.setVisibility(View.GONE);
 
-
                     mSearchQuotesByKeywordQuoteUnavailable.setVisibility(View.VISIBLE);
-
                 }
 
 
 
-
-
-
+                //Set listener for Quote favorite icon
                 mSearchQuotesByKeywordQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-
+                        //Set whether the Quote is to be favorited based on the boolean parameter (i.e. whether the icon is checked or unchecked)
                         mSearchQuotesByKeywordQuote.setFavorite(isChecked);
 
-
+                        //Set drawable button based on the boolean parameter
                         mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
-
+                        //If Favorites icon is CHECKED
                         if (isChecked){
 
+                            //If Quote is NOT in the Favorites SQLite database
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mSearchQuotesByKeywordQuote.getId()) == null){
-                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mSearchQuotesByKeywordQuote);
-                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mSearchQuotesByKeywordQuote);
+                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mSearchQuotesByKeywordQuote); //Add the Quote to the Favorites SQLite database
+                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mSearchQuotesByKeywordQuote); //Update the SQLite database as per the Quote addition
                             }
-
                         }
-
+                        //If Favorites icon is UNCHECKED
                         if (!isChecked){
-                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mSearchQuotesByKeywordQuote);
-                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mSearchQuotesByKeywordQuote);
+                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mSearchQuotesByKeywordQuote); //Delete the Quote from the Favorites SQLite database
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mSearchQuotesByKeywordQuote); //Update the SQLite database as per the Quote deletion
 
                         }
                     }
@@ -885,26 +804,23 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-
-
-
-
+            //Set listener for Share icon
             mSearchQuotesByKeywordQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view){
 
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND); //Create implicit Intent with send action
 
-                    shareIntent.setType("text/plain");
+                    shareIntent.setType("text/plain"); //Set the type of the Intent to text
 
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote by " + mSearchQuotesByKeywordQuote.getAuthor());
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote by " + mSearchQuotesByKeywordQuote.getAuthor()); //Set subject of Intent
 
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, getSearchQuotesByKeywordQuoteShareString());
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getSearchQuotesByKeywordQuoteShareString()); //Set text of Intent
 
-                    shareIntent = Intent.createChooser(shareIntent, "Share Quote of the Day via");
+                    shareIntent = Intent.createChooser(shareIntent, "Share Quote via"); //Set chooser title
 
-                    startActivity(shareIntent);
+                    startActivity(shareIntent); //Start the Intent
                 }
             });
 
@@ -913,29 +829,22 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-
+        //Set the Quote sharing text
         private String getSearchQuotesByKeywordQuoteShareString(){
-            String searchQuotesByKeywordQuoteString = "\"" + mSearchQuotesByKeywordQuote.getQuote() + "\"";
 
-            String searchQuotesByKeywordQuoteAuthorString = " - " + mSearchQuotesByKeywordQuote.getAuthor();
+            String searchQuotesByKeywordQuoteString = "\"" + mSearchQuotesByKeywordQuote.getQuote() + "\""; //Quote text body
 
-            return searchQuotesByKeywordQuoteString + searchQuotesByKeywordQuoteAuthorString;
+            String searchQuotesByKeywordQuoteAuthorString = " - " + mSearchQuotesByKeywordQuote.getAuthor(); //Quote author
+
+            return searchQuotesByKeywordQuoteString + searchQuotesByKeywordQuoteAuthorString; //Concatenate Quote text body with author
         }
-
-
-
 
     }
 
 
 
 
-
-
-
-
-
-
+    //Override onActivityCreated(..) fragment lifecycle callback method
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
@@ -945,6 +854,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+
+    //Override onStart() fragment lifecycle callback method
     @Override
     public void onStart(){
         super.onStart();
@@ -954,6 +865,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+
+    //Override onResume() fragment lifecycle callback method
     @Override
     public void onResume(){
         super.onResume();
@@ -964,6 +877,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+    //Override onPause() fragment lifecycle callback method
     @Override
     public void onPause(){
         super.onPause();
@@ -974,6 +888,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+    //Override onStop() fragment lifecycle callback method
     @Override
     public void onStop(){
         super.onStop();
@@ -983,6 +898,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+
+    //Override onDestroyView() fragment lifecycle callback method
     @Override
     public void onDestroyView(){
         super.onDestroyView();
@@ -992,6 +909,8 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
+
+    //Override onDestroy( fragment lifecycle callback method
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -1000,6 +919,9 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
     }
 
 
+
+
+    //Override onDetach() fragment lifecycle callback method
     @Override
     public void onDetach(){
         super.onDetach();
