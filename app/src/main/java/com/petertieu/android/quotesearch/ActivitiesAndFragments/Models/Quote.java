@@ -26,6 +26,9 @@ public class Quote {
     //Only used for SearchQuotesByKeywordFragment
     int mSearchQuotesByKeywordQuotePosition;
 
+    //Only used for SearchQuotesByCategoryFragment
+    int mSearchQuotesByCategoryQuotePosition;
+
 
     public Quote(){
     }
@@ -100,5 +103,13 @@ public class Quote {
 
     public void setSearchQuotesByKeywordQuotePosition(int searchQuotesByKeywordQuotePosition){
         mSearchQuotesByKeywordQuotePosition = searchQuotesByKeywordQuotePosition;
+    }
+
+    public int getSearchQuotesByCategoryQuotePosition(){
+        return mSearchQuotesByCategoryQuotePosition;
+    }
+
+    public void setSearchQuotesByCategoryQuotePosition(int searchQuotesByKeywordQuotePosition){
+        mSearchQuotesByCategoryQuotePosition = searchQuotesByKeywordQuotePosition;
     }
 }
