@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Layout of a RecyclerView list item in the SearchQuotesByCategoryFragment-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_quotes_by_category_quote_bubble_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="25dp"
+    android:orientation="vertical"
+    android:paddingLeft="-20dp"
+    android:paddingRight="-20dp">
+
+
+    <!--Layout for TOP PANE-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp">
+
+        <!--Quote position text-->
+        <TextView
+            android:id="@+id/search_quotes_by_category_quote_position"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="16dp"
+            android:textStyle="bold"/>
+
+        <!--Favorite Icon checkbox-->
+        <CheckBox
+            android:id="@+id/search_quotes_by_category_quote_favorite_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/ic_imageview_favorite_on"/>
+
+        <!--Share Quote button-->
+        <Button
+            android:id="@+id/search_quotes_by_category_quote_share_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/ic_button_share"
+            android:gravity="right"/>
+    </LinearLayout>
+
+
+    <!--Loading icon-->
+    <ProgressBar
+        android:id="@+id/search_quotes_by_category_quote_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="35dp"
+        android:paddingBottom="10dp"/>
+
+    <!--"Quote unavailalbe" text - for when there are no quotes to view-->
+    <TextView
+        android:id="@+id/search_quotes_by_category_quote_unavailable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="110dp"
+        android:layout_marginRight="110dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/unable_to_fetch_quote"
+        android:textColor="@color/orange"
+        android:textSize="16dp"/>
+
+    <!--Quote-body text-->
+    <TextView
+        android:id="@+id/search_quotes_by_category_quote_quote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="-10dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textIsSelectable="true"
+        android:textSize="14dp"
+        android:textStyle="italic"/>
+
+    <!--Author text-->
+    <TextView
+        android:id="@+id/search_quotes_by_category_quote_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:textColor="@color/colorAccent"
+        android:textIsSelectable="true"
+        android:textSize="14dp"/>
+
+    <!--Category text-->
+    <TextView
+        android:id="@+id/search_quotes_by_category_quote_categories"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="20dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="14dp"/>
+
+</LinearLayout>
