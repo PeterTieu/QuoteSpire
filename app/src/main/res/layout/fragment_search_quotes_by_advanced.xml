@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Layout for SearchQuotesByAdvancedFragment-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <!--Search query feedback text-->
+    <TextView
+        android:id="@+id/search_quotes_by_advanced_advanced_searched"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:textColor="@color/white"/>
+
+
+    <!--RecyclerView-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_quotes_by_advanced_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+
+
+
+
+
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="-140dp">
+
+
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="ADVANCED SEARCH"-->
+        <!--android:textSize="22dp"/>-->
+
+
+        <TextView
+            android:id="@+id/search_quotes_by_advanced_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="35dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:text="Search quotes by using any combination of the following fields"
+            android:textColor="@color/white"
+            android:textSize="17dp"/>
+
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/search_quotes_by_keyword_text"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="KEYWORD"
+                android:textSize="14dp"/>
+
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search_quotes_by_keyword_search_view"
+                android:layout_width="230dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="20dp"
+                android:gravity="right"
+                app:iconifiedByDefault="false"
+                app:queryHint="Quote word or phrase">
+            </android.support.v7.widget.SearchView>
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="25dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/search_quotes_by_author_text"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="AUTHOR"
+                android:textSize="14dp"/>
+
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search_quotes_by_keyword_author_search_view"
+                android:layout_width="230dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="20dp"
+                android:gravity="right"
+                app:iconifiedByDefault="false"
+                app:queryHint="Quote author">
+            </android.support.v7.widget.SearchView>
+
+        </LinearLayout>
+
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="25dp"
+            android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/search_quotes_by_category_text"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="CATEGORY"
+                android:textSize="14dp"/>
+
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search_quotes_by_category_search_view"
+                android:layout_width="230dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="20dp"
+                android:gravity="right"
+                app:iconifiedByDefault="false"
+                app:queryHint="Quote category">
+            </android.support.v7.widget.SearchView>
+
+        </LinearLayout>
+
+
+
+
+
+        <Button
+            android:id="@+id/search_quotes_by_advanced_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="45dp"
+            android:text="SEARCH"
+            android:textSize="20dp"/>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
