@@ -125,7 +125,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
         Log.i(TAG, "onCreateView(..) called"); //Log to Logcat
 
-        getActivity().setTitle(getResources().getString(R.string.search_quotes_by_keyword_fragment_title)); //Set title for fragment
+        getActivity().setTitle(getResources().getString(R.string.search_quotes_fragment_title)); //Set title for fragment
 
         View view = layoutInflater.inflate(R.layout.fragment_search_quotes_by_keyword, viewGroup, false); //Inflate fragment layout
 
@@ -347,7 +347,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         MenuItem searchItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_search); //Menu item for "Search"
 
         mSearchView = (SearchView) searchItem.getActionView(); //Assign SearchView instance variable to this menu item
-        mSearchView.setQueryHint(getResources().getString(R.string.search_view_hint)); //Set hint to SearchView
+        mSearchView.setQueryHint(getResources().getString(R.string.search_quotes_by_keyword_search_view_hint)); //Set hint to SearchView
 
 
         //Set listeners to the query Text of the SearchView
@@ -372,7 +372,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
                 sSearchQuery = searchQuery; //Assign static instance variable to the local variable
 
-                SearchQuotesByKeywordSharedPref.setSearchQuotesByKeywordStoredQuery(getActivity(), searchQuery); //Set the search query to the Shraed Preferences - to be retrieved later
+                SearchQuotesByKeywordSharedPref.setSearchQuotesByKeywordStoredQuery(getActivity(), searchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
                 mSearchView.onActionViewCollapsed(); //Collapse the SearchView
 
@@ -389,7 +389,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
                 mSearchQuotesByKeywordQuoteRecyclerView.setVisibility(View.VISIBLE); //Show the RecyclerView
-                sSearchQuotesByKeywordQuotes = null; //Nullify the List of all Quotes if they already point to an existing set from the previuos search
+                sSearchQuotesByKeywordQuotes = null; //Nullify the List of all Quotes if they already point to an existing set from the previous search
                 sSearchQuotesByKeywordQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]); //Re-initialise the size of the List of all Quotes
                 sSearchQuotesByKeywordQuoteAdapter = new SearchQuotesByKeywordAdapter(sSearchQuotesByKeywordQuotes); //Create a new RecyclerView Adapter
                 sSearchQuotesByKeywordQuoteAdapter.setSearchQuotesByKeywordQuotes(sSearchQuotesByKeywordQuotes);  //Link the RecyclerView adapter to the List of Quotes from the search result
@@ -403,7 +403,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                     Integer quotePosition = i; //Let the quote position equal the index
 
                     mGetSearchQuotesByKeywordAsyncTasksList.set(i, new GetSearchQuotesByKeywordAsyncTask(searchQuery)); //Assign the AsyncTask reference in the List to a new AsyncTask object
-                    mGetSearchQuotesByKeywordAsyncTasksList.get(i).execute(quotePosition); //Execut the AsyncTask object (i.e. begin fetching the Quote)
+                    mGetSearchQuotesByKeywordAsyncTasksList.get(i).execute(quotePosition); //Execute the AsyncTask object (i.e. begin fetching the Quote)
                 }
 
                 //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
@@ -426,7 +426,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         //---------------- Configure CLEAR ALL menu item -------------------------------------------------------------------------------
         final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_keyword_fragment_clear_all); //Menu item for "Clear All"
 
-        //Show the "Clar All" menu item IF and ONLY IF the flag indicating that the search results are displayed is TRUE
+        //Show the "Clear All" menu item IF and ONLY IF the flag indicating that the search results are displayed is TRUE
         if (shouldDisplaySearchResultsWhenFragmentIsReloaded){
             clearAllItem.setVisible(true);
         }
@@ -454,7 +454,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
                 shouldDisplaySearchResultsWhenFragmentIsReloaded = false; //Toggle flag to display the search results to FALSE
 
-                getActivity().invalidateOptionsMenu(); //Update options menu - i.e. call onCreateOptionsMenu() in order to make the "CLEAR ALL" menu item disapear
+                getActivity().invalidateOptionsMenu(); //Update options menu - i.e. call onCreateOptionsMenu() in order to make the "CLEAR ALL" menu item disappear
 
                 //Configure visibilities of each of the Views
                 mKeywordSearchedText.setVisibility(View.GONE);
@@ -478,7 +478,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
                 cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the keyword query
 
-                Toast.makeText(getActivity(), "Cleared Search Results for: " + sSearchQuery.toUpperCase(), Toast.LENGTH_LONG).show(); //Create Toast notifying that the search results have been cleraed
+                Toast.makeText(getActivity(), "Cleared Search Results for: " + sSearchQuery.toUpperCase(), Toast.LENGTH_LONG).show(); //Create Toast notifying that the search results have been cleared
 
                 return true;
 
@@ -498,7 +498,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         if (!mGetSearchQuotesByKeywordAsyncTasksList.isEmpty()) {
 
             for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
-                //Try rusky task - mGetSearchQuotesByKeywordAsyncTasksList.get(i).cancel() may throw a NullPointerException if the AsyncTask is not running
+                //Try risky task - mGetSearchQuotesByKeywordAsyncTasksList.get(i).cancel() may throw a NullPointerException if the AsyncTask is not running
                 try{
                     mGetSearchQuotesByKeywordAsyncTasksList.get(i).cancel(true);
                 }
@@ -515,7 +515,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
 
 
-    //AsyncTask for fetching a Quote baed on the search query
+    //AsyncTask for fetching a Quote based on the search query
     //GENERIC TYPES:
         //#1: PARAMS:   Integer: Type passed to execute(). NOTE: It could be passed in multiples (e.g. ..execute(1, 2, 3, 4))
         //#2: PROGRESS: Void: Type published during background computation
@@ -541,11 +541,11 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
         @Override
         protected Quote doInBackground(Integer... quotePosition){
 
-            mQuotePosition = quotePosition; //Stash the quote psotion to the instance variable (mQuotePosition)
+            mQuotePosition = quotePosition; //Stash the Quote position to the instance variable (mQuotePosition)
 
-            Quote searchQuotesByKeywordQuote = new GetSearchQuotesByKeywordQuote().getSearchQuotesByKeywordQuote(mSearchQuery); //Fetch the Quote baed on the search query
+            Quote searchQuotesByKeywordQuote = new GetSearchQuotesByKeywordQuote().getSearchQuotesByKeywordQuote(mSearchQuery); //Fetch the Quote based on the search query
 
-            return searchQuotesByKeywordQuote; //Return the fetched Quote - to be pased to onPostExecute()
+            return searchQuotesByKeywordQuote; //Return the fetched Quote - to be passed to onPostExecute()
         }
 
 
@@ -599,11 +599,11 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Create LayoutInflater
 
-            View listItemView = layoutInflater.inflate(R.layout.list_item_search_quotes_by_keyword_quote, viewGroup, false); //Obtain list-item view
+            View listItemView = layoutInflater.inflate(R.layout.list_item_search_quotes_by_keyword, viewGroup, false); //Obtain list-item view
 
             mSearchQuotesByKeywordQuoteViewHolder = new SearchQuotesByKeywordQuoteViewHolder(listItemView); //Send list-item view to the RecyclerView ViewHolder
 
-            return mSearchQuotesByKeywordQuoteViewHolder; //Return ReyclerView ViewHolder
+            return mSearchQuotesByKeywordQuoteViewHolder; //Return RecyclerView ViewHolder
         }
 
 
@@ -704,7 +704,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
                 mSearchQuotesByKeywordQuotePositionText.setText("Quote #" + mSearchQuotesByKeywordQuote.getSearchQuotesByKeywordQuotePosition()); //Set the text of the position of the Quote
 
-                //Set drawable for Quote favorite icon, based on whether it is favorited or not
+                //Set drawable for Quote favorite icon, based on whether it is Favorited or not
                 mSearchQuotesByKeywordQuoteFavoriteIcon.setButtonDrawable(mSearchQuotesByKeywordQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
@@ -777,7 +777,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-                        //Set whether the Quote is to be favorited based on the boolean parameter (i.e. whether the icon is checked or unchecked)
+                        //Set whether the Quote is to be Favorited based on the boolean parameter (i.e. whether the icon is checked or unchecked)
                         mSearchQuotesByKeywordQuote.setFavorite(isChecked);
 
                         //Set drawable button based on the boolean parameter
