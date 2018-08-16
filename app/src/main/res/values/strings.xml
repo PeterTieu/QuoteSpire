@@ -48,12 +48,29 @@
 
 
 
-    <!--SearchQuotesByKeywordFragment-->
-    <string name="search_quotes_by_keyword_fragment_title">Search Quotes</string>
-    <string name="search_view_hint">Search by keyword or phrase</string>
+    <!--SearchQuotes Navigation Drawer-->
+    <string name="search_quotes_fragment_title">Search Quotes</string>
     <string name="clear_all">Clear All</string>
-    <string name="keyword_search_suggestions">KEYWORD search suggestions...</string>
     <string name="unable_to_fetch_quote">* Unable to Fetch quote! *</string>
+
+    <!--SearchQuotesByKeywordFragment-->
+    <string name="search_quotes_by_keyword_search_view_hint">Search by Keyword or Phrase</string>
+    <string name="search_quotes_by_keyword_search_suggestions">KEYWORD search suggestions...</string>
+
+
+
+    <!--SearchQuotesByCategoryFragment-->
+    <string name="search_quotes_by_category_search_view_hint">Search by Category</string>
+    <string name="category_search_suggestions">CATEGORY search suggestions...</string>
+
+    <!--SearchQuotesByAuthorFragment-->
+    <string name="search_quotes_by_author_search_view_hint">Search by Author</string>
+    <string name="author_search_suggestions">AUTHOR search suggestions...</string>
+
+    <!--SearchQuotesByAdvancedFragment-->
+    <string name="search_quotes_by_advanced_search_view_hint">Search by Advanced</string>
+    <string name="advanced_search_suggestions">ADVANCED search suggestions...</string>
+
 
 
 
