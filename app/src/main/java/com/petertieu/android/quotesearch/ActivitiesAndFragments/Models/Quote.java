@@ -29,6 +29,12 @@ public class Quote {
     //Only used for SearchQuotesByCategoryFragment
     int mSearchQuotesByCategoryQuotePosition;
 
+    //Only used for SearchQuotesByAuthorFragment
+    int mSearchQuotesByAuthorQuotePosition;
+
+    //Only used for SearchQuotesByAdvancedFragment
+    int mSearchQuotesByAdvancedQuotePosition;
+
 
     public Quote(){
     }
@@ -109,7 +115,26 @@ public class Quote {
         return mSearchQuotesByCategoryQuotePosition;
     }
 
-    public void setSearchQuotesByCategoryQuotePosition(int searchQuotesByKeywordQuotePosition){
-        mSearchQuotesByCategoryQuotePosition = searchQuotesByKeywordQuotePosition;
+    public void setSearchQuotesByCategoryQuotePosition(int searchQuotesByCategoryQuotePosition){
+        mSearchQuotesByCategoryQuotePosition = searchQuotesByCategoryQuotePosition;
+    }
+
+
+    public int getSearchQuotesByAuthorQuotePosition(){
+        return mSearchQuotesByAuthorQuotePosition;
+    }
+
+    public void setSearchQuotesByAuthorQuotePosition(int searchQuotesByAuthorQuotePosition){
+        mSearchQuotesByAuthorQuotePosition = searchQuotesByAuthorQuotePosition;
+    }
+
+
+
+    public int getSearchQuotesByAdvancedQuotePosition(){
+        return mSearchQuotesByAdvancedQuotePosition;
+    }
+
+    public void setSearchQuotesByAdvancedQuotePosition(int searchQuotesByAdvancedQuotePosition){
+        mSearchQuotesByAdvancedQuotePosition = searchQuotesByAdvancedQuotePosition;
     }
 }
