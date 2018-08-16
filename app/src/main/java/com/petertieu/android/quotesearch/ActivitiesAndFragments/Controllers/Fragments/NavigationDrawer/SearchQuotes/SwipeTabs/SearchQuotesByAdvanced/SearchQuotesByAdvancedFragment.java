@@ -2,17 +2,23 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -335,6 +341,21 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
             @Override
             public void onClick(View view){
 
+
+
+                if (sKeywordSearchQuery == null && sAuthorSearchQuery == null && sCategorySearchQuery == null){
+                    Log.i(TAG, "Empty");
+
+                    noSearchQueriesDialogFragment();
+                    return;
+
+                }
+
+                Log.i(TAG, "post-Empty");
+
+
+                getActivity().invalidateOptionsMenu();
+
                 shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
 
                 mSearchQuotesByAdvancedTitle.setVisibility(View.GONE);
@@ -381,165 +402,76 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
 
 
+    private void noSearchQueriesDialogFragment(){
+
+    }
 
 
 
 
 
 
-//    //Override onCreateOptionsMenu(..) fragment lifecycle callback method
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-//        super.onCreateOptionsMenu(menu, menuInflater);
-//
-//        menuInflater.inflate(R.menu.fragment_search_quotes_by_advanced, menu); //Inflate options menu layout
-//
-//
-//        //---------------- Configure SEARCH menu item -------------------------------------------------------------------------------
-//        MenuItem searchItem = menu.findItem(R.id.menu_item_search_quotes_by_advanced_fragment_search); //Menu item for "Search"
-//
-//        mSearchView = (SearchView) searchItem.getActionView(); //Assign SearchView instance variable to this menu item
-//        mSearchView.setQueryHint(getResources().getString(R.string.search_quotes_by_advanced_search_view_hint)); //Set hint to SearchView
-//
-//
-//        //Set listeners to the query Text of the SearchView
-//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//
-//            //When SearchView query text is changed
-//            @Override
-//            public boolean onQueryTextChange(String searchQuery) {
-//                Log.d(TAG, searchQuery); //Log to Logcat
-//
-//                //Return a boolean:
-//                //true: If this method has been handled
-//                //false: If this method has not been handled.
-//                //In this case, we only logged an event, so it doesn't count as a 'handle'
-//                return false;
-//            }
-//
-//            //When SearchView query text is submitted
-//            @Override
-//            public boolean onQueryTextSubmit(String searchQuery){
-//                Log.d(TAG, "Submitted query: " + searchQuery);
-//
-//                sKeywordSearchQuery = searchQuery.replaceAll("( +)","-").trim(); //Replace all space characters (either single or multiple spaces) to a single hyphen character in the search query
-//
-//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedStoredQuery(getActivity(), sKeywordSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-//
-//                mSearchView.onActionViewCollapsed(); //Collapse the SearchView
-//
-//                shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
-//
-//                getActivity().invalidateOptionsMenu(); //Update the options menu
-//
-//
-//                cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the advanced query
-//
-//
-//                mAdvancedSearchedText.setVisibility(View.VISIBLE); //Show the "Searched Text" TextView
-//                mAdvancedSearchedText.setText(Html.fromHtml("Advanced searched: " + " " + " \"" +"<i>" +  sKeywordSearchQuery.toUpperCase() + "</i>" + "\"")); //Update the "Searched Text" text
-//
-//
-//                mSearchQuotesByAdvancedQuoteRecyclerView.setVisibility(View.VISIBLE); //Show the RecyclerView
-//                sSearchQuotesByAdvancedQuotes = null; //Nullify the List of all Quotes if they already point to an existing set from the previous search
-//                sSearchQuotesByAdvancedQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]); //Re-initialise the size of the List of all Quotes
-//                sSearchQuotesByAdvancedQuoteAdapter = new SearchQuotesByAdvancedFragment.SearchQuotesByAdvancedAdapter(sSearchQuotesByAdvancedQuotes); //Create a new RecyclerView Adapter
-//                sSearchQuotesByAdvancedQuoteAdapter.setSearchQuotesByAdvancedQuotes(sSearchQuotesByAdvancedQuotes);  //Link the RecyclerView adapter to the List of Quotes from the search result
-//                sSearchQuotesByAdvancedQuoteAdapter.notifyDataSetChanged(); //Update the RecyclerView Adapter
-//                mSearchQuotesByAdvancedQuoteRecyclerView.setAdapter(sSearchQuotesByAdvancedQuoteAdapter); //Set the RecyclerView to the new RecyclerView Adapter
-//
-//
-//                //Begin a new set of AsyncTasks to fetch a new set of Quotes from the search query
-//                for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
-//
-//                    Integer quotePosition = i; //Let the quote position equal the index
-//
-//                    mGetSearchQuotesByAdvancedAsyncTasksList.set(i, new SearchQuotesByAdvancedFragment.GetSearchQuotesByAdvancedAsyncTask(sKeywordSearchQuery)); //Assign the AsyncTask reference in the List to a new AsyncTask object
-//                    mGetSearchQuotesByAdvancedAsyncTasksList.get(i).execute(quotePosition); //Execute the AsyncTask object (i.e. begin fetching the Quote)
-//                }
-//
-//                //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
-//                return true;
-//            }
-//        });
-//
-//
-//        //Set listener to the SearchView - make it load/retrieve the search query in the SharedPreferences when pressed on
-//        mSearchView.setOnSearchClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                String searchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedStoredQuery(getActivity()); //Load/retrieve search query from SharedPreferences
-//                mSearchView.setQuery(searchQuery, false); //Set the search query to the SearchView, but not load it yet
-//            }
-//        });
-//
-//
-//        //---------------- Configure CLEAR ALL menu item -------------------------------------------------------------------------------
-//        final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_advanced_fragment_clear_all); //Menu item for "Clear All"
-//
-//        //Show the "Clear All" menu item IF and ONLY IF the flag indicating that the search results are displayed is TRUE
-//        if (shouldDisplaySearchResultsWhenFragmentIsReloaded){
-//            clearAllItem.setVisible(true);
-//        }
-//        else{
-//            clearAllItem.setVisible(false);
-//        }
-//    }
-//
-//
-//
-//
-//    //Define what happens when the menu items are selected
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem menuItem){
-//
-//        switch (menuItem.getItemId()){
-//
-//            //"SEARCH" menu item
-//            case (R.id.menu_item_search_quotes_by_advanced_fragment_search):
-//                //Do nothing. All covered in onCreateOptionsMenu(..) method
-//                return true;
-//
-//            //"CLEAR ALL" menu item
-//            case (R.id.menu_item_search_quotes_by_advanced_fragment_clear_all):
-//
-//                shouldDisplaySearchResultsWhenFragmentIsReloaded = false; //Toggle flag to display the search results to FALSE
-//
-//                getActivity().invalidateOptionsMenu(); //Update options menu - i.e. call onCreateOptionsMenu() in order to make the "CLEAR ALL" menu item disappear
-//
-//                //Configure visibilities of each of the Views
-//                mAdvancedSearchedText.setVisibility(View.GONE);
-//                mSearchQuotesByAdvancedQuoteRecyclerView.setVisibility(View.GONE);
-//
-//                mSearchSuggestionsText.setVisibility(View.VISIBLE);
-//                mSearchSuggestionsRefresh.setVisibility(View.VISIBLE);
-//
-//                mSearchSuggestionOne.setVisibility(View.VISIBLE);
-//                mSearchSuggestionTwo.setVisibility(View.VISIBLE);
-//                mSearchSuggestionThree.setVisibility(View.VISIBLE);
-//                mSearchSuggestionFour.setVisibility(View.VISIBLE);
-//                mSearchSuggestionFive.setVisibility(View.VISIBLE);
-//                mSearchSuggestionSix.setVisibility(View.VISIBLE);
-//                mSearchSuggestionSeven.setVisibility(View.VISIBLE);
-//                mSearchSuggestionEight.setVisibility(View.VISIBLE);
-//                mSearchSuggestionNine.setVisibility(View.VISIBLE);
-//                mSearchSuggestionTen.setVisibility(View.VISIBLE);
-//
-//                setUpRandomSearchSuggestions(); //Get a new set of Search Suggestions from a List of ALL possible Search Suggestions, now they are to be displayed
-//
-//                cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the advanced query
-//
+    //Override onCreateOptionsMenu(..) fragment lifecycle callback method
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+
+        menuInflater.inflate(R.menu.fragment_search_quotes_by_advanced, menu);
+
+        //---------------- Configure CLEAR ALL menu item -------------------------------------------------------------------------------
+        final MenuItem clearAllItem = menu.findItem(R.id.menu_item_search_quotes_by_advanced_fragment_clear_all); //Menu item for "Clear All"
+
+        //Show the "Clear All" menu item IF and ONLY IF the flag indicating that the search results are displayed is TRUE
+        if (shouldDisplaySearchResultsWhenFragmentIsReloaded){
+            clearAllItem.setVisible(true);
+        }
+        else{
+            clearAllItem.setVisible(false);
+        }
+    }
+
+
+
+
+    //Define what happens when the menu items are selected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+
+        switch (menuItem.getItemId()){
+
+            //"CLEAR ALL" menu item
+            case (R.id.menu_item_search_quotes_by_advanced_fragment_clear_all):
+
+                shouldDisplaySearchResultsWhenFragmentIsReloaded = false; //Toggle flag to display the search results to FALSE
+
+                getActivity().invalidateOptionsMenu(); //Update options menu - i.e. call onCreateOptionsMenu() in order to make the "CLEAR ALL" menu item disappear
+
+                //Configure visibilities of each of the Views
+                mAdvancedSearchedText.setVisibility(View.GONE);
+                mSearchQuotesByAdvancedQuoteRecyclerView.setVisibility(View.GONE);
+
+                mSearchQuotesByAdvancedTitle.setVisibility(View.VISIBLE);
+                mSearchQuotesByKeywordText.setVisibility(View.VISIBLE);
+                mSearchQuotesByKeywordSearchView.setVisibility(View.VISIBLE);
+                mSearchQuotesByAuthorText.setVisibility(View.VISIBLE);
+                mSearchQuotsByAuthorSearchView.setVisibility(View.VISIBLE);
+                mSearchQuotesByCategoryText.setVisibility(View.VISIBLE);
+                mSearchQuotesByCategorySearchView.setVisibility(View.VISIBLE);
+                mSearchQuotesByAdvancedSearchButton.setVisibility(View.VISIBLE);
+
+
+                cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the advanced query
+
 //                Toast.makeText(getActivity(), "Cleared Search Results for: " + sKeywordSearchQuery.toUpperCase(), Toast.LENGTH_LONG).show(); //Create Toast notifying that the search results have been cleared
-//
-//                return true;
-//
-//            default:
-//                return super.onOptionsItemSelected(menuItem);
-//
-//        }
-//
-//    }
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(menuItem);
+
+        }
+
+    }
 
 
 
