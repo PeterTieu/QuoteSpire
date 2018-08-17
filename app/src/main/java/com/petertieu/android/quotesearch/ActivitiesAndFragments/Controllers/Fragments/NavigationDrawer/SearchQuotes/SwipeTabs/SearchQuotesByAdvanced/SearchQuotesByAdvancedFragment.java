@@ -348,8 +348,8 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
                     noSearchQueriesDialogFragment();
                     return;
-
                 }
+
 
                 Log.i(TAG, "post-Empty");
 
@@ -388,11 +388,6 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
             }
         });
 
-
-
-
-
-
         getActivity().invalidateOptionsMenu(); //Result options menu
 
         return view;
@@ -403,10 +398,29 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
 
     private void noSearchQueriesDialogFragment(){
+        TextView dialogTitle = new TextView(getActivity());
+        dialogTitle.setText("No Search Queries");
+        dialogTitle.setTextSize(22);
+        dialogTitle.setGravity(Gravity.CENTER);
+        dialogTitle.setTypeface(null, Typeface.BOLD);
+        dialogTitle.setTextColor(getResources().getColor(R.color.orange));
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey));
 
+        String dialogMessage = "Please enter search queries for Keyword and/or Author and/or Category";
+
+
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_remove_all_favorite_quotes, null);
+
+        AlertDialog alertDialog = new AlertDialog
+                .Builder(getActivity())
+                .setView(view)
+                .setCustomTitle(dialogTitle)
+                .setMessage(dialogMessage)
+                .setPositiveButton(android.R.string.ok, null)
+                .create();
+
+        alertDialog.show();
     }
-
-
 
 
 
