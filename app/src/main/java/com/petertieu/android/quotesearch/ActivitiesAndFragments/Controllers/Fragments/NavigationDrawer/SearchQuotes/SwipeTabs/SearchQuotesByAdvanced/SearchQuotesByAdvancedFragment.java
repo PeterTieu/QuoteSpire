@@ -3,7 +3,6 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -12,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -49,9 +49,9 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
     //-------------- SEARCH variables ------------------------------------
     private static final int NUMBER_OF_QUOTES_TO_LOAD = 10; //Number of quotes to load upon search
-    private static String sKeywordSearchQuery;
-    private static String sAuthorSearchQuery;
-    private static String sCategorySearchQuery;
+    public static String sKeywordSearchQuery;
+    public static String sAuthorSearchQuery;
+    public static String sCategorySearchQuery;
     private TextView mAdvancedSearchedText;
 
 
@@ -70,7 +70,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
     private TextView mSearchQuotesByKeywordText;
     private SearchView mSearchQuotesByKeywordSearchView;
     private TextView mSearchQuotesByAuthorText;
-    private SearchView mSearchQuotsByAuthorSearchView;
+    private SearchView mSearchQuotesByAuthorSearchView;
     private TextView mSearchQuotesByCategoryText;
     private SearchView mSearchQuotesByCategorySearchView;
     private Button mSearchQuotesByAdvancedSearchButton;
@@ -120,6 +120,11 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
         Log.i(TAG, "onCreateView(..) called"); //Log to Logcat
 
+//        sKeywordSearchQuery = null;
+//        sAuthorSearchQuery = null;
+//        sCategorySearchQuery = null;
+
+
         getActivity().setTitle(getResources().getString(R.string.search_quotes_fragment_title)); //Set title for fragment
 
         View view = layoutInflater.inflate(R.layout.fragment_search_quotes_by_advanced, viewGroup, false); //Inflate fragment layout
@@ -133,7 +138,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
         mSearchQuotesByKeywordText = (TextView) view.findViewById(R.id.search_quotes_by_keyword_text);
         mSearchQuotesByKeywordSearchView = (SearchView) view.findViewById(R.id.search_quotes_by_keyword_search_view);
         mSearchQuotesByAuthorText = (TextView) view.findViewById(R.id.search_quotes_by_author_text);
-        mSearchQuotsByAuthorSearchView = (SearchView) view.findViewById(R.id.search_quotes_by_keyword_author_search_view);
+        mSearchQuotesByAuthorSearchView = (SearchView) view.findViewById(R.id.search_quotes_by_author_search_view);
         mSearchQuotesByCategoryText = (TextView) view.findViewById(R.id.search_quotes_by_category_text);
         mSearchQuotesByCategorySearchView = (SearchView) view.findViewById(R.id.search_quotes_by_category_search_view);
         mSearchQuotesByAdvancedSearchButton = (Button) view.findViewById(R.id.search_quotes_by_advanced_search_button);
@@ -164,12 +169,10 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
             mSearchQuotesByKeywordText.setVisibility(View.GONE);
             mSearchQuotesByKeywordSearchView.setVisibility(View.GONE);
             mSearchQuotesByAuthorText.setVisibility(View.GONE);
-            mSearchQuotsByAuthorSearchView.setVisibility(View.GONE);
+            mSearchQuotesByAuthorSearchView.setVisibility(View.GONE);
             mSearchQuotesByCategoryText.setVisibility(View.GONE);
             mSearchQuotesByCategorySearchView.setVisibility(View.GONE);
             mSearchQuotesByAdvancedSearchButton.setVisibility(View.GONE);
-
-
 
 
             //---------- Configure View variables ----------------------
@@ -190,10 +193,27 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
             mSearchQuotesByKeywordText.setVisibility(View.VISIBLE);
             mSearchQuotesByKeywordSearchView.setVisibility(View.VISIBLE);
             mSearchQuotesByAuthorText.setVisibility(View.VISIBLE);
-            mSearchQuotsByAuthorSearchView.setVisibility(View.VISIBLE);
+            mSearchQuotesByAuthorSearchView.setVisibility(View.VISIBLE);
             mSearchQuotesByCategoryText.setVisibility(View.VISIBLE);
             mSearchQuotesByCategorySearchView.setVisibility(View.VISIBLE);
             mSearchQuotesByAdvancedSearchButton.setVisibility(View.VISIBLE);
+
+
+
+            Log.i(TAG, "sKeywordSearchQuery: " + sKeywordSearchQuery);
+            Log.i(TAG, "sAuthorSearchQuery: " + sAuthorSearchQuery);
+            Log.i(TAG, "sCategorySearchQuery: " + sCategorySearchQuery);
+
+
+            mSearchQuotesByKeywordSearchView.setQuery(sKeywordSearchQuery, false);
+            mSearchQuotesByAuthorSearchView.setQuery(sAuthorSearchQuery, false);
+            mSearchQuotesByCategorySearchView.setQuery(sCategorySearchQuery, false);
+
+
+//
+//            sKeywordSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedKeywordStoredQuery(getActivity());
+//            sAuthorSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedAuthorStoredQuery(getActivity());
+//            sCategorySearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedCategoryStoredQuery(getActivity());
 
 
         }
@@ -212,7 +232,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
                 sKeywordSearchQuery = keywordQuery;
 
 
-                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedStoredQuery(getActivity(), sKeywordSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
+//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedKeywordStoredQuery(getActivity(), sKeywordSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
                 return false;
             }
@@ -222,13 +242,9 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
             public boolean onQueryTextSubmit(String keywordQuery) {
 
 
-                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedStoredQuery(getActivity(), sKeywordSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
+//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedKeywordStoredQuery(getActivity(), sKeywordSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
-
-                shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
-
-                getActivity().invalidateOptionsMenu(); //Update the options menu
-
+                searchQuotes();
 
                 //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
                 return true;
@@ -245,7 +261,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
 
 
-        mSearchQuotsByAuthorSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchQuotesByAuthorSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextChange(String authorQuery) {
@@ -255,23 +271,20 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
                 sAuthorSearchQuery = authorQuery;
 
 
-                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedStoredQuery(getActivity(), sAuthorSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
+//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedAuthorStoredQuery(getActivity(), sAuthorSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
                 return false;
             }
 
 
             @Override
-            public boolean onQueryTextSubmit(String keywordQuery) {
+            public boolean onQueryTextSubmit(String authorQuery) {
 
 
-                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedStoredQuery(getActivity(), sAuthorSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
+//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedAuthorStoredQuery(getActivity(), sAuthorSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
 
-                shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
-
-                getActivity().invalidateOptionsMenu(); //Update the options menu
-
+                searchQuotes();
 
                 //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
                 return true;
@@ -279,12 +292,6 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
             }
 
         });
-
-
-
-
-
-
 
 
 
@@ -304,23 +311,19 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
                 sCategorySearchQuery = categoryQuery;
 
 
-                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedStoredQuery(getActivity(), sCategorySearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
+//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedCategoryStoredQuery(getActivity(), sCategorySearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
                 return false;
             }
 
 
             @Override
-            public boolean onQueryTextSubmit(String keywordQuery) {
+            public boolean onQueryTextSubmit(String categoryQuery) {
+
+//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedCategoryStoredQuery(getActivity(), sCategorySearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
 
-                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedStoredQuery(getActivity(), sCategorySearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-
-
-                shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
-
-                getActivity().invalidateOptionsMenu(); //Update the options menu
-
+                searchQuotes();
 
                 //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
                 return true;
@@ -332,65 +335,77 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
 
 
-
-
-
-
         mSearchQuotesByAdvancedSearchButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view){
 
-
-
-                if (sKeywordSearchQuery == null && sAuthorSearchQuery == null && sCategorySearchQuery == null){
-                    Log.i(TAG, "Empty");
-
-                    noSearchQueriesDialogFragment();
-                    return;
-                }
-
-
-                Log.i(TAG, "post-Empty");
-
-
-                getActivity().invalidateOptionsMenu();
-
-                shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
-
-                mSearchQuotesByAdvancedTitle.setVisibility(View.GONE);
-                mSearchQuotesByKeywordText.setVisibility(View.GONE);
-                mSearchQuotesByKeywordSearchView.setVisibility(View.GONE);
-                mSearchQuotesByAuthorText.setVisibility(View.GONE);
-                mSearchQuotsByAuthorSearchView.setVisibility(View.GONE);
-                mSearchQuotesByCategoryText.setVisibility(View.GONE);
-                mSearchQuotesByCategorySearchView.setVisibility(View.GONE);
-                mSearchQuotesByAdvancedSearchButton.setVisibility(View.GONE);
-
-                mSearchQuotesByAdvancedQuoteRecyclerView.setVisibility(View.VISIBLE); //Show the RecyclerView
-                sSearchQuotesByAdvancedQuotes = null; //Nullify the List of all Quotes if they already point to an existing set from the previous search
-                sSearchQuotesByAdvancedQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]); //Re-initialise the size of the List of all Quotes
-                sSearchQuotesByAdvancedQuoteAdapter = new SearchQuotesByAdvancedFragment.SearchQuotesByAdvancedAdapter(sSearchQuotesByAdvancedQuotes); //Create a new RecyclerView Adapter
-                sSearchQuotesByAdvancedQuoteAdapter.setSearchQuotesByAdvancedQuotes(sSearchQuotesByAdvancedQuotes);  //Link the RecyclerView adapter to the List of Quotes from the search result
-                sSearchQuotesByAdvancedQuoteAdapter.notifyDataSetChanged(); //Update the RecyclerView Adapter
-                mSearchQuotesByAdvancedQuoteRecyclerView.setAdapter(sSearchQuotesByAdvancedQuoteAdapter); //Set the RecyclerView to the new RecyclerView Adapter
-
-
-                //Begin a new set of AsyncTasks to fetch a new set of Quotes from the search query
-                for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
-
-                    Integer quotePosition = i; //Let the quote position equal the index
-
-                    mGetSearchQuotesByAdvancedAsyncTasksList.set(i, new SearchQuotesByAdvancedFragment.GetSearchQuotesByAdvancedAsyncTask(sKeywordSearchQuery, sAuthorSearchQuery, sCategorySearchQuery)); //Assign the AsyncTask reference in the List to a new AsyncTask object
-                    mGetSearchQuotesByAdvancedAsyncTasksList.get(i).execute(quotePosition); //Execute the AsyncTask object (i.e. begin fetching the Quote)
-                }
-
+                searchQuotes();
             }
         });
+
+
 
         getActivity().invalidateOptionsMenu(); //Result options menu
 
         return view;
+    }
+
+
+
+
+
+    private void searchQuotes(){
+
+//        sKeywordSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedKeywordStoredQuery(getActivity());
+//        sAuthorSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedAuthorStoredQuery(getActivity());
+//        sCategorySearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedCategoryStoredQuery(getActivity());
+
+
+        if ( (sKeywordSearchQuery == null || sKeywordSearchQuery.isEmpty()) &&
+             (sAuthorSearchQuery == null || sAuthorSearchQuery.isEmpty()) &&
+             (sCategorySearchQuery == null || sCategorySearchQuery.isEmpty()) ){
+
+            Log.i(TAG, "Empty");
+
+            noSearchQueriesDialogFragment();
+            return;
+        }
+
+
+        Log.i(TAG, "post-Empty");
+
+
+        getActivity().invalidateOptionsMenu();
+
+        shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
+
+        mSearchQuotesByAdvancedTitle.setVisibility(View.GONE);
+        mSearchQuotesByKeywordText.setVisibility(View.GONE);
+        mSearchQuotesByKeywordSearchView.setVisibility(View.GONE);
+        mSearchQuotesByAuthorText.setVisibility(View.GONE);
+        mSearchQuotesByAuthorSearchView.setVisibility(View.GONE);
+        mSearchQuotesByCategoryText.setVisibility(View.GONE);
+        mSearchQuotesByCategorySearchView.setVisibility(View.GONE);
+        mSearchQuotesByAdvancedSearchButton.setVisibility(View.GONE);
+
+        mSearchQuotesByAdvancedQuoteRecyclerView.setVisibility(View.VISIBLE); //Show the RecyclerView
+        sSearchQuotesByAdvancedQuotes = null; //Nullify the List of all Quotes if they already point to an existing set from the previous search
+        sSearchQuotesByAdvancedQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]); //Re-initialise the size of the List of all Quotes
+        sSearchQuotesByAdvancedQuoteAdapter = new SearchQuotesByAdvancedFragment.SearchQuotesByAdvancedAdapter(sSearchQuotesByAdvancedQuotes); //Create a new RecyclerView Adapter
+        sSearchQuotesByAdvancedQuoteAdapter.setSearchQuotesByAdvancedQuotes(sSearchQuotesByAdvancedQuotes);  //Link the RecyclerView adapter to the List of Quotes from the search result
+        sSearchQuotesByAdvancedQuoteAdapter.notifyDataSetChanged(); //Update the RecyclerView Adapter
+        mSearchQuotesByAdvancedQuoteRecyclerView.setAdapter(sSearchQuotesByAdvancedQuoteAdapter); //Set the RecyclerView to the new RecyclerView Adapter
+
+
+        //Begin a new set of AsyncTasks to fetch a new set of Quotes from the search query
+        for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
+
+            Integer quotePosition = i; //Let the quote position equal the index
+
+            mGetSearchQuotesByAdvancedAsyncTasksList.set(i, new SearchQuotesByAdvancedFragment.GetSearchQuotesByAdvancedAsyncTask(sKeywordSearchQuery, sAuthorSearchQuery, sCategorySearchQuery)); //Assign the AsyncTask reference in the List to a new AsyncTask object
+            mGetSearchQuotesByAdvancedAsyncTasksList.get(i).execute(quotePosition); //Execute the AsyncTask object (i.e. begin fetching the Quote)
+        }
     }
 
 
@@ -468,10 +483,19 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
                 mSearchQuotesByKeywordText.setVisibility(View.VISIBLE);
                 mSearchQuotesByKeywordSearchView.setVisibility(View.VISIBLE);
                 mSearchQuotesByAuthorText.setVisibility(View.VISIBLE);
-                mSearchQuotsByAuthorSearchView.setVisibility(View.VISIBLE);
+                mSearchQuotesByAuthorSearchView.setVisibility(View.VISIBLE);
                 mSearchQuotesByCategoryText.setVisibility(View.VISIBLE);
                 mSearchQuotesByCategorySearchView.setVisibility(View.VISIBLE);
                 mSearchQuotesByAdvancedSearchButton.setVisibility(View.VISIBLE);
+
+
+                mSearchQuotesByKeywordSearchView.setQuery(sKeywordSearchQuery, false);
+                mSearchQuotesByAuthorSearchView.setQuery(sAuthorSearchQuery, false);
+                mSearchQuotesByCategorySearchView.setQuery(sCategorySearchQuery, false);
+
+//                mSearchQuotesByKeywordSearchView.setQuery(SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedKeywordStoredQuery(getActivity()), false);
+//                mSearchQuotesByAuthorSearchView.setQuery(SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedAuthorStoredQuery(getActivity()), false);
+//                mSearchQuotesByCategorySearchView.setQuery(SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedCategoryStoredQuery(getActivity()), false);
 
 
                 cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the advanced query
@@ -719,7 +743,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
                 //If the Quote author exists
                 if (mSearchQuotesByAdvancedQuote.getAuthor() != null){
-                    mSearchQuotesByAdvancedQuoteAuthor.setText(mSearchQuotesByAdvancedQuote.getAuthor()); //Set the Quote author text
+                    mSearchQuotesByAdvancedQuoteAuthor.setText("- " + mSearchQuotesByAdvancedQuote.getAuthor()); //Set the Quote author text
                 }
                 //If the Quote author DOES NOT exist
                 else{
