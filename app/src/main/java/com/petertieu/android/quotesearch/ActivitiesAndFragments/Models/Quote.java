@@ -20,6 +20,7 @@ public class Quote {
     List<String> mCategories;
     boolean mIsFavorite;
 
+
     //Only used for RandomQuotesFragment
     int mRandomQuotePosition;
 
@@ -34,6 +35,9 @@ public class Quote {
 
     //Only used for SearchQuotesByAdvancedFragment
     int mSearchQuotesByAdvancedQuotePosition;
+
+    //Only used for RandomPicturesOfQuotesFragment
+    String mPictureDownloadURI;
 
 
     public Quote(){
@@ -137,4 +141,17 @@ public class Quote {
     public void setSearchQuotesByAdvancedQuotePosition(int searchQuotesByAdvancedQuotePosition){
         mSearchQuotesByAdvancedQuotePosition = searchQuotesByAdvancedQuotePosition;
     }
+
+
+    public String getPictureDownloadURI(){
+        return mPictureDownloadURI;
+    }
+
+
+    public void setPictureDownloadURI(String pictureDownloadURI){
+        mPictureDownloadURI = pictureDownloadURI;
+    }
+
+
+
 }
