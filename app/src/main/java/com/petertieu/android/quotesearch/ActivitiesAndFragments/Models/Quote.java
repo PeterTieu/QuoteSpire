@@ -36,8 +36,11 @@ public class Quote {
     //Only used for SearchQuotesByAdvancedFragment
     int mSearchQuotesByAdvancedQuotePosition;
 
-    //Only used for RandomPicturesOfQuotesFragment
+    //Only used for RandomQuotePicturesFragment
     String mPictureDownloadURI;
+
+    //Only used for RandomQuotePicturesFragment
+    int mRandomQuotePicturePosition;
 
 
     public Quote(){
@@ -150,6 +153,16 @@ public class Quote {
 
     public void setPictureDownloadURI(String pictureDownloadURI){
         mPictureDownloadURI = pictureDownloadURI;
+    }
+
+
+    public int getRandomQuotePicturePosition(){
+        return mRandomQuotePicturePosition;
+    }
+
+
+    public void setRandomQuotePicturePosition(int randomQuotePicturePosition){
+        mRandomQuotePicturePosition = randomQuotePicturePosition;
     }
 
 
