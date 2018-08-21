@@ -56,7 +56,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
     public interface QuotePictureDownloadListener<T>{
 
-        void onQuotePictureDownloaded(T quote, Bitmap quotePicture);
+        void onQuotePictureDownloaded(T quotePictureViewHolder, Bitmap quotePicture);
     }
 
 
@@ -109,12 +109,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
     // Argument 1: 'T' is the class identifier for the image to download. In this case, it is Quote.
     // It is also the "obj" instance variable of the Message, which is sent with the Message
     // Argument 2: The URL of the image to download (i.e. galleryItem.getUrl(), where galleryItem is an instance of GetRandomQuotePictureQuote)
-    public void enqueueQuotePictureDownloadURIIToMessageQueue(T quote, String quotePictureDownloadURI){
-
-        //Log the URL that is found
-        Log.i(TAG, "Got a URL: " + quotePictureDownloadURI);
-        Quote quotee = (Quote) quote;
-        Log.i(TAG, "QUOTE URL: " + quotee.getPictureDownloadURI());
+    public void enqueueQuotePictureDownloadURIIToMessageQueue(T quotePictureViewHolder, String quotePictureDownloadURI){
 
 
 
@@ -123,7 +118,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //Remove the target (Quote) from the ConcurrentHashMap collection (mRequestMap),
             //NOTE: This also removes the 'url' counterpart of the element 'obj' is in,
             // as 'obj' and 'url' are in the same element in the ConcurrentHashMap
-            mRequestMap.remove(quote);
+            mRequestMap.remove(quotePictureViewHolder);
         }
 
         //If the "url_s" parameter of the JSON text (i.e. JSON object called "url_s" exists
@@ -131,7 +126,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //Add to the ConcurrentHashMap:
             // 1: The obj (Quote), and
             // 2: The url (i.e. GalleryItem.getUrl())
-            mRequestMap.put(quote, quotePictureDownloadURI);
+            mRequestMap.put(quotePictureViewHolder, quotePictureDownloadURI);
 
 
             //Have the Handler create a Message object,
@@ -151,7 +146,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //  and create Messages, which are moved to the MessageQueue by the Looper!
             // This means that mRequestHandler is in charge of processing the Message
             // (when the Message is pulled off the MESSAGE QUEUE by the Looper)
-            mRequestHandler.obtainMessage(MESSAGE_DOWNLOAD, (Quote) quote).sendToTarget();
+            mRequestHandler.obtainMessage(MESSAGE_DOWNLOAD, quotePictureViewHolder).sendToTarget();
         }
 
 
@@ -204,16 +199,16 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
                     // and let it equal the "obj" instance variable of the Message (msg).
                     // REMEMBER: The "obj" instance variable of the Message (msg) is the identifier for the request.
                     // In this case, "obj" is of type Quote (since T is of type Quote)
-                    T quote = (T) message.obj;
+                    T quotePictureViewHolder = (T) message.obj;
 
                     //Log that a Message is pulled from the MESSAGE QUEUE, which requests for a URL
                     //NOTE: mRequestMap.get(obj) returns the VALUE element of the 'obj' KEY, which is: 'url' (aka the "url_s" parameter of the JSON string),
                     // as both 'obj' and 'url' are in the same element in the ConcurrentHashMap
-                    Log.i(TAG, "Got a request for url_s: " + mRequestMap.get(quote));
+                    Log.i(TAG, "Got a request for url_s: " + mRequestMap.get(quotePictureViewHolder));
 
                     //Call the handleRequest(T) helper method,
                     // which is configured to DOWNLOAD the bitmap
-                    handleRequest(quote);
+                    handleRequest(quotePictureViewHolder);
                 }
 
             }
@@ -234,7 +229,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
     //The handleRequest(T) method is a helper method of handleMessage(Message) (inside the overriden onLooperPrepared()).
     // It uses the url to download the bitmap into bytes,
     // then parses it to a bitmap image
-    private void handleRequest(final T quote){
+    private void handleRequest(final T quotePictureViewHolder){
 
         //Try a 'risky' task,
         // as getUrlBytes(url) could throw a IOException exception
@@ -245,7 +240,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //NOTE: 'url' is actually the String version of the "url_s" parameter of the JSON String. It represents the url to the thumbnail!
             //NOTE: In this case, 'obj' is Quote
             //NOTE: get(obj) returns the VALUE, 'url' (aka the "url_s" parameter of the JSON String).
-            final String quotePictureDownloadURI = mRequestMap.get(quote);
+            final String quotePictureDownloadURI = mRequestMap.get(quotePictureViewHolder);
 
             //If the url doesn't exist, then leave this method
             if (quotePictureDownloadURI == null){
@@ -310,14 +305,14 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
                     //If the VALUE component of the 'obj' KEY (i.e. the 'url' variable) in the ConcurrentHashMap object (mRequestMap) isn't actually the 'url' variable,
                     // OR... mHasQuit = true (a 'flag' - to make sure that this background thread hasn't reached the quit() cycle of its life yet)
                     // then leave the method (return null)
-                    if (mRequestMap.get(quote) != quotePictureDownloadURI || mHasHandlerThreadQuit){
+                    if (mRequestMap.get(quotePictureViewHolder) != quotePictureDownloadURI || mHasHandlerThreadQuit){
                         return;
                     }
 
 
 
                     //Remove the Quote-URI mapping from the mRequestMap
-                    mRequestMap.remove(quote);
+                    mRequestMap.remove(quotePictureViewHolder);
 
                     //RECALL: Callback interface..
                     //Call the onThumbnailDownloadListener interface object (mThumbnailDownloadListener)
@@ -325,7 +320,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
                     // in order to BIND the bitmap image to the Quote object!
                     //Set the bitmap on the Quote object
                     // i.e. the 'obj' instance variable of the Message
-                    mQuoteQuotePictureDownloadListener.onQuotePictureDownloaded(quote, bitmap);
+                    mQuoteQuotePictureDownloadListener.onQuotePictureDownloaded(quotePictureViewHolder, bitmap);
                 }
             });
 
