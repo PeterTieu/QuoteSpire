@@ -29,7 +29,7 @@ public class RandomQuotePicturesFragment extends Fragment {
     private final String TAG = "RQPFragment";
 
     //-------------- SEARCH variables ------------------------------------
-    private final int NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD = 12; //Number of quotes to load upon search
+    private final int NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD = 26; //Number of quotes to load upon search
 
     //-------------- LIST variables ------------------------------------
     private List<Quote> mRandomQuotePictureQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD]);
@@ -46,7 +46,7 @@ public class RandomQuotePicturesFragment extends Fragment {
     public boolean shouldEnableRandomiseMenuItem = false;
 
 
-    private QuotePictureDownloaderHandlerThread<RandomQuotePictureViewHolder> mRandomQuotePicturesDownloaderHandlerThread;
+    private QuotePictureDownloaderHandlerThread<Quote> mRandomQuotePicturesDownloaderHandlerThread;
 
 
     private RandomQuotePicturesAdapter mRandomeQuotePicturesAdapter;
@@ -83,18 +83,36 @@ public class RandomQuotePicturesFragment extends Fragment {
 
         mRandomQuotePicturesDownloaderHandlerThread = new QuotePictureDownloaderHandlerThread<>(responseHandler);
 
-        mRandomQuotePicturesDownloaderHandlerThread.setQuoteQuotePictureDownloadListener(new QuotePictureDownloaderHandlerThread.QuotePictureDownloadListener<RandomQuotePictureViewHolder>() {
+
+
+        mRandomQuotePicturesDownloaderHandlerThread.setQuoteQuotePictureDownloadListener(new QuotePictureDownloaderHandlerThread.QuotePictureDownloadListener<Quote>() {
 
             @Override
-            public void onQuotePictureDownloaded(RandomQuotePictureViewHolder randomQuotePictureViewHolder, Bitmap quotePicture) {
+            public void onQuotePictureDownloaded(Quote randomQuotePictureQuote, Bitmap quotePicture) {
 
-                Drawable quotePictureDrawable = new BitmapDrawable(getResources(), quotePicture);
 
-                randomQuotePictureViewHolder.bindRandomQuotePictureDrawable(quotePictureDrawable);
+                mRandomQuotePictureBitmaps.set(randomQuotePictureQuote.getRandomQuotePicturePosition()-1, quotePicture);
+
+
+
+                if (mRandomeQuotePicturesAdapter == null){
+
+                    mRandomeQuotePicturesAdapter = new RandomQuotePicturesAdapter(mRandomQuotePictureBitmaps);
+
+                }
+
+                    mRandomeQuotePicturesAdapter.setRandomQuotePictures(mRandomQuotePictureBitmaps);
+                    mRandomPicturesOfQuotesRecyclerView.setAdapter(mRandomeQuotePicturesAdapter);
+                    mRandomeQuotePicturesAdapter.notifyDataSetChanged();
+
+
+//                randomQuotePictureViewHolder.bindRandomQuotePictureDrawable(quotePictureDrawable);
 
 //                updateUI();
             }
         });
+
+
 
         mRandomQuotePicturesDownloaderHandlerThread.start();
 
@@ -132,10 +150,19 @@ public class RandomQuotePicturesFragment extends Fragment {
         mRandomPicturesOfQuotesRecyclerView.setLayoutManager(mGridLayoutManager);
 
 
+        if (mRandomeQuotePicturesAdapter != null){
+            mRandomeQuotePicturesAdapter = new RandomQuotePicturesAdapter(mRandomQuotePictureBitmaps);
+//            mRandomeQuotePicturesAdapter.setRandomQuotePictures(mRandomQuotePictureBitmaps);
+            mRandomPicturesOfQuotesRecyclerView.setAdapter(mRandomeQuotePicturesAdapter);
+//            mRandomeQuotePicturesAdapter.notifyDataSetChanged();
+        }
+
+
+
 
 
         getActivity().invalidateOptionsMenu();
-        getActivity().setTitle("Random Pictures of Quotes");
+        getActivity().setTitle("Random Quote Pictures");
 
 
 
@@ -239,47 +266,52 @@ public class RandomQuotePicturesFragment extends Fragment {
             mRandomQuotePictureQuotes.set(mQuotePosition[0], randomQuotePicture);
 
 
-//            mRandomQuotePicturesDownloaderHandlerThread.enqueueQuotePictureDownloadURIIToMessageQueue(mRandomQuotePictureQuotes.get(mQuotePosition[0]), randomQuotePicture.getPictureDownloadURI());
+            mRandomQuotePicturesDownloaderHandlerThread.enqueueQuotePictureDownloadURIIToMessageQueue(mRandomQuotePictureQuotes.get(mQuotePosition[0]), randomQuotePicture.getPictureDownloadURI());
 //            mRandomQuotePicturesDownloaderHandlerThread.enqueueQuotePictureDownloadURIIToMessageQueue(randomQuotePicture, randomQuotePicture.getPictureDownloadURI());
-//
-//            if (randomQuotePicture != null){
-//                Log.i(TAG, "randomQuotePicture exists");
-//            }
-//            else{
-//                Log.i(TAG, "randomQuotePicture DOES NOT exist");
-//            }
-//
-//
-//            if (randomQuotePicture.getPictureDownloadURI() != null){
-//                Log.i(TAG, "randomQuotePicture.getPictureDownloadURI() exists");
-//            }
-//            else{
-//                Log.i(TAG, "randomQuotePicture.getPictureDownloadURI() DOES NOT exist");
-//            }
 
-
-
-
-            mRandomQuotePictureDownloadURIs.set(mQuotePosition[0], randomQuotePicture.getPictureDownloadURI());
-
-
-            Log.i(TAG, "mRandomQuotePictureDownloadURI: " + mRandomQuotePictureDownloadURIs);
-
-            Log.i(TAG, "mRandomQuotePictureDownloadURIs.size(): " + mRandomQuotePictureDownloadURIs.size());
-
-
-
-
-
-            if (mRandomQuotePictureDownloadURIs.get(NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD-1) != null){
-                Log.i(TAG, "HERRRRRRRRRRRRRRRE");
-                mRandomeQuotePicturesAdapter = new RandomQuotePicturesAdapter(mRandomQuotePictureDownloadURIs);
-                mRandomeQuotePicturesAdapter.setRandomQuotePictures(mRandomQuotePictureDownloadURIs);
-                mRandomPicturesOfQuotesRecyclerView.setAdapter(mRandomeQuotePicturesAdapter);
-                mRandomeQuotePicturesAdapter.notifyDataSetChanged();
-
-
+            if (randomQuotePicture != null){
+                Log.i(TAG, "randomQuotePicture exists");
             }
+            else{
+                Log.i(TAG, "randomQuotePicture DOES NOT exist");
+            }
+
+
+            if (randomQuotePicture.getPictureDownloadURI() != null){
+                Log.i(TAG, "randomQuotePicture.getPictureDownloadURI() exists");
+            }
+            else{
+                Log.i(TAG, "randomQuotePicture.getPictureDownloadURI() DOES NOT exist");
+            }
+
+
+
+
+
+
+
+
+
+//            mRandomQuotePictureDownloadURIs.set(mQuotePosition[0], randomQuotePicture.getPictureDownloadURI());
+//
+//
+//            Log.i(TAG, "mRandomQuotePictureDownloadURI: " + mRandomQuotePictureDownloadURIs);
+//
+//            Log.i(TAG, "mRandomQuotePictureDownloadURIs.size(): " + mRandomQuotePictureDownloadURIs.size());
+//
+//
+//
+//
+//
+//            if (mRandomQuotePictureDownloadURIs.get(NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD-1) != null){
+//                Log.i(TAG, "HERRRRRRRRRRRRRRRE");
+//                mRandomeQuotePicturesAdapter = new RandomQuotePicturesAdapter(mRandomQuotePictureDownloadURIs);
+//                mRandomeQuotePicturesAdapter.setRandomQuotePictures(mRandomQuotePictureDownloadURIs);
+//                mRandomPicturesOfQuotesRecyclerView.setAdapter(mRandomeQuotePicturesAdapter);
+//                mRandomeQuotePicturesAdapter.notifyDataSetChanged();
+//
+//
+//            }
 
 
 
@@ -301,14 +333,14 @@ public class RandomQuotePicturesFragment extends Fragment {
     private class RandomQuotePicturesAdapter extends RecyclerView.Adapter<RandomQuotePictureViewHolder>{
 
 
-        public RandomQuotePicturesAdapter(List<String> randomQuotePictureDownaloadURIs){
-            mRandomQuotePictureDownloadURIs = randomQuotePictureDownaloadURIs;
+        public RandomQuotePicturesAdapter(List<Bitmap> randomQuotePictureBitmaps){
+            mRandomQuotePictureBitmaps = randomQuotePictureBitmaps;
         }
 
 
         @Override
         public int getItemCount(){
-            return mRandomQuotePictureDownloadURIs.size();
+            return mRandomQuotePictureBitmaps.size();
         }
 
 
@@ -329,24 +361,25 @@ public class RandomQuotePicturesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(RandomQuotePictureViewHolder randomQuotePictureViewHolder, int position){
-            String randomQuotePictureDownloadURI = mRandomQuotePictureDownloadURIs.get(position);
+
+            Bitmap randomQuotePictureBitmap = mRandomQuotePictureBitmaps.get(position);
 
 //            int randomQuotePosition = position + 1;
 //            mRandomQuotesViewHolder.mRandomQuotePositionText.setText("Random Quote #" + randomQuotePosition);
 
 
-            randomQuotePictureViewHolder.bindListItem(randomQuotePictureDownloadURI);
+            randomQuotePictureViewHolder.bindListItem(randomQuotePictureBitmap);
 
-            mRandomQuotePicturesDownloaderHandlerThread.enqueueQuotePictureDownloadURIIToMessageQueue(randomQuotePictureViewHolder, randomQuotePictureDownloadURI);
-
-
-
+//            mRandomQuotePicturesDownloaderHandlerThread.enqueueQuotePictureDownloadURIIToMessageQueue(randomQuotePictureViewHolder, randomQuotePictureDownloadURI);
 
         }
 
 
-        public void setRandomQuotePictures(List<String> randomQuotePictures){
-            mRandomQuotePictureDownloadURIs = randomQuotePictures;
+
+
+
+        public void setRandomQuotePictures(List<Bitmap> randomQuotePictureBitmaps){
+            mRandomQuotePictureBitmaps = randomQuotePictureBitmaps;
         }
 
 
@@ -360,7 +393,7 @@ public class RandomQuotePicturesFragment extends Fragment {
 
     private class RandomQuotePictureViewHolder extends RecyclerView.ViewHolder{
 
-        private String mRandomQuotePictureDownloadURI;
+        private Drawable mRandomQuotePictureBitmap;
         ImageView mQuotePictureListItem;
 
 
@@ -372,8 +405,13 @@ public class RandomQuotePicturesFragment extends Fragment {
         }
 
 
-        public void bindListItem(String randomQuotePictureDownloadURI){
-            mRandomQuotePictureDownloadURI = randomQuotePictureDownloadURI;
+        public void bindListItem(Bitmap randomQuotePictureBitmap){
+//            mRandomQuotePictureBitmap = randomQuotePictureBitmap;
+
+            mRandomQuotePictureBitmap = new BitmapDrawable(getResources(), randomQuotePictureBitmap);
+
+            mQuotePictureListItem.setImageDrawable(mRandomQuotePictureBitmap);
+
         }
 
 
