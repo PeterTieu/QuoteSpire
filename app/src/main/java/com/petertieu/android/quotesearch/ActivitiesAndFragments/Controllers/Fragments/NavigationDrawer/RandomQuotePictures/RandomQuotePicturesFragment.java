@@ -9,14 +9,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotes.RandomQuotesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
@@ -33,11 +38,11 @@ public class RandomQuotePicturesFragment extends Fragment {
     private final String TAG = "RQPFragment"; //Log for Logcat
 
     //-------------- SEARCH variables ------------------------------------
-    private final int NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD = 26; //Number of quotes to load upon search
+    private final static int NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD = 26; //Number of quotes to load upon search
 
     //-------------- LIST variables ------------------------------------
-    private List<Quote> mRandomQuotePictureQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD]); //List of Quotes
-    private List<Bitmap> mRandomQuotePictureBitmaps = Arrays.asList(new Bitmap[NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD]); //List of Bitmaps of Quote Pictures - feteched from the HandlerThread
+    private static List<Quote> mRandomQuotePictureQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD]); //List of Quotes
+    private static List<Bitmap> mRandomQuotePictureBitmaps = Arrays.asList(new Bitmap[NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD]); //List of Bitmaps of Quote Pictures - feteched from the HandlerThread
 
     //-------------- VIEW variables ------------------------------------
     private GridLayoutManager mGridLayoutManager; //GridLayoutMager - to be fed into the the RecyclerView
@@ -114,6 +119,8 @@ public class RandomQuotePicturesFragment extends Fragment {
 
 
 
+
+
     //Override the onCreateView(..) fragment lifecycle callback method
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -126,31 +133,37 @@ public class RandomQuotePicturesFragment extends Fragment {
 
         mRandomPicturesOfQuotesRecyclerView = view.findViewById(R.id.random_pictures_of_quotes_recycler_view);
 
+
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
 
         mRandomPicturesOfQuotesRecyclerView.setLayoutManager(mGridLayoutManager);
 
 
-        if (mRandomeQuotePicturesAdapter != null){
+        if (mRandomQuotePictureBitmaps.get(NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD-1) == null) {
             mRandomeQuotePicturesAdapter = new RandomQuotePicturesAdapter(mRandomQuotePictureBitmaps);
-            mRandomPicturesOfQuotesRecyclerView.setAdapter(mRandomeQuotePicturesAdapter);
         }
+
+        mRandomPicturesOfQuotesRecyclerView.setAdapter(mRandomeQuotePicturesAdapter);
+
 
         getActivity().invalidateOptionsMenu();
         getActivity().setTitle("Random Quote Pictures");
 
 
         //Loop through the total number of Quotes to load
-        for (int i=0; i<NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD; i++){
+        for (int i = 0; i < NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD; i++) {
 
             //If the specific index of the Quote Pictures Bitmap List contain a Bitmap object (i.e. no Quote Picture have been fetched for that index)
-            if (mRandomQuotePictureBitmaps.get(i) == null){
+            if (mRandomQuotePictureBitmaps.get(i) == null) {
 
                 Integer randomPicturesOfQuotesPosition = i; //Obtain Integer variable to feed into the AsyncTask
                 new GetRandomQuotePictureAsyncTask().execute(randomPicturesOfQuotesPosition); //Begin an AsyncTask
 
             }
         }
+
+
+
 
         return view;
     }
@@ -216,6 +229,7 @@ public class RandomQuotePicturesFragment extends Fragment {
                 //2: The VALUE (Quote Picture Download URI) - to be used to fetch the Quote Picture
             mRandomQuotePicturesDownloaderHandlerThread.enqueueQuotePictureDownloadURIIToMessageQueue(mRandomQuotePictureQuotes.get(mQuotePosition[0]), randomQuotePictureQuote.getPictureDownloadURI());
 
+
         }
 
     }
@@ -270,13 +284,21 @@ public class RandomQuotePicturesFragment extends Fragment {
     private class RandomQuotePictureViewHolder extends RecyclerView.ViewHolder{
 
         private Drawable mRandomQuotePictureBitmap;
-        ImageView mQuotePictureListItem;
+        private ImageView mQuotePictureListItem;
+        private ProgressBar mQuotePictureListItemProgressBar;
 
 
         public RandomQuotePictureViewHolder(View listItemView){
             super(listItemView);
 
-            mQuotePictureListItem = listItemView.findViewById(R.id.quote_picture_list_item);
+            mQuotePictureListItem = (ImageView) listItemView.findViewById(R.id.quote_picture_list_item_bitmap);
+            mQuotePictureListItemProgressBar = (ProgressBar) listItemView.findViewById(R.id.quote_picture_list_item_progress_bar);
+
+
+
+            mQuotePictureListItem.setVisibility(View.GONE);
+            mQuotePictureListItemProgressBar.setVisibility(View.VISIBLE);
+
 
         }
 
@@ -288,14 +310,115 @@ public class RandomQuotePicturesFragment extends Fragment {
 
             mQuotePictureListItem.setImageDrawable(mRandomQuotePictureBitmap);
 
-        }
+
+            if (mRandomQuotePictureBitmap == null){
+                Log.i(TAG, "NULLLL");
+            }
+            else{
+                Log.i(TAG, "EXISTSSS");
+            }
 
 
-        public void bindRandomQuotePictureDrawable(Drawable randomQuotePictureDrawable){
-            mQuotePictureListItem.setImageDrawable(randomQuotePictureDrawable);
+            if (randomQuotePictureBitmap != null){
+                mQuotePictureListItemProgressBar.setVisibility(View.GONE);
+                mQuotePictureListItem.setVisibility(View.VISIBLE);
+            }
+
         }
+
 
     }
+
+
+
+
+
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+
+        super.onCreateOptionsMenu(menu, menuInflater);
+
+        menuInflater.inflate(R.menu.fragment_random_picture_quotes, menu);
+
+        MenuItem randomiseItem = menu.findItem(R.id.menu_item_randomise_random_picture_quotes_fragment);
+
+
+
+        //If the flag to enable the "Randomise" menu item is TRUE
+        if (shouldEnableRandomiseMenuItem == true){
+
+            randomiseItem.setEnabled(true);
+
+        }
+        //If the flag to enable the "Randomise" menu item is FALSE
+        else{
+            randomiseItem.setEnabled(false);
+        }
+    }
+
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem){
+
+        switch (menuItem.getItemId()){
+            case (R.id.menu_item_randomise_random_picture_quotes_fragment):
+
+                //Disable the "Randomise" menu item button (the moment it is pressed)
+                menuItem.setEnabled(false);
+
+
+                //Set the flag to enable "Randomise" menu item button to FALSE (i.e. DISABLE "Randomise" menu item button)
+                shouldEnableRandomiseMenuItem = false;
+
+                //'Reset' the instance variables
+                mRandomQuotePictureBitmaps = Arrays.asList(new Bitmap[NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD]); //Re-assign mRandomQuotes to a new object
+                mRandomeQuotePicturesAdapter = new RandomQuotePicturesAdapter(mRandomQuotePictureBitmaps); //Re-assign the RecyclerView Adapter
+                mRandomPicturesOfQuotesRecyclerView.setAdapter(mRandomeQuotePicturesAdapter); //Re-assign the RecyclerView to the re-assigned RecyclerView Adapter
+
+
+
+
+                //Loop through the total number of Quotes to load
+                for (int i = 0; i < NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD; i++) {
+
+                    //If the specific index of the Quote Pictures Bitmap List contain a Bitmap object (i.e. no Quote Picture have been fetched for that index)
+                    if (mRandomQuotePictureBitmaps.get(i) == null) {
+
+                        Integer randomPicturesOfQuotesPosition = i; //Obtain Integer variable to feed into the AsyncTask
+                        new GetRandomQuotePictureAsyncTask().execute(randomPicturesOfQuotesPosition); //Begin an AsyncTask
+
+                    }
+                }
+
+
+
+                //If the flag to enable the "Randomise" menu item is TRUE.
+                // Called when the last Random Quote has been created in the AsyncTask
+                if (shouldEnableRandomiseMenuItem == true){
+                    menuItem.setEnabled(true);
+                }
+
+
+
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(menuItem);
+
+        }
+
+
+
+
+    }
+
 
 
 
