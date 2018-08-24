@@ -25,6 +25,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1' //Add dependency for app compatability features from the Support Library
     implementation 'com.android.support:design:27.1.1' //Add dependency for design features from the Support Library - to implement the Navigation Drawer
     implementation 'de.hdodenhof:circleimageview:2.2.0' //Add dependency for circular ImageView as header for the navigation drawer
+    implementation 'com.commit451:PhotoView:1.2.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
