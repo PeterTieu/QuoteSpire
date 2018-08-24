@@ -5,15 +5,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.service.voice.VoiceInteractionService;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.petertieu.android.quotesearch.R;
+
+import java.util.Arrays;
+
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class QuotePictureDetailFragment extends Fragment{
 
@@ -48,6 +57,10 @@ public class QuotePictureDetailFragment extends Fragment{
         //Log to Logcat
         Log.i(TAG, "onCreate(..) called");
 
+        setRetainInstance(true); //Retain data even when the view has changed (i.e. screen rotation)
+
+        setHasOptionsMenu(true); //Declare that there is an opeionts menu
+
 
         //If arguments passed to CategoryChooserFragment from CategoryChooserActivity exists
         if (getArguments() != null){
@@ -63,15 +76,16 @@ public class QuotePictureDetailFragment extends Fragment{
         }
 
 
-        //Declare that this fragment participates in populating menus
-        setHasOptionsMenu(true);
+//        //Declare that this fragment participates in populating menus
+//        setHasOptionsMenu(true);
 
         //Reset options menu
-        getActivity().invalidateOptionsMenu();
+//        getActivity().invalidateOptionsMenu();
 
     }
 
 
+    PhotoViewAttacher mPhotoViewAttacher;
 
 
     //Override the onCreateView(..) fragment lifecycle callback method
@@ -93,11 +107,41 @@ public class QuotePictureDetailFragment extends Fragment{
         mQuotePictureImageView.setImageDrawable(mQuotePictureDrawable);
 
 
+        //Add zoom-effect to the ImageView
+        mPhotoViewAttacher = new PhotoViewAttacher(mQuotePictureImageView);
+        mPhotoViewAttacher.update();
 
+
+        setHasOptionsMenu(true);
+
+        getActivity().invalidateOptionsMenu();
+
+
+
+        getActivity().setTitle("Quote Picture");
 
 
         return view;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
