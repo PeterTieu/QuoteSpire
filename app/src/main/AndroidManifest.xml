@@ -22,6 +22,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 
+    <!--WRITE/READ to/from external storage - part of the STORAGE permission group. These are 'dangerous' permissions and MUST also be requested at runtime-->
+    <!--Used for saving the Picture Quote in QuotePictureFragment to internal storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
 
 
 
@@ -47,6 +53,10 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
 
+
+
+
+
         <!--================== DECLARE ACTIVITIES ==================-->
 
         <!--IntroActivity - set to be the first activity to be opened. Serves as a launcher page-->
@@ -61,6 +71,9 @@
         </activity>
 
 
+
+
+
         <!--MainActivity - holds all the fragments. Serves as the core of the app-->
         <activity
             android:name=".ActivitiesAndFragments.Controllers.Activities.MainActivity"
@@ -70,12 +83,39 @@
 
 
 
+
+
+
+
         <activity
             android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureDetailActivity"
             android:label="@string/quote_picture"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:parentActivityName=".ActivitiesAndFragments.Controllers.Activities.IntroActivity">
         </activity>
+
+
+
+
+
+
+
+
+
+        <!--FileProvider for saving a Quote Picture from QuotePictureFragment as a cache, before sharing it (via implicit intent)-->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.petertieu.android.quotesearch.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+
+
 
 
 
