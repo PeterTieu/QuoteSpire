@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.SwipeTabs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -605,13 +605,13 @@ public class FavoriteQuotesFragment extends Fragment {
 
         String dialogMessage = null;
         if (favoriteQuotesDatabaseSize == 1){
-            dialogMessage = "Are you sure you want to remove this quote from Favorites?";
+            dialogMessage = "Are you sure you want to remove this Quote from Favorites?";
         }
         else if (favoriteQuotesDatabaseSize == 2){
-            dialogMessage = "Are you sure you want to remove these 2 quotes from Favorites?";
+            dialogMessage = "Are you sure you want to remove these 2 Quotes from Favorites?";
         }
         else if (favoriteQuotesDatabaseSize > 1){
-            dialogMessage = "Are you sure you want to remove all " + favoriteQuotesDatabaseSize + " quotes from Favorites?";
+            dialogMessage = "Are you sure you want to remove all " + favoriteQuotesDatabaseSize + " Quotes from Favorites?";
         }
 
 
