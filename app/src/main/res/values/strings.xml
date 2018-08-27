@@ -3,6 +3,7 @@
 
     <string name="quote_of_the_day">QUOTE  OF  THE  DAY</string>
     <string name="search_quotes">Search Quotes</string>
+    <string name="random_quote_pictures">Random Quote Pictures</string>
     <string name="search_pictures_of_quotes">Search Pictures of Quotes</string>
     <string name="random_quotes">Random Quotes</string>
     <string name="favorites">Favorites</string>
@@ -33,14 +34,16 @@
 
 
     <string name="action_settings">Settings</string>
-    <string name="push_notification">Push Notification</string>
     <string name="new_quote_of_the_day_title">New Quote of The Day</string>
 
 
 
-    <!--FavoriteQuotesFragment-->
+    <!--Favorites (Navigation Drawer)-->
     <string name="remove_all">Remove all</string>
-    <string name="no_favorite_quotes_text">There are no Favorite quotes...</string>
+        <!--FavoriteQuotesFragment (Swip Tab fragment)-->
+    <string name="no_favorite_quotes_text">There are no Favorite Quotes...</string>
+        <!--FavoriteQuotePicturesFragment (Swip Tab fragment)-->
+    <string name="no_favorite_quote_pictures_text">There are no Favorite Quote Pictures...</string>
 
 
     <!--RandomQuotesFragment-->
@@ -70,6 +73,22 @@
     <!--SearchQuotesByAdvancedFragment-->
     <string name="search_quotes_by_advanced_search_view_hint">Search by Advanced</string>
     <string name="advanced_search_suggestions">ADVANCED search suggestions...</string>
+
+
+    <!--QuotePictureDetailActivity-->
+    <string name="quote_picture">Quote Picture</string>
+
+
+
+    <!--SettingsFragment-->
+    <string name="push_notification">Push Notification</string>
+    <string name="clear_recent_search_queries">Clear Recent Search Queries</string>
+
+
+    <!--QuotePictureDetailFragment-->
+    <string name="toggle_favorites">Toggle Favorites</string>
+    <string name="share">Share</string>
+    <string name="download">Download</string>
 
 
 
