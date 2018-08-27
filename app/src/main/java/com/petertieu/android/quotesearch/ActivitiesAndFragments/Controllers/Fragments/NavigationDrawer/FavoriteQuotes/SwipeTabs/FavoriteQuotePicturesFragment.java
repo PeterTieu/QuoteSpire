@@ -393,7 +393,7 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         Log.i(TAG, "onCreateOptionsMenu(..) called");
 
         //If there are one or more FavoriteQuotes in the list (i.e. one or more list items)
-        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0) {
+        if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size() > 0) {
             //Inflate a menu hierarchy from specified resource
             menuInflater.inflate(R.menu.fragment_favorite_quotes, menu);
         }
@@ -492,7 +492,8 @@ public class FavoriteQuotePicturesFragment extends Fragment{
     private void removeAllFavoriteQuotePictures(){
 
 
-        int databaseIndex = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size();
+        int databaseIndex = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size();
+        Log.i(TAG, "databaseIndex: " + databaseIndex);
 
 //        tempFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
 
@@ -503,6 +504,20 @@ public class FavoriteQuotePicturesFragment extends Fragment{
             List<QuotePicture> favoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
 
             QuotePicture favoriteQuotePicture = favoriteQuotePictures.get(0);
+
+
+
+
+            //Make sure that the picture files of all the Favorited Quote Pictures are also deleted. NOTE: Deleting them from the SQLiteDatabase just isn't enough.
+            //We need to delete from internal storage as well, so as to clear space for the app
+            File file = new File(favoriteQuotePicture.getQuotePictureBitmapFilePath(), favoriteQuotePicture.getId() + ".jpg");
+            boolean deleteFile = file.delete();
+            Log.i(TAG, "Deleted file: " + favoriteQuotePicture.getQuotePictureBitmapFilePath() + favoriteQuotePicture.getId() + ".. State: " + deleteFile);
+
+
+
+
+
 
             favoriteQuotePicture.setFavorite(false);
             FavoriteQuotePicturesManager.get(getActivity()).deleteFavoriteQuotePicture(favoriteQuotePicture);
