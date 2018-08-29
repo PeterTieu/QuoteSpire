@@ -44,13 +44,17 @@
 
 
     <!--DECLARE APP COMPONENTS-->
+        <!--NOTE:
+            largeHeap="true": declared because app could sometimes close when the bitmapByteArray size being transferred from RandomQuotePicturesFragment to QuotePictureViewPagerActivity is too large.
+                                This makes the app throw a "TransactionTooLargeException". Making largeHeapt=true avoids this.-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:largeHeap="true">
 
 
 
@@ -89,6 +93,16 @@
 
         <activity
             android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureDetailActivity"
+            android:label="@string/quote_picture"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:parentActivityName=".ActivitiesAndFragments.Controllers.Activities.IntroActivity">
+        </activity>
+
+
+
+
+        <activity
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureViewPagerActivity"
             android:label="@string/quote_picture"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:parentActivityName=".ActivitiesAndFragments.Controllers.Activities.IntroActivity">
