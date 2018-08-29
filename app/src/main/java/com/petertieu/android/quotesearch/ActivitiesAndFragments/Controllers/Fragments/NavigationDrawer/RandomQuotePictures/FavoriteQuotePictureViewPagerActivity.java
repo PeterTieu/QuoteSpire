@@ -19,7 +19,7 @@ import com.petertieu.android.quotesearch.R;
 
 import java.util.List;
 
-public class QuotePictureViewPagerActivity extends AppCompatActivity implements QuotePictureDetailFragment.Callbacks{
+public class FavoriteQuotePictureViewPagerActivity extends AppCompatActivity implements QuotePictureDetailFragment.Callbacks{
 
 
 
@@ -34,18 +34,18 @@ public class QuotePictureViewPagerActivity extends AppCompatActivity implements 
     private final static String TAG = "QPViewPagerActivity";
 
     public final static String ACTUAL_SIZE_OF_QUOTE_PICTURES_LIST = "quotePictureViewPagerActivityActualSizeOfQuotePicturesList";
+    public final static String QUOTE_PICTURE_BITMAP_FILE_PATH = "quotePictureViewPagerActivityFilePath";
     public final static String QUOTE_PICTURE_ID = "quotePictureViewPagerIDKey";
-    public final static String QUOTE_PICTURE_BYTE_ARRAY_KEY = "quotePictureViewPagerByteArrayKey";
-    public final static String VIEW_PAGER_POSITION = "viewPagerPosition";
 
-    public static List<QuotePicture> mQuotePicturesList;
 
     public static ViewPager sViewPager;
-    private static final int OFF_SCREEN_PAGE_LIMIT = 5;
+    private static final int OFF_SCREEN_PAGE_LIMIT = 3;
 
 
 
+    public List<QuotePicture> mQuotePicturesList;
     public static int mActualSizeOfQuotePictursList;
+    public String mQuotePictureFilePath;
     private String mQuotePictureID;
 
 
@@ -54,15 +54,16 @@ public class QuotePictureViewPagerActivity extends AppCompatActivity implements 
     //Params:
         //1 (context): Context
         //2 (int): The non-null size of mQuotePicturesList. If we instead use mQuotePicturesList.size(), a NullPointException thrown when the ViewPager tries to access null elements of mQuotePicturesList if not all QuotePictures are finished loading
-    public static Intent newIntent(Context context, int actualSizeOfQuotePicturesList, String quotePictureId){
+    public static Intent newIntent(Context context, int actualSizeOfQuotePicturesList, String quotePictureFilePath, String quotePictureId){
 
         Log.i(TAG, "newIntent(..) called");
 
         Log.i(TAG, "ID in newIntent(): " + quotePictureId);
 
-        Intent intent  = new Intent(context, QuotePictureViewPagerActivity.class);
+        Intent intent  = new Intent(context, FavoriteQuotePictureViewPagerActivity.class);
 
         intent.putExtra(ACTUAL_SIZE_OF_QUOTE_PICTURES_LIST, actualSizeOfQuotePicturesList);
+        intent.putExtra(QUOTE_PICTURE_BITMAP_FILE_PATH, quotePictureFilePath);
         intent.putExtra(QUOTE_PICTURE_ID, quotePictureId);
 
 
@@ -87,6 +88,7 @@ public class QuotePictureViewPagerActivity extends AppCompatActivity implements 
 
 
         mActualSizeOfQuotePictursList = (int) getIntent().getIntExtra(ACTUAL_SIZE_OF_QUOTE_PICTURES_LIST, 0);
+        mQuotePictureFilePath = (String) getIntent().getStringExtra(QUOTE_PICTURE_BITMAP_FILE_PATH);
         mQuotePictureID = (String) getIntent().getStringExtra(QUOTE_PICTURE_ID);
 
 
@@ -98,15 +100,19 @@ public class QuotePictureViewPagerActivity extends AppCompatActivity implements 
 
 
         mQuotePicturesList = FavoriteQuotePicturesManager.get(this).getFavoriteQuotePictures();
+//        Collections.reverse(mQuotePicturesList);
 
 
 
         //Set the Adapter to the ViewPager
         sViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
 
+
             //Override method from the FragmentStatePagerAdapter
             @Override
             public Fragment getItem(int position) {
+
+                position = (mActualSizeOfQuotePictursList - 1) - position; //Reverse the order of the creation of the Fragments.. otherwise, clicking on item #1 in the list would open item #16 and vice versa!
 
 
                 //Get a specific Pix from the List of Pix objects
@@ -117,7 +123,7 @@ public class QuotePictureViewPagerActivity extends AppCompatActivity implements 
                 Log.i(TAG, "quotePicture.getId(): " + quotePicture.getId());
 //                Log.i(TAG, "quotePicture.getQuotePictureBitmapByteArray(): " + quotePicture.getQuotePictureBitmapByteArray());
 
-                return FavoriteQuotePictureDetailFragment.newInstance(quotePicture.getId());
+                return FavoriteQuotePictureDetailFragment.newInstance(quotePicture.getQuotePictureBitmapFilePath(), quotePicture.getId());
             }
 
             //Override method from the FragmentStatePagerAdapter
@@ -134,42 +140,16 @@ public class QuotePictureViewPagerActivity extends AppCompatActivity implements 
 
 
 
-//        sViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//
-//
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                sViewPagerPositionSelected = position;
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
 
 
 
-
-
-
-
-
-
-
-
-        for (int i = 0; i < mActualSizeOfQuotePictursList; i++) {
+        for (currentItemNumber = 0; currentItemNumber < mActualSizeOfQuotePictursList; currentItemNumber++) {
 
             Log.i(TAG, "mQuotePicturesList.get(0).getId(): " + mQuotePicturesList.get(0).getId());
 
-            if (mQuotePicturesList.get(i).getId().equals(mQuotePictureID)) {
+            if (mQuotePicturesList.get(currentItemNumber).getId().equals(mQuotePictureID)) {
 
-                sViewPager.setCurrentItem(i);
+                sViewPager.setCurrentItem(currentItemNumber);
 
 //                sViewPager.setCurrentItem(i+1);
                 break;
@@ -179,17 +159,15 @@ public class QuotePictureViewPagerActivity extends AppCompatActivity implements 
 
 
 
-
-
-
-
-
-
-
-
     }
 
 
+
+
+
+
+
+    public static int currentItemNumber;
 
 
 
