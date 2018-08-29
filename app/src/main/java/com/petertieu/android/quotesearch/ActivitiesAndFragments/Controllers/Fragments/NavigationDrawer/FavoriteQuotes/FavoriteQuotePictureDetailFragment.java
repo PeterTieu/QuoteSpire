@@ -7,11 +7,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -25,14 +26,14 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureDetailActivity;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureDetailFragment;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureViewPagerActivity;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.FavoriteQuotePictureViewPagerActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotePicturesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.QuotePicture;
 import com.petertieu.android.quotesearch.R;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -46,6 +47,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
     private QuotePicture mQuotePicture = new QuotePicture();
 
+    private String mQuotePictureBitmapFilePath;
     private String mQuotePictureID;
     private int mViewPagerPosition;
 
@@ -56,6 +58,11 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     private Button mQuotePictureShareIcon;
     private Button mQuotePictureDownloadIcon;
     private ImageView mQuotePictureImageView;
+    private Button mQuotePicturePreviousButton;
+    private Button mQuotePictureNextButton;
+
+    private Snackbar snackbar;
+    private Snackbar snackbar1;
 
 
 
@@ -63,14 +70,16 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-    public static FavoriteQuotePictureDetailFragment newInstance(String quotePictureID){
+    public static FavoriteQuotePictureDetailFragment newInstance(String quotePictureBitmapFilePath, String quotePictureID){
 
         //Create argument-bundle to pass data to QuotePictureDetailFragment
         Bundle argumentBundle = new Bundle();
 
-//        argumentBundle.putString(QuotePictureViewPagerActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
-//        argumentBundle.putByteArray(QuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
-        argumentBundle.putString(QuotePictureViewPagerActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
+//        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
+//        argumentBundle.putByteArray(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
+
+        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH, quotePictureBitmapFilePath);
+        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
 
         //Create QuotePictureDetailFragment
         FavoriteQuotePictureDetailFragment favoriteQuotePictureDetailFragment = new FavoriteQuotePictureDetailFragment();
@@ -125,21 +134,25 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 //            Log.i(TAG, "ID: " + mQuotePicture.getId());
 
 
-//            mQuotePictureID = getArguments().getString(QuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
-//            mQuotePictureByteArray = getArguments().getByteArray(QuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY);
-            mQuotePictureID = getArguments().getString(QuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
-//            mViewPagerPosition = getArguments().getInt(QuotePictureViewPagerActivity.VIEW_PAGER_POSITION);
+//            mQuotePictureID = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
+//            mQuotePictureByteArray = getArguments().getByteArray(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY);
+
+            mQuotePictureBitmapFilePath = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH);
+            mQuotePictureID = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
+//            mViewPagerPosition = getArguments().getInt(FavoriteQuotePictureViewPagerActivity.VIEW_PAGER_POSITION);
 
 
 
 
 
 
-
-            Log.i(TAG, "mQuotePicture.getQuotePictureBitmapByteArray(): " + mQuotePicture.getQuotePictureBitmapByteArray());
+//            Log.i(TAG, "mQuotePicture.getQuotePictureBitmapByteArray(): " + mQuotePicture.getQuotePictureBitmapByteArray());
 
 
             //Set ID and Bitmap for the mQuotePicture
+
+
+            mQuotePicture.setQuotePictureBitmapFilePath(mQuotePictureBitmapFilePath);
             mQuotePicture.setId(mQuotePictureID);
 
 
@@ -147,15 +160,15 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-//            QuotePictureViewPagerActivity.sViewPager.setCurrentItem(0);
+//            FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(0);
 
 
 
 
-//            QuotePictureViewPagerActivity.sViewPager.setCurrentItem(QuotePictureViewPagerActivity.sViewPager.getCurrentItem()+1);
+//            FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(FavoriteQuotePictureViewPagerActivity.sViewPager.getCurrentItem()+1);
 
 
-//            Log.i(TAG, "QuotePictureViewPagerActivity.sViewPagerPositionSelected: " + QuotePictureViewPagerActivity.sViewPager.getCurrentItem());
+//            Log.i(TAG, "FavoriteQuotePictureViewPagerActivity.sViewPagerPositionSelected: " + FavoriteQuotePictureViewPagerActivity.sViewPager.getCurrentItem());
 
 
 
@@ -245,35 +258,24 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
         //Obtain View from the layout of the CategoryChooserFragment
-        View view = layoutInflater.inflate(R.layout.fragment_quote_picture_detail, viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.fragment_favorite_quote_picture_detail, viewGroup, false);
 
-        mQuotePictureFavoriteIcon = (CheckBox) view.findViewById(R.id.quote_picture_detail_fragment_favorite_icon);
-        mQuotePictureShareIcon = (Button) view.findViewById(R.id.quote_picture_detail_fragment_share_icon);
-        mQuotePictureDownloadIcon = (Button) view.findViewById(R.id.quote_picture_detail_fragment_download_icon);
-
-
-        mQuotePictureImageView = (ImageView) view.findViewById(R.id.quote_picture_image_view);
+        mQuotePictureFavoriteIcon = (CheckBox) view.findViewById(R.id.favorite_quote_picture_detail_fragment_favorite_icon);
+        mQuotePictureShareIcon = (Button) view.findViewById(R.id.favorite_quote_picture_detail_fragment_share_icon);
+        mQuotePictureDownloadIcon = (Button) view.findViewById(R.id.favorite_quote_picture_detail_fragment_download_icon);
 
 
+        mQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_detail_fragment_quote_image_view);
 
-
-
+        mQuotePicturePreviousButton = (Button) view.findViewById(R.id.favorite_quote_picture_detail_fragment_previous_button);
+        mQuotePictureNextButton = (Button) view.findViewById(R.id.favorite_quote_picture_detaill_fragment_next_button);
 
 
 
 
 
 
-
-
-
-
-
-
-
-        mQuotePictureDrawable = new BitmapDrawable(getResources(), mQuotePictureBitmap);
-        mQuotePictureImageView.setImageDrawable(mQuotePictureDrawable);
-
+        loadImageFromStorage(mQuotePicture.getQuotePictureBitmapFilePath(), mQuotePicture.getId());
 
         //Add zoom-effect to the ImageView
         mPhotoViewAttacher = new PhotoViewAttacher(mQuotePictureImageView);
@@ -281,11 +283,6 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-
-
-
-
-//        mQuotePictureFavoriteIcon.setButtonDrawable(mQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
         mQuotePictureFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_quote_picture_favorite_off);
@@ -313,10 +310,6 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
 
-
-//                mRandomQuote.setFavorite(isChecked);
-
-
                 mQuotePictureFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_quote_picture_favorite_on: R.drawable.ic_imageview_quote_picture_favorite_off);
 
 
@@ -334,6 +327,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
                         FavoriteQuotePicturesManager.get(getActivity()).addFavoriteQuotePicture(mQuotePicture);
                         FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture);
+
                     }
                     else{
                         //Do nothing
@@ -344,6 +338,62 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
                 if (isChecked == false){
                     FavoriteQuotePicturesManager.get(getActivity()).deleteFavoriteQuotePicture(mQuotePicture);
                     FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture);
+
+
+
+
+
+
+
+
+
+
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        //What to do AFTER the 300ms delay
+                        @Override
+                        public void run() {
+                            snackbar = Snackbar
+                                    .make(mQuotePictureImageView, "Quote Picture has been removed from Favorites", Snackbar.LENGTH_LONG)
+
+
+                                    .setAction("UNDO", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            snackbar1 = Snackbar.make(view, "Quote Picture has been re-added to Favorites!", Snackbar.LENGTH_LONG);
+
+
+                                            View snackBarActionView = snackbar1.getView();
+                                            snackBarActionView.setMinimumHeight(150);
+                                            snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
+
+                                            snackbar1.show();
+
+
+                                            FavoriteQuotePicturesManager.get(getActivity()).addFavoriteQuotePicture(mQuotePicture);
+
+//                                                    mFavoriteQuote.setFavorite(true);
+//                                                    mFavoriteQuoteFavoriteIcon.setChecked(true);
+                                            //Log.i(TAG, "UNDO called");
+//                                                    bind(mFavoriteQuote);
+//                                                    updateUI();
+
+                                            mQuotePictureFavoriteIcon.setChecked(true);
+
+
+
+                                        }
+                                    });
+
+
+                            View snackBarView = snackbar.getView();
+                            snackBarView.setMinimumHeight(150);
+                            snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
+                            snackbar.show();
+                        }
+                    }, 100);
+
+
 
                 }
 
@@ -416,6 +466,36 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
+        mQuotePicturePreviousButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                mQuotePicturePreviousButton.setEnabled(true);
+
+                FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(getNextPossibleItemIndex(-1), true);
+
+
+            }
+        });
+
+
+
+
+
+
+        // For scrolling to next item
+        mQuotePictureNextButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(getNextPossibleItemIndex(1), true);
+            }
+        });
+
+
+
+
 
         setHasOptionsMenu(true);
 
@@ -427,6 +507,40 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
         return view;
+    }
+
+
+
+
+
+
+    private int getNextPossibleItemIndex (int change) {
+
+        int currentIndex = FavoriteQuotePictureViewPagerActivity.sViewPager.getCurrentItem();
+        int total = FavoriteQuotePictureViewPagerActivity.sViewPager.getAdapter().getCount();
+
+        if (currentIndex + change < 0) {
+            return total;
+        }
+
+        return Math.abs((currentIndex + change) % total) ;
+    }
+
+
+
+
+
+
+    private void loadImageFromStorage(String path, String quotePictureID) {
+
+        try {
+            File f = new File(path, quotePictureID + ".jpg");
+            mQuotePictureBitmap = BitmapFactory.decodeStream(new FileInputStream(f));
+            mQuotePictureImageView.setImageBitmap(mQuotePictureBitmap);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
