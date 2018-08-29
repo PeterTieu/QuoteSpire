@@ -15,6 +15,7 @@ public class FavoriteQuotePicturesDatabaseSchema {
         public static final class Columns{
             public static final String ID = "id";
             public static final String IS_FAVORITE = "is_favorite";
+            public static final String BITMAP_FILE_PATH = "bitmap_file_path";
         }
     }
 }

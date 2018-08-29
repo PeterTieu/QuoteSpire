@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureViewPagerActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotePicturesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
@@ -205,12 +206,12 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
-
+    private List<QuotePicture> mFavoriteQuotePictures;
 
     private class FavoriteQuotePicturesAdapter extends RecyclerView.Adapter<FavoriteQuotePictureViewHolder>{
 
 
-        private List<QuotePicture> mFavoriteQuotePictures;
+
 
 
 
@@ -246,7 +247,8 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         @Override
         public void onBindViewHolder(FavoriteQuotePictureViewHolder favoriteQuotePictureViewHolder, int position){
             QuotePicture favoriteQuotePicture = mFavoriteQuotePictures.get(position);
-            favoriteQuotePictureViewHolder.bind(favoriteQuotePicture);
+
+            favoriteQuotePictureViewHolder.bind(favoriteQuotePicture, position);
 
 //            favoriteQuotePictureViewHolder.mFavoriteQuotePictureFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
         }
@@ -277,6 +279,8 @@ public class FavoriteQuotePicturesFragment extends Fragment{
     private class FavoriteQuotePictureViewHolder extends RecyclerView.ViewHolder{
 
 
+        private LinearLayout mListItemView;
+
         public QuotePicture mFavoriteQuotePicture;
 
         private Drawable mFavoriteQuotePictureDrawable;
@@ -290,7 +294,11 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         public FavoriteQuotePictureViewHolder(View view) {
             super(view);
 
+
+            mListItemView = (LinearLayout) view.findViewById(R.id.list_item_favorite_quote_picture_view);
+
             mFavoriteQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_image_view);
+
 
 
         }
@@ -299,12 +307,9 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
-        public void bind(QuotePicture favoriteQuotePicture){
+        public void bind(QuotePicture favoriteQuotePicture, final int position){
 
             mFavoriteQuotePicture = favoriteQuotePicture;
-
-
-
 
 
 
@@ -325,14 +330,50 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 //            mFavoriteQuotePictureBitmap = mFavoriteQuotePicture.getQuotePictureBitmap();
                 mFavoriteQuotePictureDrawable = new BitmapDrawable(getResources(), mFavoriteQuotePictureBitmap);
                 mFavoriteQuotePictureImageView.setImageDrawable(mFavoriteQuotePictureDrawable);
-
             }
 
 
 
+
+
             loadImageFromStorage(mFavoriteQuotePicture.getQuotePictureBitmapFilePath(), mFavoriteQuotePicture.getId());
+
+
+
+
+
+
+//            Bitmap bitmap = null;
+//
+//            try {
+//                File f = new File(mFavoriteQuotePicture.getQuotePictureBitmapFilePath(), mFavoriteQuotePicture.getId() + ".jpg");
+//                bitmap = BitmapFactory.decodeStream(new FileInputStream(f));
+//                mFavoriteQuotePictureImageView.setImageBitmap(bitmap);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+
+
+
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//            byte[] quotePictureBitmapByteArray = stream.toByteArray();
+//            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).setQuotePictureBitmapByteArray(quotePictureBitmapByteArray);
+
+
+
+
+
+
             Log.i(TAG, "ID: " + mFavoriteQuotePicture.getId());
             Log.i(TAG, "Quote Picture Bitmap path: " + mFavoriteQuotePicture.getQuotePictureBitmapFilePath());
+
+
+
+
+            for(int i=0; i<FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size(); i++){
+                Log.i(TAG, "IDs: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(i).getId());
+            }
 
 
 
@@ -345,6 +386,31 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 //            Drawable favoriteQuotePictureDrawable = new BitmapDrawable(getResources(), favoriteQuotePictureBitmap);
 //            mFavoriteQuotePictureImageView.setImageDrawable(favoriteQuotePictureDrawable);
 //            mFavoriteQuotePictureImageView.setVisibility(View.VISIBLE);
+
+            Log.i(TAG, "CURRENT SIZE: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size());
+            Log.i(TAG, "CURRENT ID: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId());
+            Log.i(TAG, "CURRENT BITMAP BYTE ARRAY: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getQuotePictureBitmapByteArray());
+
+
+            final int positionOfFavoriteQuotePicture = position;
+
+
+            mListItemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Intent quotePictureActivityIntent = QuotePictureViewPagerActivity.newIntent(
+                            getContext(),
+                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size(),
+                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId(),
+                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getQuotePictureBitmapByteArray());
+
+                    startActivity(quotePictureActivityIntent);
+
+
+                }
+
+            });
 
 
         }

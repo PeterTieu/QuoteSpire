@@ -397,8 +397,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
         displayQuoteOfTheDay();
 
 
+//        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
 
-        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
 
 
 
@@ -1938,34 +1938,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
 
 
 

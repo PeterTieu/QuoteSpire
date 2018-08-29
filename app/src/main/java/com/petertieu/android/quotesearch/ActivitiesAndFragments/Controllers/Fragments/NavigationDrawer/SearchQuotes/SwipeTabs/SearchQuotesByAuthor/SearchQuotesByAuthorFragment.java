@@ -47,7 +47,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
 
     //================== DECLARE/DEFINE INSTANCE VARIABLES =========================================================
 
-    private final String TAG = "SQBCFragment"; //Log for Logcat
+    private final String TAG = "SQBAuthorFragment"; //Log for Logcat
 
     //-------------- SEARCH variables ------------------------------------
     private static final int NUMBER_OF_QUOTES_TO_LOAD = 10; //Number of quotes to load upon search
@@ -244,7 +244,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
                 "Steve Jobs", "Usain Bolt", "Hugh Jackman", "J.K. Rowling", "J.R.R. Tolkien", "Kevin Hart", "Neil Armstrong", "John Lennon", "Quentin Tarantino",
                 "Angelina Jolie", "Richard Branson", "George Orwell", "Beethoven", "Anne Frank", "Madonna", "Julius Caesar", "Alexander The Great", "Eminem",
                 "Kanye West", "Vincent Van Gogh", "Charlie Chaplin", "Rowan Atkinson", "Sun Tzu", "Alan Watts", "Benjamin Franklin", "Nelson Mandela",
-                "Wolfgang Amadeus Mozart", "Homer", "Homer Simpson", "Ludwig van Beethoven", "Pablo Picasso");
+                "Wolfgang Amadeus Mozart", "Homer", "Homer Simpson", "Ludwig van Beethoven", "Pablo Picasso", "Carl Sagan");
 
         //Shuffle the List of al possible Search Suggestions
         Collections.shuffle(mSearchSuggestionsFullList);
@@ -717,7 +717,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
 
                 //If the Quote author exists
                 if (mSearchQuotesByAuthorQuote.getAuthor() != null){
-                    mSearchQuotesByAuthorQuoteAuthor.setText(mSearchQuotesByAuthorQuote.getAuthor()); //Set the Quote author text
+                    mSearchQuotesByAuthorQuoteAuthor.setText("- " + mSearchQuotesByAuthorQuote.getAuthor()); //Set the Quote author text
                 }
                 //If the Quote author DOES NOT exist
                 else{

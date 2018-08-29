@@ -119,7 +119,7 @@ public class GetQuoteOfTheDayAuthorQuote {
         Log.i(TAG, "Quote of the day Author Quote - method - Quote String: " + quote.getQuote());
         Log.i(TAG, "Quote of the day Author Quote - method  - Category: " + quote.getCategory());
         Log.i(TAG, "Quote of the day Author Quote - method  - Author: " + quote.getAuthor());
-        Log.i(TAG, "Qutoe of the day Author Quote - method - ID: " + quote.getId());
+        Log.i(TAG, "Quote of the day Author Quote - method - ID: " + quote.getId());
 
 
 
@@ -131,22 +131,15 @@ public class GetQuoteOfTheDayAuthorQuote {
 
         JSONArray categoriesJSONArray = contentsJSONObject.getJSONArray("categories");
 
-        Log.i(TAG, "Categoriesss: " + categoriesJSONArray);
-
         List<String> categoriesArrayList = new ArrayList<String>();
 
-
         for (int i=0; i<categoriesJSONArray.length(); i++){
-
             String category = categoriesJSONArray.getString(i);
-
             categoriesArrayList.add(category);
         }
 
-
         quote.setCategories(categoriesArrayList);
-
-        Log.i(TAG, "Quotesss: " + quote.getCategories());
+        Log.i(TAG, "\"Qutoe of the day Author Quote - method - Categories: \" " + quote.getCategories());
 
 
 

@@ -16,10 +16,12 @@ public class FavoriteQuotePicturesDatabaseCursorWrapper extends CursorWrapper {
     public QuotePicture getQuotePictureFromFavoriteQuotePicturesDatabase(){
         String id = getString(getColumnIndex(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID));
         int isFavorite = getInt(getColumnIndex(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.IS_FAVORITE));
+        String bitmapFilePath = getString(getColumnIndex(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.BITMAP_FILE_PATH));
 
 
         QuotePicture quotePicture = new QuotePicture(id);
         quotePicture.setFavorite(isFavorite != 0);
+        quotePicture.setQuotePictureBitmapFilePath(bitmapFilePath);
 
 
         return quotePicture;

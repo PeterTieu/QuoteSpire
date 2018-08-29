@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FavoriteQuotesDatabaseHelper extends SQLiteOpenHelper{
 
     private static final int VERSION = 1;
-    private static final String DATABASE_NAME = "favorite_quotes_database";
+    private static final String DATABASE_NAME = "favorite_quotes_database.db";
 
     public FavoriteQuotesDatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, VERSION);
@@ -22,7 +22,7 @@ public class FavoriteQuotesDatabaseHelper extends SQLiteOpenHelper{
                 "create table " +
                         FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.FAVORITE_QUOTES_TABLE_NAME +
                         "(" +
-                        "_id_integer primary key autoincrement," +
+                        " _id integer primary key autoincrement, " +
                         FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.ID + ", " +
                         FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.QUOTE_STRING + ", " +
                         FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.AUTHOR + ", " +

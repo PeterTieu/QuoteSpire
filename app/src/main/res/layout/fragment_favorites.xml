@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+
+<!--Layout for the Swipe Tabs of the Favorites navigation drawer fragment item-->
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SearchQuotesFragment">
 
+    <!--Tab Layout - component of the Swipe Tab layout-->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/favorites_tabs"
+        android:padding="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"/>
 
-    <TextView
+    <!--View Pager - Allows swiping between multiple TabLayouts, making them into Swipe Tabs-->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/favorites_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/favorites"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

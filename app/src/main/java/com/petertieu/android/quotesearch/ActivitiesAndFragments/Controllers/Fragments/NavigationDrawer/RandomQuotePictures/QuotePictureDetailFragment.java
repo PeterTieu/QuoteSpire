@@ -45,8 +45,11 @@ public class QuotePictureDetailFragment extends Fragment{
 
 
     private QuotePicture mQuotePicture = new QuotePicture();
+
     private String mQuotePictureID;
     private byte[] mQuotePictureByteArray;
+    private int mViewPagerPosition;
+
     private Bitmap mQuotePictureBitmap;
     private Drawable mQuotePictureDrawable;
 
@@ -60,6 +63,40 @@ public class QuotePictureDetailFragment extends Fragment{
     private PhotoViewAttacher mPhotoViewAttacher; //Adds Zoom-Effect to ImageView
 
 
+    private Callbacks mCallbacks;
+
+
+
+
+
+    public static QuotePictureDetailFragment newInstance(String quotePictureID, byte[] quotePictureByteArray){
+
+        //Create argument-bundle to pass data to QuotePictureDetailFragment
+        Bundle argumentBundle = new Bundle();
+
+//        argumentBundle.putString(QuotePictureViewPagerActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
+//        argumentBundle.putByteArray(QuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
+        argumentBundle.putString(QuotePictureDetailActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
+        argumentBundle.putByteArray(QuotePictureDetailActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
+
+        //Create QuotePictureDetailFragment
+        QuotePictureDetailFragment quotePictureDetailFragment = new QuotePictureDetailFragment();
+
+        //Link the argument-bundle to the QuotePictureDetailFragment object
+        quotePictureDetailFragment.setArguments(argumentBundle);
+
+        //Return the QuotePictureDetailFragment
+        return quotePictureDetailFragment;
+    }
+
+
+
+
+
+
+
+
+
 
     //Override onAttach(..) fragment lifecycle callback method
     @Override
@@ -68,6 +105,9 @@ public class QuotePictureDetailFragment extends Fragment{
 
         //Log to Logcat
         Log.i(TAG, "onAttach(..) called");
+
+
+        mCallbacks = (Callbacks) context;
     }
 
 
@@ -92,10 +132,14 @@ public class QuotePictureDetailFragment extends Fragment{
 
 //            Log.i(TAG, "ID: " + mQuotePicture.getId());
 
-            mQuotePictureID = getArguments().getString(QuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
 
-            //Get the String for the language chosen
-            mQuotePictureByteArray = getArguments().getByteArray(QuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY);
+//            mQuotePictureID = getArguments().getString(QuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
+//            mQuotePictureByteArray = getArguments().getByteArray(QuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY);
+            mQuotePictureID = getArguments().getString(QuotePictureDetailActivity.QUOTE_PICTURE_ID);
+            mQuotePictureByteArray = getArguments().getByteArray(QuotePictureDetailActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY);
+//            mViewPagerPosition = getArguments().getInt(QuotePictureViewPagerActivity.VIEW_PAGER_POSITION);
+
+
 
 
             mQuotePictureBitmap = BitmapFactory.decodeByteArray(mQuotePictureByteArray, 0, mQuotePictureByteArray.length);
@@ -116,9 +160,23 @@ public class QuotePictureDetailFragment extends Fragment{
 
 
 
+//            QuotePictureViewPagerActivity.sViewPager.setCurrentItem(0);
+
+
+
+
+//            QuotePictureViewPagerActivity.sViewPager.setCurrentItem(QuotePictureViewPagerActivity.sViewPager.getCurrentItem()+1);
+
+
+//            Log.i(TAG, "QuotePictureViewPagerActivity.sViewPagerPositionSelected: " + QuotePictureViewPagerActivity.sViewPager.getCurrentItem());
+
+
+
+
         }
 
 
+//        mCallbacks.scrollViewPagerForward();
 
 
 
@@ -149,6 +207,11 @@ public class QuotePictureDetailFragment extends Fragment{
 
 
 
+
+    interface Callbacks{
+        void scrollViewPagerBackward();
+        void scrollViewPagerForward();
+    }
 
 
 

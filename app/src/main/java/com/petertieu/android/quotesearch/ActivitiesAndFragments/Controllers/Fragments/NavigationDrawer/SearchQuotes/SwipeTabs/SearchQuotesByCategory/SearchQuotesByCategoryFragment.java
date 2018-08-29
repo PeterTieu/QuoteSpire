@@ -237,7 +237,7 @@ public class SearchQuotesByCategoryFragment extends Fragment implements View.OnC
                 "Motivation", "Opportunities", "Government", "Truth", "People", "Universe", "Harmony", "Duty", "Culture", "Education", "Soul", "Mind", "Work", "Mind-Body-Spirit",
                 "Cosmic", "Self-Improvement", "Money", "Wealth", "Aspirations", "Inspirational", "Beliefs", "Self-Help", "Startup", "Time", "Politics", "Teaching", "Futurism",
                 "Poetry", "Confidence", "Trust", "Hope", "Humanity", "Future", "War", "Peace", "Society", "Psychology", "Greatness", "Progress", "Meaning", "Knowledge", "Zen",
-                "Meditation", "Reality", "Mindfulness", "Imagination", "Technology", "Science", "Funny", "Comedy", "Humor", "Sarcasm");
+                "Meditation", "Reality", "Mindfulness", "Imagination", "Technology", "Science", "Funny", "Comedy", "Humor", "Sarcasm", "Nautre");
 
         //Shuffle the List of al possible Search Suggestions
         Collections.shuffle(mSearchSuggestionsFullList);
@@ -589,7 +589,7 @@ public class SearchQuotesByCategoryFragment extends Fragment implements View.OnC
 
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Create LayoutInflater
 
-            View listItemView = layoutInflater.inflate(R.layout.list_item_search_quotes_by_category_quote, viewGroup, false); //Obtain list-item view
+            View listItemView = layoutInflater.inflate(R.layout.list_item_search_quotes_by_category, viewGroup, false); //Obtain list-item view
 
             mSearchQuotesByCategoryQuoteViewHolder = new SearchQuotesByCategoryFragment.SearchQuotesByCategoryQuoteViewHolder(listItemView); //Send list-item view to the RecyclerView ViewHolder
 
@@ -710,7 +710,7 @@ public class SearchQuotesByCategoryFragment extends Fragment implements View.OnC
 
                 //If the Quote author exists
                 if (mSearchQuotesByCategoryQuote.getAuthor() != null){
-                    mSearchQuotesByCategoryQuoteAuthor.setText(mSearchQuotesByCategoryQuote.getAuthor()); //Set the Quote author text
+                    mSearchQuotesByCategoryQuoteAuthor.setText("- " + mSearchQuotesByCategoryQuote.getAuthor()); //Set the Quote author text
                 }
                 //If the Quote author DOES NOT exist
                 else{

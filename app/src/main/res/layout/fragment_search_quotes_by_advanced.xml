@@ -47,15 +47,6 @@
 
 
 
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="10dp"-->
-        <!--android:gravity="center"-->
-        <!--android:text="ADVANCED SEARCH"-->
-        <!--android:textSize="22dp"/>-->
-
-
         <TextView
             android:id="@+id/search_quotes_by_advanced_title"
             android:layout_width="wrap_content"
@@ -87,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="KEYWORD"
+                android:textColor="@color/white"
                 android:textSize="14dp"/>
 
 
@@ -123,11 +115,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="AUTHOR"
+                android:textColor="@color/white"
                 android:textSize="14dp"/>
 
 
             <android.support.v7.widget.SearchView
-                android:id="@+id/search_quotes_by_keyword_author_search_view"
+                android:id="@+id/search_quotes_by_author_search_view"
                 android:layout_width="230dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="20dp"
@@ -158,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="CATEGORY"
+                android:textColor="@color/white"
                 android:textSize="14dp"/>
 
 

@@ -282,6 +282,8 @@ public class RandomQuotePicturesFragment extends Fragment {
 
             if (mRandomQuotePictureQuotes.get(position) != null){
 
+
+
                 randomQuotePictureViewHolder.bindListItem(position, mRandomQuotePictureBitmaps.get(position));
             }
 
@@ -358,7 +360,19 @@ public class RandomQuotePicturesFragment extends Fragment {
             if (randomQuotePictureBitmap != null){
 
 
+
                 final Bitmap randomQuotePictureBitmapFinal = randomQuotePictureBitmap;
+
+
+                //TODO: NOTE:: THIS IS THE CAUSE TO THE BIG LAG IN RandomQuotePicturesFragment WHEN LOADING PICTURES!!! TOO MUCH BYTE-ARRAY DATA IS BEING SAVED INTO mRandomQuotePictureQuotes
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                randomQuotePictureBitmapFinal.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                byte[] quotePictureBitmapByteArray = stream.toByteArray();
+//                mRandomQuotePictureQuotes.get(position).setQuotePictureBitmapByteArray(quotePictureBitmapByteArray);
+
+
+
+
 
                 mListItemView.setOnClickListener(new View.OnClickListener(){
 
@@ -368,11 +382,23 @@ public class RandomQuotePicturesFragment extends Fragment {
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         randomQuotePictureBitmapFinal.compress(Bitmap.CompressFormat.PNG, 100, stream);
                         byte[] quotePictureBitmapByteArray = stream.toByteArray();
-
                         mRandomQuotePictureQuotes.get(position).setQuotePictureBitmapByteArray(quotePictureBitmapByteArray);
 
 
-                        Intent quotePictureActivityIntent = QuotePictureViewPagerActivity.newIntent(getContext(), mRandomQuotePictureQuotes.get(position).getId(), mRandomQuotePictureQuotes.get(position).getQuotePictureBitmapByteArray());
+                        int actualSizeOfmRandomQuotePictureBitmaps = 0;
+
+                        for (Bitmap bitmap : mRandomQuotePictureBitmaps) {
+                            if (bitmap == null) {
+                            }
+                            if (bitmap != null) {
+                                actualSizeOfmRandomQuotePictureBitmaps++;
+                            }
+                        }
+
+
+
+//                        Intent quotePictureActivityIntent = QuotePictureViewPagerActivity.newIntent(getContext(), actualSizeOfmRandomQuotePictureBitmaps, mRandomQuotePictureQuotes.get(position).getId(), mRandomQuotePictureQuotes.get(position).getQuotePictureBitmapByteArray());
+                        Intent quotePictureActivityIntent = QuotePictureDetailActivity.newIntent(getContext(), mRandomQuotePictureQuotes.get(position).getId(), mRandomQuotePictureQuotes.get(position).getQuotePictureBitmapByteArray());
 
 
                         startActivity(quotePictureActivityIntent);
@@ -410,18 +436,18 @@ public class RandomQuotePicturesFragment extends Fragment {
 
 
 
-        int numberOfBitmapObjectsInList = 0;
+        int actualSizeOfmRandomQuotePictureBitmaps = 0;
 
         for (Bitmap bitmap : mRandomQuotePictureBitmaps) {
             if (bitmap == null) {
             }
             if (bitmap != null) {
-                numberOfBitmapObjectsInList++;
+                actualSizeOfmRandomQuotePictureBitmaps++;
             }
         }
 
 
-        if (numberOfBitmapObjectsInList == NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD) {
+        if (actualSizeOfmRandomQuotePictureBitmaps == NUMBER_OF_RANDOM_PICTURES_OF_QUOTES_TO_LOAD) {
             shouldEnableRandomiseMenuItem = true;
             randomiseItem.setEnabled(true);
         } else {

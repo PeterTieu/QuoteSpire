@@ -10,7 +10,7 @@ public class FavoriteQuotesDatabaseSchema {
     public static final class FavoriteQuotesTable{
 
         //Name of the table
-        public static final String FAVORITE_QUOTES_TABLE_NAME = "favorte_quotes_table";
+        public static final String FAVORITE_QUOTES_TABLE_NAME = "favorite_quotes_table";
 
         //Inner-inner clas that sets names of the columns of the table
         public static final class Columns{

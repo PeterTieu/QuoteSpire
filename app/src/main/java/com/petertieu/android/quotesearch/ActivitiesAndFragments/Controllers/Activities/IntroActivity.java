@@ -75,7 +75,6 @@ public class IntroActivity extends AppCompatActivity {
 
 
 
-
 //        new GetQuoteOfTheDayAsyncTask().execute();
 
 

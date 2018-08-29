@@ -33,7 +33,7 @@ import java.util.List;
 public class RandomQuotesFragment extends Fragment {
 
 
-    private final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 7;
+    private static final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 7;
 
     //Log for Logcat
     private final String TAG = "RandomQuotesFragment";
@@ -45,8 +45,8 @@ public class RandomQuotesFragment extends Fragment {
 
 //    private List<Quote> mRandomQuotes = new ArrayList<>();
 
-    //Declare and INITIALISE the List of Quote objects to size 8
-    private List<Quote> mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]);
+    //Declare and INITIALISE the List of Quote objects to size 7
+    private static List<Quote> mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]);
 
     //Flag to decide whether the "Randomise" menut item button should be enabled or disabled
     boolean shouldEnableRandomiseMenuItem = false;
@@ -76,6 +76,8 @@ public class RandomQuotesFragment extends Fragment {
 
 
     }
+
+
 
     //Override the onCreateView(..) fragment lifecycle callback method
     @Override
@@ -119,6 +121,7 @@ public class RandomQuotesFragment extends Fragment {
         for (int i = 0; i < NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++) {
 
 
+            //If each of the Quote objects in the mRandomQuotes ArrayList are EMPTY
             if (mRandomQuotes.get(i) == null){
 
 
@@ -191,7 +194,6 @@ public class RandomQuotesFragment extends Fragment {
 
             //Decide whether to enable or disable the "Randomise" menu item button
                 //If the last Random Quote has been creted
-
             try{
 
                 if (mQuotePosition[0] == NUMBER_OF_RANDOM_QUOTES_TO_LOAD-1){
@@ -396,7 +398,7 @@ public class RandomQuotesFragment extends Fragment {
 
 
                 if (mRandomQuote.getAuthor() != null){
-                    mRandomQuoteAuthor.setText(mRandomQuote.getAuthor());
+                    mRandomQuoteAuthor.setText("- " + mRandomQuote.getAuthor());
                 }
                 else{
                     mRandomQuoteAuthor.setText("* No Author *");
@@ -510,11 +512,11 @@ public class RandomQuotesFragment extends Fragment {
 
                     shareIntent.setType("text/plain");
 
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote by " + mRandomQuote.getAuthor());
 
                     shareIntent.putExtra(Intent.EXTRA_TEXT, getRandomQuoteShareString());
 
-                    shareIntent = Intent.createChooser(shareIntent, "Share Quote of the Day via");
+                    shareIntent = Intent.createChooser(shareIntent, "Share this quote via");
 
                     startActivity(shareIntent);
                 }

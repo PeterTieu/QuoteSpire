@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!--Layout for list item of RandomQuotePicturesFragment, SearchQuotePicturesByAuthorFragment, and SearchQuotePicturesByCategoryFragment-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item_favorite_quote_picture_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/favorite_quote_picture_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:scaleType="centerCrop">
+    </ImageView>
+
+
+</LinearLayout>
+

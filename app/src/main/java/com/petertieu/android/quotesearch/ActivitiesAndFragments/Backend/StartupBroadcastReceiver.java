@@ -1,9 +1,12 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Backend;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDaySharedPreferences;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService;
 
 
 //Base class for code that receives and handles broadcast intents sent by Context.sendBroadcast(Intent)
@@ -20,9 +23,10 @@ public class StartupBroadcastReceiver extends BroadcastReceiver{
         //"Received broadcast intent: android.intent.action.BOOT_COMPLETED"
         Log.i(TAG, "Received broadcast intent: " + intent.getAction());
 
-        boolean pushNotificationState = QuotesSharedPreferences.getPushNotificationState(context);
+        boolean pushNotificationState = QuoteOfTheDaySharedPreferences.getPushNotificationState(context);
 
-        //TODO: Add PollService code here, taking into account the pushNotiticaitonState
+
+        QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(context, pushNotificationState);
 
 
 

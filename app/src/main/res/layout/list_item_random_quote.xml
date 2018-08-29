@@ -26,11 +26,10 @@
 
 
         <TextView
-            android:id="@+id/random_quote_number"
+            android:id="@+id/random_quote_position"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/quote_of_the_day"
             android:textColor="@color/colorAccent"
             android:textSize="17dp"
             android:textStyle="bold"/>
@@ -109,7 +108,7 @@
 
 
     <TextView
-        android:id="@+id/random_quote_category"
+        android:id="@+id/random_quote_categories"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"

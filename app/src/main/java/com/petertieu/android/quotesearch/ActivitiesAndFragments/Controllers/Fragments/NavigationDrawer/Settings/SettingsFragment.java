@@ -37,10 +37,12 @@ public class SettingsFragment extends Fragment {
 
 
 
+
     //Override the onCreateView(..) fragment lifecycle callback method
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
+
 
         //Log in Logcat
         Log.i(TAG, "onCreateView(..) called");
@@ -126,18 +128,8 @@ public class SettingsFragment extends Fragment {
 
                 alertDialog.show();
 
-
-
             }
         });
-
-
-
-
-
-
-
-
 
 
         getActivity().setTitle("Settings");

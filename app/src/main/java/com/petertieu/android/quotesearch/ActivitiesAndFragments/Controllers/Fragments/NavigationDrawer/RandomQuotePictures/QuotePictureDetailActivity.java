@@ -8,38 +8,85 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.QuotePicture;
 import com.petertieu.android.quotesearch.R;
 
 import java.io.FileInputStream;
 
-public class QuotePictureDetailActivity extends AppCompatActivity{
+public class QuotePictureDetailActivity extends AppCompatActivity implements QuotePictureDetailFragment.Callbacks{
 
     private final static String TAG = "QPDActivity";
 
+    public final static String QUOTE_PICTURE_ID = "quotePictureIDKey";
     public final static String QUOTE_PICTURE_BYTE_ARRAY_KEY = "quotePictureByteArrayKey";
 
 
+    private String mQuotePictureID;
     private byte[] mQuotePictureByteArray;
     private Bitmap mQuotePictureBitmap;
 
 
+    @Override
+    public void scrollViewPagerBackward(){
+        //Do nothing
+    }
 
-    public static Intent newIntent(Context context, byte[] quotePictureByteArray){
+    @Override
+    public void scrollViewPagerForward(){
+        //Do nothing
+    }
+
+
+
+
+//    public static Intent newIntent(Context context, QuotePicture quotePicture, String quotePictureId, byte[] quotePictureByteArray){
+//
+//        Log.i(TAG, "newIntent(..) called");
+//
+//        Log.i(TAG, "ID in newIntent(): " + quotePictureId);
+//
+//        Intent intent  = new Intent(context, QuotePictureDetailActivity.class);
+//
+//        intent.putExtra(QUOTE_PICTURE_ID, quotePictureId);
+//
+//        intent.putExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray);
+//
+//
+//        return intent;
+//
+//    }
+
+
+
+
+    public static Intent newIntent(Context context, String quotePictureId, byte[] quotePictureBitmapByteArray){
 
         Log.i(TAG, "newIntent(..) called");
 
+        Log.i(TAG, "ID in newIntent(): " + quotePictureId);
+
         Intent intent  = new Intent(context, QuotePictureDetailActivity.class);
 
+        intent.putExtra(QUOTE_PICTURE_ID, quotePictureId);
 
-        intent.putExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray);
+        intent.putExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureBitmapByteArray);
 
 
         return intent;
 
     }
+
+
+
 
 
 
@@ -49,23 +96,17 @@ public class QuotePictureDetailActivity extends AppCompatActivity{
 
         Log.i(TAG, "onCreate(..) called");
 
-        setContentView(R.layout.activity_quote_picture);
 
+
+        setContentView(R.layout.activity_quote_picture_detail);
+
+        mQuotePictureID = getIntent().getStringExtra(QUOTE_PICTURE_ID);
         mQuotePictureByteArray = getIntent().getByteArrayExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY);
 
 
+//        Log.i(TAG, "ID in onCreate(): " + mQuotePicture.getId());
 
 
-
-        //May not need this
-        String filename = getIntent().getStringExtra("image");
-        try {
-            FileInputStream fileInputStream = this.openFileInput(filename);
-            mQuotePictureBitmap = BitmapFactory.decodeStream(fileInputStream);
-            fileInputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
 
 
@@ -87,6 +128,13 @@ public class QuotePictureDetailActivity extends AppCompatActivity{
         }
 
 
+
+
+
+
+
+
+
     }
 
 
@@ -97,8 +145,11 @@ public class QuotePictureDetailActivity extends AppCompatActivity{
         //Create argument-bundle to pass data to QuotePictureDetailFragment
         Bundle argumentBundle = new Bundle();
 
-        //Add String describing language chosen to the argument-bundle
-        argumentBundle.putByteArray(QUOTE_PICTURE_BYTE_ARRAY_KEY, mQuotePictureByteArray);
+
+        argumentBundle.putString(QUOTE_PICTURE_ID, mQuotePictureID); //Add Quote Picture ID (String) to the argument-bundle
+
+
+        argumentBundle.putByteArray(QUOTE_PICTURE_BYTE_ARRAY_KEY, mQuotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
 
         //Create QuotePictureDetailFragment
         QuotePictureDetailFragment quotePictureDetailFragment = new QuotePictureDetailFragment();
@@ -109,6 +160,7 @@ public class QuotePictureDetailActivity extends AppCompatActivity{
         //Return the QuotePictureDetailFragment
         return quotePictureDetailFragment;
     }
+
 
 
 

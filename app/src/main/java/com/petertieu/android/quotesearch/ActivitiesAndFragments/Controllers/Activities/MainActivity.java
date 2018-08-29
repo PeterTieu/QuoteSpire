@@ -13,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.FavoritesFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.FavoritesFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.SwipeTabs.FavoriteQuotesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.RandomQuotePicturesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotes.RandomQuotesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchPicturesOfQuotes.SearchPicturesOfQuotesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SearchQuotesFragment;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     QuoteOfTheDayFragment mQuoteOfTheDayFragment = new QuoteOfTheDayFragment();
     SearchQuotesFragment mSearchQuotesFragment = new SearchQuotesFragment();
     RandomQuotesFragment mRandomQuotesFragment = new RandomQuotesFragment();
+    RandomQuotePicturesFragment mRandomQuotePicturesFragment = new RandomQuotePicturesFragment();
     SearchPicturesOfQuotesFragment mSearchPicturesOfQuotesFragment = new SearchPicturesOfQuotesFragment();
     FavoritesFragment mFavoritesFragment = new FavoritesFragment();
     SettingsFragment mSettingsFragment = new SettingsFragment();
@@ -117,16 +120,20 @@ public class MainActivity extends AppCompatActivity {
                         //Scan through the navigation drawer's MenuItem IDs. Perform operations to open the fragments of the selected items
                         switch (menuItem.getItemId()){
 
-                            case R.id.quote_of_the_day:
+                            case R.id.quote_of_the_day_quote_title:
                                 openFragment(mQuoteOfTheDayFragment);
+                                return true;
+
+                            case R.id.random_quotes:
+                                openFragment(mRandomQuotesFragment);
                                 return true;
 
                             case R.id.search_quote:
                                 openFragment(mSearchQuotesFragment);
                                 return true;
 
-                            case R.id.random_quotes:
-                                openFragment(mRandomQuotesFragment);
+                            case R.id.random_quote_pictures:
+                                openFragment(mRandomQuotePicturesFragment);
                                 return true;
 
                             case R.id.search_pictures_of_quotes:
@@ -164,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         if (mFragment != null){
             //Remove the current fragment from the R.id.content_frame RelativeLayout
             mFragmentManager.beginTransaction().remove(mFragment).commit();
+
         }
 
         //Re-assign the mFragment reference variable to the Fragment to open
@@ -197,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //Inflate the options menu
-        getMenuInflater().inflate(R.menu.activity_main, menu);
+//        getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
 
@@ -215,9 +223,9 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
-            //The Settings toolbar button
-            case R.id.action_settings:
-                return true;
+//            //The Settings toolbar button
+//            case R.id.action_settings:
+//                return true;
         }
 
         return super.onOptionsItemSelected(item);

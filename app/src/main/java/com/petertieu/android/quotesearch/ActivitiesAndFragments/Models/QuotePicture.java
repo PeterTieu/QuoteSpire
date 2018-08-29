@@ -19,8 +19,7 @@ public class QuotePicture{
     boolean mIsFavorite;
     String mQuotePictureDownloadURI;
     int mRandomQuotePicturePosition; //Only used for RandomQuotePicturesFragment
-    Bitmap mQuotePictureBitmap; //TODO: Not used??
-    byte[] mQuotePictureBitmapByteArray; //TODO: Not used??
+    byte[] mQuotePictureBitmapByteArray;
 
     String mQuotePictureBitmapFilePath;
 
@@ -66,13 +65,6 @@ public class QuotePicture{
         mRandomQuotePicturePosition = randomQuotePicturePosition;
     }
 
-    public Bitmap getQuotePictureBitmap() {
-        return mQuotePictureBitmap;
-    }
-
-    public void setQuotePictureBitmap(Bitmap quotePictureBitmap) {
-        mQuotePictureBitmap = quotePictureBitmap;
-    }
 
 
     public byte[] getQuotePictureBitmapByteArray(){

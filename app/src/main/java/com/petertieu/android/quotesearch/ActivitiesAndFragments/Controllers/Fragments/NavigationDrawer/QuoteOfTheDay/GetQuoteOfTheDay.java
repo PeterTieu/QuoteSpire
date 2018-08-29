@@ -3,6 +3,8 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 
 import android.util.Log;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.MainActivity;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 
 import org.json.JSONArray;
@@ -31,7 +33,7 @@ public class GetQuoteOfTheDay {
 
 //        String urlString = "http://quotes.rest/qod.json";
         String urlString = "http://quotes.rest/qod.json?api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
-//        String urlString = "http://quotes.rest/quote/search.json?category=empowering&api_key=eQMFnO84Di1ojF0riK_HfgeF";
+//        String urlString = "http://quotes.rest/quote/search.json?category=strong&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
 
         try {
             String jsonString = getJsonString(urlString);
@@ -140,11 +142,12 @@ public class GetQuoteOfTheDay {
 
 
 
+
             String category = quoteJsonObject.getString("category");
             List<String> categories = new ArrayList<String>();
             categories.add(category);
             quote.setCategories(categories);
-            Log.i(TAG, "Quote of the day - method - Quote String ArrayList" + quote.getCategories());
+            Log.i(TAG, "\"Qutoe of the day Author Quote - method - Categories: \" " + quote.getCategories());
 
         }
     }

@@ -1,5 +1,7 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Models;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 public class Quote {
@@ -36,11 +38,15 @@ public class Quote {
     //Only used for SearchQuotesByAdvancedFragment
     int mSearchQuotesByAdvancedQuotePosition;
 
-    //Only used for RandomQuotePicturesFragment
+    //Only used for RandomQuotePictureFragment, SearchQuotePictureByAuthorFragment, and SearchQuotePictureByCatgoryFragment
     String mPictureDownloadURI;
 
     //Only used for RandomQuotePicturesFragment
     int mRandomQuotePicturePosition;
+
+    //Only used for RandomQuotePictureFragment, SearchQuotePictureByAuthorFragment, and SearchQuotePictureByCatgoryFragment
+    Bitmap mQuotePicture;
+
 
 
     public Quote(){
@@ -163,6 +169,16 @@ public class Quote {
 
     public void setRandomQuotePicturePosition(int randomQuotePicturePosition){
         mRandomQuotePicturePosition = randomQuotePicturePosition;
+    }
+
+
+    public Bitmap getQuotePicture(){
+        return mQuotePicture;
+    }
+
+
+    public void setQuotePicture(Bitmap quotePicture){
+        mQuotePicture = quotePicture;
     }
 
 

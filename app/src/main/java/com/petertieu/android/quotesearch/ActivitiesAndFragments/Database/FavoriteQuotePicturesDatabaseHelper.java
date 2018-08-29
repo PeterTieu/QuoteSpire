@@ -24,7 +24,8 @@ public class FavoriteQuotePicturesDatabaseHelper extends SQLiteOpenHelper{
                         "(" +
                         " _id integer primary key autoincrement, " +
                         FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID + ", " +
-                        FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.IS_FAVORITE +
+                        FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.IS_FAVORITE + ", " +
+                        FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.BITMAP_FILE_PATH +
                         ")"
 
         );

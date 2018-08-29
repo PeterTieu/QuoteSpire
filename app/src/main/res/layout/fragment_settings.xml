@@ -6,39 +6,53 @@
     android:orientation="vertical">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/settings"
-        android:textSize="20sp"/>
-
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:layout_marginTop="10dp">
 
 
         <TextView
+            android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
             android:text="@string/push_notification"
             android:textSize="20sp"/>
 
         <Switch
             android:id="@+id/push_notification_switch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:switchMinWidth="60dp"
             android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
             android:layout_gravity="right"/>
-
 
     </LinearLayout>
 
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+
+        <TextView
+            android:id="@+id/clear_all_recent_search_queries"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"
+            android:text="@string/clear_recent_search_queries"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="20sp"/>
+
+
+    </LinearLayout>
 
 </LinearLayout>

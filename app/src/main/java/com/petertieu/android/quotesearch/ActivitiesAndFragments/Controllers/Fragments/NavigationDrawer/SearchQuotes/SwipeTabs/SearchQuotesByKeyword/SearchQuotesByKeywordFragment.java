@@ -720,7 +720,7 @@ public class SearchQuotesByKeywordFragment extends Fragment implements View.OnCl
 
                 //If the Quote author exists
                 if (mSearchQuotesByKeywordQuote.getAuthor() != null){
-                    mSearchQuotesByKeywordQuoteAuthor.setText(mSearchQuotesByKeywordQuote.getAuthor()); //Set the Quote author text
+                    mSearchQuotesByKeywordQuoteAuthor.setText("- " + mSearchQuotesByKeywordQuote.getAuthor()); //Set the Quote author text
                 }
                 //If the Quote author DOES NOT exist
                 else{

@@ -4,20 +4,17 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/random_quotes"
-        android:padding="16dp"
-        android:textSize="13dp"
-        android:textColor="@color/colorAccent"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/random_quotes"-->
+        <!--android:padding="16dp"-->
+        <!--android:textSize="13dp"-->
+        <!--android:textColor="@color/colorAccent"/>-->
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/your_play_list"
+        android:id="@+id/random_quotes_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="4dp"
-        android:scrollbars="none" />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
