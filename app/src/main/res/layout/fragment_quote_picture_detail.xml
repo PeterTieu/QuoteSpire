@@ -44,11 +44,14 @@
 
 
     <ImageView
-        android:id="@+id/quote_picture_image_view"
+        android:id="@+id/quote_picture_detail_fragment_quote_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp"
+        android:layout_marginBottom="130dp"
         android:layout_gravity="center"
         android:layout_marginTop="-120dp"/>
+
+
 
 </LinearLayout>
