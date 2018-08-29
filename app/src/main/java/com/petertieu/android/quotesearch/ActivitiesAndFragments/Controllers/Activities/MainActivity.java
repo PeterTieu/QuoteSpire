@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.FavoritesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.SwipeTabs.FavoriteQuotesFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.MyQuotes.MyQuotesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.RandomQuotePicturesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotes.RandomQuotesFragment;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     RandomQuotesFragment mRandomQuotesFragment = new RandomQuotesFragment();
     RandomQuotePicturesFragment mRandomQuotePicturesFragment = new RandomQuotePicturesFragment();
     SearchPicturesOfQuotesFragment mSearchPicturesOfQuotesFragment = new SearchPicturesOfQuotesFragment();
+    MyQuotesFragment mMyQuotesFragment = new MyQuotesFragment();
     FavoritesFragment mFavoritesFragment = new FavoritesFragment();
     SettingsFragment mSettingsFragment = new SettingsFragment();
 
@@ -139,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.search_pictures_of_quotes:
                                 openFragment(mSearchPicturesOfQuotesFragment);
                                 return true;
+
+                            case R.id.my_quotes:
+                                openFragment(mMyQuotesFragment);
 
                             case R.id.favorites:
                                 openFragment(mFavoritesFragment);
