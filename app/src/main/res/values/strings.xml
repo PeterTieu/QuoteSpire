@@ -28,6 +28,9 @@
     <string name="search_pictures_of_quotes_category">Search Category</string>
     <string name="search_pictures_of_quotes_author">Search Author</string>
 
+
+    <string name="my_quotes">My Quotes</string>
+
     <string name="title_activity_main">QuoteSearch</string>
 
 
@@ -85,10 +88,14 @@
     <string name="clear_recent_search_queries">Clear Recent Search Queries</string>
 
 
-    <!--QuotePictureDetailFragment-->
+    <!--QuotePictureDetailFragment AND FavoriteQuotePictureDetailFragment-->
     <string name="toggle_favorites">Toggle Favorites</string>
     <string name="share">Share</string>
     <string name="download">Download</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+
+
 
 
 
