@@ -38,12 +38,13 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 //Fragment to display the QuotePicture RecyclerView list-item selected in:
 //RandomQuotePicturesFragment, SearchQuotePicturesByCategoryFragment, or SearchQuotePicturesByAuthorFragment.
-//NOTE: This Fragment is hosted by: QuotePictuerDetailActivity
+//NOTE: This Fragment is hosted by: QuotePictureDetailActivity
+@SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "SpellCheckingInspection", "RedundantCast"})
 public class QuotePictureDetailFragment extends Fragment{
 
     private final static String TAG = "QPDFragment"; //Tag for Logcat
 
-    private QuotePicture mQuotePicture = new QuotePicture(); //QuotePicture retrieved from the intent passed from the hosting activity (QuotePictuerDetailActivity)
+    private final QuotePicture mQuotePicture = new QuotePicture(); //QuotePicture retrieved from the intent passed from the hosting activity (QuotePictureDetailActivity)
 
     private String mQuotePictureID; //Intent extra retrieved from the hosting activity: QuotePicture ID
     private byte[] mQuotePictureByteArray; //Intent extra retrieved from the hosting activity: Bitmap Byte Array (stores data of the Bitmap to be displayed)
@@ -104,18 +105,17 @@ public class QuotePictureDetailFragment extends Fragment{
         Log.i(TAG, "onCreate(..) called"); //Log to Logcat
 
         setRetainInstance(true); //Retain data even when the view has changed (i.e. screen rotation)
-        setHasOptionsMenu(true); //Declare that there is an opeionts menu
 
         //If arguments passed to CategoryChooserFragment from CategoryChooserActivity exists
         if (getArguments() != null){
 
-            mQuotePictureID = getArguments().getString(QuotePictureDetailActivity.QUOTE_PICTURE_ID_KEY); //Retrieve data passed from activity: QuotePiture ID
+            mQuotePictureID = getArguments().getString(QuotePictureDetailActivity.QUOTE_PICTURE_ID_KEY); //Retrieve data passed from activity: QuotePicture ID
             mQuotePictureByteArray = getArguments().getByteArray(QuotePictureDetailActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY); //Retrieve data passed from activity: Bitmap Byte Array
 
             mQuotePicture.setId(mQuotePictureID); //Set ID and Bitmap to the QuotePicture variable
             mQuotePicture.setQuotePictureBitmapByteArray(mQuotePictureByteArray); //Set the Bitmap Byte Array to the QuotePicture variable
 
-            mQuotePictureBitmap = BitmapFactory.decodeByteArray(mQuotePictureByteArray, 0, mQuotePictureByteArray.length); //Parese the Bitmap Byte Array to a Bitmap
+            mQuotePictureBitmap = BitmapFactory.decodeByteArray(mQuotePictureByteArray, 0, mQuotePictureByteArray.length); //Parse the Bitmap Byte Array to a Bitmap
         }
 
     }
@@ -124,6 +124,7 @@ public class QuotePictureDetailFragment extends Fragment{
 
 
     //Override the onCreateView(..) fragment lifecycle callback method
+    @SuppressWarnings("NullableProblems")
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
@@ -175,7 +176,7 @@ public class QuotePictureDetailFragment extends Fragment{
                 mQuotePictureFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_quote_picture_favorite_on: R.drawable.ic_imageview_quote_picture_favorite_off);
 
                 //If the Favorite icon is CHECKED...
-                if (isChecked == true){
+                if (isChecked){
                     //If the QuotePicture EXISTS in the Favorite QuotePictures SQLite Database
                     if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePicture(mQuotePictureID) == null){
 
@@ -188,13 +189,10 @@ public class QuotePictureDetailFragment extends Fragment{
                         FavoriteQuotePicturesManager.get(getActivity()).addFavoriteQuotePicture(mQuotePicture); //Add the QuotePicture to the Favorite QuotePictures SQLite Database
                         FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture); //Update the database
                     }
-                    else{
-                        //Do nothing
-                    }
                 }
 
                 //If the Favorite icon is UNCHECKED...
-                if (isChecked == false){
+                if (!isChecked){
                     FavoriteQuotePicturesManager.get(getActivity()).deleteFavoriteQuotePicture(mQuotePicture); //Remove the QuotePicture from the Favorite QuotePictures SQLite Database
                     FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture); //Update the database
                 }
@@ -224,7 +222,7 @@ public class QuotePictureDetailFragment extends Fragment{
             public void onClick(View view){
 
                 //If permission for writing to storage has NOT been granted at runtime (by user). NOTE: This permission is required for saving the QuotePicture to storage
-                if (hasWriteExternalStoragePermission() == false){
+                if (!hasWriteExternalStoragePermission()){
                     requestPermissions(STORAGE_PERMISSIONS, REQUEST_CODE_FOR_STORAGE_PERMISSIONS); //Request (user) for storage permissions - as they are 'dangerous' permissions (and therefore must be requested)
                 }
 
@@ -251,6 +249,7 @@ public class QuotePictureDetailFragment extends Fragment{
 
 
     //Helper method - Check if STORAGE permissions have been granted at runtime (by user)
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean hasWriteExternalStoragePermission(){
 
         //If permission is granted, result = PackageManager.PERMISSION_GRANTED (else, PackageManager.PERMISSION_DENIED).
@@ -301,39 +300,35 @@ public class QuotePictureDetailFragment extends Fragment{
 
 
     //Helper method - Save the QuotePicture Picture to the app's cache directory so that it could be shared to other apps (via an implicit intent)
+    @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
     private Uri saveBitmap(Bitmap quotePictureBitmap) {
 
         File quotePictureBitmapSaveFolder = new File(getContext().getCacheDir(), "images"); //Create folder to save the Bitmap cache
         Uri savedBitmapURI = null; //Declare URI to the Bitmap
 
-        //Try risky task -
+        //Try risky task
         try {
-            quotePictureBitmapSaveFolder.mkdirs();
-            File file = new File(quotePictureBitmapSaveFolder, "shared_image.png");
+            quotePictureBitmapSaveFolder.mkdirs(); //Make the cache directory
+            File file = new File(quotePictureBitmapSaveFolder, "shared_image.png"); //Create the cache file
 
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            quotePictureBitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            savedBitmapURI = FileProvider.getUriForFile(getContext(), "com.petertieu.android.quotesearch.fileprovider", file);
-
-            Log.i(TAG, savedBitmapURI.toString());
-
+            FileOutputStream fileOutputStream = new FileOutputStream(file); //Create the FileOutputStream
+            quotePictureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream); //Compress the FileOutputStream
+            fileOutputStream.flush(); //Flush the FileOutputStream
+            fileOutputStream.close(); //Close the FileOutputStream
+            savedBitmapURI = FileProvider.getUriForFile(getContext(), "com.petertieu.android.quotesearch.fileprovider", file); //Get the Bitmap URI
+            Log.i(TAG, savedBitmapURI.toString()); //Log to Logcat
         }
         catch (IOException IOException) {
             Log.d(TAG, "IOException while trying to write file for sharing: " + IOException.getMessage());
         }
 
-        return savedBitmapURI;
+        return savedBitmapURI; //Return the Bitmap URI
     }
 
 
 
 
-    /**
-     * Shares the PNG image from Uri.
-     * @param savedBitmapURI Uri of image to share.
-     */
+    //Helper method - Share the Bitmap to other apps (via an implicit intent)
     private void shareQuotePictureBitmap(Uri savedBitmapURI){
 
         Intent shareBitmapIntent = new Intent(Intent.ACTION_SEND); //Create implicit Intent with send action
