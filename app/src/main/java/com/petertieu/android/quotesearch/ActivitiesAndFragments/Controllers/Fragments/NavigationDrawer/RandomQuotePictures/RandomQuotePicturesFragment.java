@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-//Fragment that fetches and displays Quotes Pictures by Random
+//Displays Quotes Pictures by Random
 @SuppressWarnings("ALL")
 public class RandomQuotePicturesFragment extends Fragment {
 
@@ -148,10 +148,10 @@ public class RandomQuotePicturesFragment extends Fragment {
 
         Log.i(TAG, "onCreateView(..) called");  //Log in Logcat
 
-        View view = layoutInflater.inflate(R.layout.fragment_random_pictures_of_quotes, viewGroup, false); //Inflate View
+        View view = layoutInflater.inflate(R.layout.fragment_quote_pictures, viewGroup, false); //Inflate View
 
 
-        mRandomPicturesOfQuotesRecyclerView = view.findViewById(R.id.random_pictures_of_quotes_recycler_view); //Assign RecyclerView member variable to the view
+        mRandomPicturesOfQuotesRecyclerView = view.findViewById(R.id.quote_pictures_recycler_view); //Assign RecyclerView member variable to the view
 
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2); //Create LayoutManager to link the RecyclerView to
 
@@ -227,11 +227,9 @@ public class RandomQuotePicturesFragment extends Fragment {
             mRandomQuotePictureQuotes.set(mQuotePosition[0], randomQuotePictureQuote); //Add the obtained Quote to the List of Quote objects
 
             //Call the worker HandlerThread - by sending a Message to its MessageQueue. This message contains:
-                //1: The KEY (QuotePicture) - for identifyng the Message
+                //1: The KEY (Position of the QuotePicture) - for identifyng the Message
                 //2: The VALUE (QuotePicture Picture Download URI) - to be used to fetch the Quote Picture
             mRandomQuotePicturesDownloaderHandlerThread.enqueueQuotePictureDownloadURIIToMessageQueue(mRandomQuotePictureQuotes.get(mQuotePosition[0]), randomQuotePictureQuote.getQuotePictureDownloadURI());
-
-
         }
 
     }
