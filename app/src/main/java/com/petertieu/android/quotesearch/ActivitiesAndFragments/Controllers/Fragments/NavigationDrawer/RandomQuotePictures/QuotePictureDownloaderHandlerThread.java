@@ -1,14 +1,12 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
-
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,51 +15,56 @@ import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+//HandlerThread, a worker thread used to obtain the QuotePicture's Picture AFTER the ID and Picture Download URI have been fetched by the AsyncTask.
+//It takes as parameters from the AsyncTask calls (of enqueueQuotePictureDownloadURIIToMessageQueue(..)):
+    //1: Position of the QuotePicture - to identify the Message
+    //2: Picture Download URI of the QuotePicture - download the QuotePicture Picture
+
+//NOTE: The HandlerThread to be run asynchronously to the Main Thread.
+// It is called by the AsyncTask of RandomQuotePictureFragment, SearchQuotePictureByCategory, or SearchQuotePictureByAuthor.
+// Only one instance is created per AsyncTask.
+@SuppressWarnings("CanBeFinal")
 public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
-    private final static String TAG = "QPDHandlerThread";
+    private final static String TAG = "QPDHandlerThread"; //Tag for Logcat
 
-    private Handler mRequestHandler;
+    private Handler mRequestHandler; //Handler for creating and handling with the Message
+    private ConcurrentMap<T, String> mRequestMap = new ConcurrentHashMap<>(); //ConcurrentHashMap to store key-value pair (key (int): Position of QuotePicture; value (String): Picture Download URI)
+    private QuotePictureDownloadListener<T> mQuoteQuotePictureDownloadListener; //Listener for when the QuotePicture Picture has been downloaded
+    private boolean mHasHandlerThreadQuit; //Flag for when the HandlerThread has been quit
+    private Handler mResponseHandler; //Handler from the Main Thread - which functions to catch the
 
-    private ConcurrentMap<T, String> mRequestMap = new ConcurrentHashMap<>();
-
-    private QuotePictureDownloadListener<T> mQuoteQuotePictureDownloadListener;
-
-    private boolean mHasHandlerThreadQuit;
-
-    private Handler mResponseHander;
-
-
-    //The "what" instance variable of the Message (of the ThumbnailDownloader bakcground thread).
-    //This is the Message instance variable (field) that is used to identify the message
-    private static final int MESSAGE_DOWNLOAD = 0;
+    private static final int MESSAGE_DOWNLOAD = 0;  //The "what" instance variable of the Message (of the ThumbnailDownloader background thread).
+                                                    //This is the Message instance variable (field) that is used to identify the message
 
 
 
+
+    //Constructor - called by RandomQuotePictureFragment, SearchQuotePictureByCategory, or SearchQuotePictureByAuthor
     public QuotePictureDownloaderHandlerThread(Handler responseHandler){
         super(TAG);
-        mResponseHander = responseHandler;
+        mResponseHandler = responseHandler;
     }
 
 
-    public void setQuoteQuotePictureDownloadListener(QuotePictureDownloadListener quotePictureDownloadListener){
 
+
+    //Listener for when the QuotePicture Picture has been downloaded
+    @SuppressWarnings("unchecked")
+    public void setQuoteQuotePictureDownloadListener(QuotePictureDownloadListener quotePictureDownloadListener){
         mQuoteQuotePictureDownloadListener = quotePictureDownloadListener;
     }
 
-
+    //Interface - used as parameter of setQuoteQuotePictureDownloadListener
     public interface QuotePictureDownloadListener<T>{
-
         void onQuotePictureDownloaded(T quotePictureViewHolder, Bitmap quotePicture);
     }
 
 
 
 
-
-
     //Override the quit() method inherited from the HandlerThread class.
-    //quit() is called in the onDestroy() fragment lifecycle callback method in RandomQuotePicturesFragment.
+    //quit() is called in the onDestroy() fragment lifecycle callback method in RandomQuotePictureFragment, SearchQuotePictureByCategory, or SearchQuotePictureByAuthor.
     //The quit() method terminates the Looper object (i.e. causes it to stop processing any messages in the message queue)
     // We override quit() so that we could make mHasQuit = true;
     @Override
@@ -72,7 +75,8 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
 
     //clearQueue() clears the (request) Handler and ConcurrentHashMap.
-    //It is called when the RandomQuotesPicturesFragment's (main thread's) view is destroyed (in onDestoryView())
+    //It is called when the RandomQuotesPicturesFragment's (main thread's) view is destroyed (in onDestroyView())
+    @SuppressWarnings("unused")
     public void clearQueue(){
 
         //removeMessages(int) is from Handler class. It doesn't return anything.
@@ -84,45 +88,39 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
 
 
-
-
-
     //NOTE: Messages have THREE main fields (instance variables);
     //1) what: The identifier of the message (i.e. MESSAGE_DOWNLOAD)
-    //2) obj: The instance object sent with the Message (i.e. Quote)
+    //2) obj: The instance object sent with the Message (i.e. QuotePicture Position)
     //3) target: The Handler to process the Message
 
-
-
-    //queueThumbnail(T, String) is callbed by Quote().
-    // This means it is run EVERYTIME a list item is created,
-    // and everytime a list item is created, a Message is created by the Handler (mRequestHandler) (via the help of the Looper),
+    //queueThumbnail(T, String) is called by Quote().
+    // This means it is run EVERY TIME a list item is created,
+    // and every time a list item is created, a Message is created by the Handler (mRequestHandler) (via the help of the Looper),
     // and is enqueued in the MessageQueue by the Looper...
     // waiting for to be processed by the Handler
     //IOW, queueThumbnail(T, String) method logs the URL of the image that is downloaded
     // AND uses a Handler object to create a Message (for the ThumbnailDownloader background thread)
     //queueThumbnail(T, String) is called by Quote
-    // Argument 1: 'T' is the class identifier for the image to download. In this case, it is Quote.
+    // Argument 1: 'T' is the class identifier for the image to download. In this case, it is the Position of the QuotePicture.
     // It is also the "obj" instance variable of the Message, which is sent with the Message
-    // Argument 2: The URL of the image to download (i.e. galleryItem.getUrl(), where galleryItem is an instance of GetRandomQuotePictureQuote)
-    public void enqueueQuotePictureDownloadURIIToMessageQueue(T quotePictureViewHolder, String quotePictureDownloadURI){
-
+    // Argument 2: The Download Picture URI
+    public void enqueueQuotePictureDownloadURIIToMessageQueue(T positionOfQuotePicture, String quotePictureDownloadURI) {
 
 
         //If the "url_s" parameter of the JSON text (i.e. JSON object called "url_s") doesn't exist
-        if (quotePictureDownloadURI == null){
+        if (quotePictureDownloadURI == null) {
             //Remove the target (Quote) from the ConcurrentHashMap collection (mRequestMap),
             //NOTE: This also removes the 'url' counterpart of the element 'obj' is in,
             // as 'obj' and 'url' are in the same element in the ConcurrentHashMap
-            mRequestMap.remove(quotePictureViewHolder);
+            mRequestMap.remove(positionOfQuotePicture);
         }
 
         //If the "url_s" parameter of the JSON text (i.e. JSON object called "url_s" exists
         else {
             //Add to the ConcurrentHashMap:
-            // 1: The obj (Quote), and
-            // 2: The url (i.e. GalleryItem.getUrl())
-            mRequestMap.put(quotePictureViewHolder, quotePictureDownloadURI);
+            // 1: The obj (Position of the QuotePicture)
+            // 2: The Download Picture URI
+            mRequestMap.put(positionOfQuotePicture, quotePictureDownloadURI);
 
 
             //Have the Handler create a Message object,
@@ -136,15 +134,14 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //Argument 1 (int): "what" - The int instance variable of the Message that is used to IDENTIFY the Message (i.e. MESSAGE_DOWNLOAD = 0)
             //Argument 2 (Object): "obj" - The instance variable of the Message that is an Object class to also identify the Message (i.e. Quote)
             //sendToTarget() is a method of the Message object (which is created by the Handler). It uses the Looper to send this Message to the Handler (i.e. the "target").
-            // REMEMBER: The Looper loops the MessageQueue and GRABS Messages and ESCROTS/SENDS them to the Handler,
+            // REMEMBER: The Looper loops the MessageQueue and GRABS Messages and ESCORTS/SENDS them to the Handler,
             //  as the Handler does not deal with the logistics of Messages in the background thread.
             //  Handlers only process Messages when they are brought to them by the Looper,
             //  and create Messages, which are moved to the MessageQueue by the Looper!
             // This means that mRequestHandler is in charge of processing the Message
             // (when the Message is pulled off the MESSAGE QUEUE by the Looper)
-            mRequestHandler.obtainMessage(MESSAGE_DOWNLOAD, quotePictureViewHolder).sendToTarget();
+            mRequestHandler.obtainMessage(MESSAGE_DOWNLOAD, positionOfQuotePicture).sendToTarget();
         }
-
 
     }
 
@@ -153,23 +150,21 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
 
 
-
-
-
-
     //Override the onLooperPrepared() method inherited from the HandlerThread class.
-    //onLooperPrepared() is a call back method that can be explicity overriden to SET THINGS UP
+    //onLooperPrepared() is a call back method that can be explicitLy overriden to SET THINGS UP
     // BEFORE the Looper object loops (NOTE: The Looper is created by the HandlerThread).
     //IOW, onLooperPrepared() is called before the Looper checks the queue for the FIRST TIME.
     // This makes it a good place to create the Handler
     //NOTE: onLooperPrepared() only gets called !!ONCE!!,
     // and that is, it is called before the Looper executes. (This is why we create the (one and only) Handler object here) (pg. 507).
-    // HOWEVER, the handleMessage(Message) method (overidden) is called !!EVERY TIME!!
+    // HOWEVER, the handleMessage(Message) method is called !!EVERY TIME!!
     // a Message is pulled off the queue by the Looper and passed to the Handler!!
+    @SuppressWarnings("SpellCheckingInspection")
+    @SuppressLint("HandlerLeak")
     @Override
     protected void onLooperPrepared(){
 
-        //Instantiate a Handler object and assign it to the mRequestHanlder (Handler) reference variable
+        //Instantiate a Handler object and assign it to the mRequestHandler (Handler) reference variable
         //The Handler's job is:
         // 1: Help create the Message via the Looper (see diagrams on pg. 507-509)
         // 2: Processes Message(s) from the MESSAGE QUEUE
@@ -179,11 +174,12 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
             //Override the handleMessage(Message) method inherited from the Handler class.
             //handleMessage(Message) defines what the Handler does
-            // !!EVERYTIME!! Messages are pulled off the queue by the Looper and passed to the Handler.
-            //NOTE: handleMessage(Message) is called EVERYTIME a download Message is pulled off the MESSAGE QUEUE
+            // !!EVERY TIME!! Messages are pulled off the queue by the Looper and passed to the Handler.
+            //NOTE: handleMessage(Message) is called EVERY TIME a download Message is pulled off the MESSAGE QUEUE
             // and ready to be processed
             //NOTE: Argument 1 (Message) is actually the Message that was created from: mRequestHandler.obtainMessage(..) (above)
             //IOW, we are HANDLING the message that was created (above) by obtainMessage(..).
+            @SuppressWarnings("unchecked")
             @Override
             public void handleMessage(Message message){
 
@@ -194,17 +190,17 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
                     //Instantiate an object of type T (in this situation, Quote) referenced by obj,
                     // and let it equal the "obj" instance variable of the Message (msg).
                     // REMEMBER: The "obj" instance variable of the Message (msg) is the identifier for the request.
-                    // In this case, "obj" is of type Quote (since T is of type Quote)
-                    T quotePictureViewHolder = (T) message.obj;
+                    // In this case, "obj" is of type int (since T is of type int)
+                    T positionOfQuotePicture = (T) message.obj;
 
                     //Log that a Message is pulled from the MESSAGE QUEUE, which requests for a URL
                     //NOTE: mRequestMap.get(obj) returns the VALUE element of the 'obj' KEY, which is: 'url' (aka the "url_s" parameter of the JSON string),
                     // as both 'obj' and 'url' are in the same element in the ConcurrentHashMap
-                    Log.i(TAG, "Got a request for url_s: " + mRequestMap.get(quotePictureViewHolder));
+                    Log.i(TAG, "Got a request for url_s: " + mRequestMap.get(positionOfQuotePicture));
 
                     //Call the handleRequest(T) helper method,
                     // which is configured to DOWNLOAD the bitmap
-                    handleRequest(quotePictureViewHolder);
+                    handleRequest(positionOfQuotePicture);
                 }
 
             }
@@ -217,15 +213,10 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
 
 
-
-
-
-
-
     //The handleRequest(T) method is a helper method of handleMessage(Message) (inside the overriden onLooperPrepared()).
     // It uses the url to download the bitmap into bytes,
     // then parses it to a bitmap image
-    private void handleRequest(final T quotePicture){
+    private void handleRequest(final T positionOfQuotePicture){
 
         //Try a 'risky' task,
         // as getUrlBytes(url) could throw a IOException exception
@@ -236,14 +227,14 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //NOTE: 'url' is actually the String version of the "url_s" parameter of the JSON String. It represents the url to the thumbnail!
             //NOTE: In this case, 'obj' is Quote
             //NOTE: get(obj) returns the VALUE, 'url' (aka the "url_s" parameter of the JSON String).
-            final String quotePictureDownloadURI = mRequestMap.get(quotePicture);
+            final String quotePictureDownloadURI = mRequestMap.get(positionOfQuotePicture);
 
             //If the url doesn't exist, then leave this method
             if (quotePictureDownloadURI == null){
                 return;
             }
 
-            //At this point, a url_s (i.e. the mUrl instance variable of GalleryItem) exists...
+            //At this point, the Download Picture URI EXISTS
             //Instantiate a byte array referenced by bitmapBytes,
             // and assign it to the getUrlBytes(String) method,
             // which parses the String version of a url to bytes, and returns an array of bytes
@@ -264,16 +255,14 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
 
 
-
-
             //At this point..
             // The REQUEST HANDLER, mRequestHandler, would have processed the Message sent from the main thread
             // (i.e. decoded the "url_s" parameter from the JSON text of the main thread into a bitmap),
-            // all we have left to do is send the bitmp to the main thread (so that it could be displayed in the UI)...
+            // all we have left to do is send the bitmap to the main thread (so that it could be displayed in the UI)...
             // This is done by running then RESPONSE HANDLER, mResponseHandler, and getting it to bind to the bitmap to the Quote.
             // (NOTE: The RESPONSE HANDLER is the Handler belonging to the main thread (vs. the REQUEST HANDLER, which belongs to the background thread.
-            // This is because it is creatd by the Looper in the main thread, and therefore maintains its loyalty to the main thread)
-            // The REPONSE HANDLER, mResponseHandler, is run via the Runnable code below.
+            // This is because it is created by the Looper in the main thread, and therefore maintains its loyalty to the main thread)
+            // The RESPONSE HANDLER, mResponseHandler, is run via the Runnable code below.
             // NOTE that the code in the run() method is run in the MAIN THREAD instead of in this background thread,
             // because this Handler belongs to the main thread... where the 'response' processing occurs (i.e. displaying the thumbnail to the UI).
             // This means that no matter what the call stack on the main thread might be at any one point in time,
@@ -283,17 +272,18 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //1: Main thread (ONGOING while the app is running)
             //2: GetRandomQuotePictureAsyncTask (AsyncTask) - background thread (would have COMPLETED running by the time we have created mItems in RandomQuotePicturesFragment)
             //3: Message looper for RequestHandler - background thread (ONGOING while there are still images to download)
-            //4: Message looper for ResponseHandler - background thread (ONNGOING while there are still images to decode and display to the UI)
+            //4: Message looper for ResponseHandler - background thread (ONGOING while there are still images to decode and display to the UI)
 
             //The post(Runnable) method of the Handler class adds a Runnable to the MessageQueue.
             // The Runnable will be run on the thread (i.e. Main UI) in which the Handler (i.e. ResponseHandler) is attached to.
             // NOTE: Because the mResponseHandler Handler was created in the MAIN THREAD (RandomQuotePicturesFragment),
             // it will be loyally linked to the Looper of the main thread,
             // and so, all the code under the run() method will be executed in the MAIN THREAD!!
-            mResponseHander.post(new Runnable () {
+            mResponseHandler.post(new Runnable () {
 
                 //Override the run() method of the Runnable interface,
                 // so that we could define the JOB for the (main) thread
+                @SuppressWarnings("StringEquality")
                 @Override
                 public void run(){
 
@@ -301,31 +291,28 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
                     //If the VALUE component of the 'obj' KEY (i.e. the 'url' variable) in the ConcurrentHashMap object (mRequestMap) isn't actually the 'url' variable,
                     // OR... mHasQuit = true (a 'flag' - to make sure that this background thread hasn't reached the quit() cycle of its life yet)
                     // then leave the method (return null)
-                    if (mRequestMap.get(quotePicture) != quotePictureDownloadURI || mHasHandlerThreadQuit){
+                    if (mRequestMap.get(positionOfQuotePicture) != quotePictureDownloadURI || mHasHandlerThreadQuit){
                         return;
                     }
 
 
 
                     //Remove the Quote-URI mapping from the mRequestMap
-                    mRequestMap.remove(quotePicture);
+                    mRequestMap.remove(positionOfQuotePicture);
 
                     //RECALL: Callback interface..
                     //Call the onThumbnailDownloadListener interface object (mThumbnailDownloadListener)
                     // that is declared in this class, but defined in the RandomQuotePicturesFragment's (main thread's) class
-                    // in order to BIND the bitmap image to the Quote object!
-                    //Set the bitmap on the Quote object
+                    // in order to BIND the bitmap image to the QuotePicture object!
+                    //Set the bitmap on the QuotePicture object
                     // i.e. the 'obj' instance variable of the Message
-                    mQuoteQuotePictureDownloadListener.onQuotePictureDownloaded(quotePicture, bitmap);
+                    mQuoteQuotePictureDownloadListener.onQuotePictureDownloaded(positionOfQuotePicture, bitmap);
                 }
             });
-
-
-
         }
 
 
-        //Catchg the IOException exception that is thrown by getUrlBytes(String)
+        //Catch the IOException exception that is thrown by getUrlBytes(String)
         // if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
         catch (IOException ioe){
 
@@ -339,22 +326,12 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     //The getUrlBytes(String) method is a helper method of getUrlString.
     // It fetches raw data from a URL (as argument) and returns it as an array of bytes.
     //NOTE: All (raw) data that is extracted from a Web URL is in the type of BYTES in an InputStream!
     // They must be converted to meaningful data (e.g JSON String) by writing them into a ByteArrayOutputStream, then parsed to String!
-    public byte[] getUrlBytes(String urlSpec) throws IOException {
+    @SuppressWarnings("UnusedAssignment")
+    private byte[] getUrlBytes(String urlSpec) throws IOException {
 
         //Create URL object from the urlSpec String parameter (e.g. https://www.bignerdranch.com)
         // IOW, parse the REST URL of type String to type URL
@@ -387,7 +364,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             // The data can be retrieved using toByteArray() and toString().
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-            //InputStream is a class that respresents an input stream of BYTES, obtained from the 'url'.
+            //InputStream is a class that represents an input stream of BYTES, obtained from the 'url'.
             //connect.getInputStream() returns the data of bytes from the URL "resource".
             //For example, if the URL "resource" is https://bignerdranch.com, then
             //connection.getInputStream() returns all the bytes that represent the HTML file of this page
@@ -424,7 +401,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //Create a buffer array of type byte (size = 1024)
             //This is a buffer array to temporarily store the bytes data read from the inputStream
             //so that this data could then be written into the byteArrayOutputStream (in the while loop).
-            //NOTE: EACH byte (i.e. 8-bit number) in this buffer array represeents
+            //NOTE: EACH byte (i.e. 8-bit number) in this buffer array represents
             // a single ASCII character of the URL "resource"
             //NOTE: If the URL is a 'non-REST' HTTP web address,
             // then each byte represents a single ASCII character of the HTML of the HTTP web address
@@ -433,7 +410,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
 
 
 
-            //What happens in EACH loop in the whileloop:
+            //What happens in EACH loop in the while loop:
             //inputStream.read(..) READS bytes FROM 'inputStream' and WRITES them INTO 'buffer'.
             //..Then.. it returns the number of bytes (int) read. That is, the number of bytes that was read INTO 'buffer'.
             //This number (int) is stored in 'bytesRead'.
@@ -446,18 +423,18 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             //.....
             //Cycle 15: bytesREad = 1024
             //Cycle 16: bytesRead = 52 (i.e. the last/remaining 52 bytes left to read)
-            //Cycle 17 bytesRead = -1 (i.e. no more bytes were left to read - in which case, the whileloop stops!)
+            //Cycle 17 bytesRead = -1 (i.e. no more bytes were left to read - in which case, the while loop stops!)
             //NOTE: It doesn't matter what the size of 'buffer' is.
             // The TOTAL number of bytes to read is UNCHANGED!!
-            // A larger 'buffer' size just means that less whileloops will be run (below) - that's all!
+            // A larger 'buffer' size just means that less while loops will be run (below) - that's all!
 
             //This process will continue until all bytes in the inputStream array are read,
-            //until inputStream.read(buffer) returns -1 (stopping the whileloop).
+            //until inputStream.read(buffer) returns -1 (stopping the while loop).
 
             while ( (bytesRead = inputStream.read(buffer) ) > 0) {
 
                 //byteArrayOutputStream.write(buffer, 0, bytesRead) READS bytes FROM 'buffer' and WRITES it to byteArrayOutputStream.
-                //Argument 1 (byte[]): The data ('buffer') to READ from (in order to WRITE to 'byteArrayOuputStream')
+                //Argument 1 (byte[]): The data ('buffer') to READ from (in order to WRITE to 'byteArrayOutputStream')
                 //Argument 2 (int): The offset in the data
                 //Argument 3 (int): The number of bytes to write (into 'byteArrayOutputStream')
                 byteArrayOutputStream.write(buffer, 0, bytesRead);
@@ -467,7 +444,7 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             byteArrayOutputStream.close();
 
 
-            //Convert the ByteSrrayOutpuStream's to an array of bytes
+            //Convert the ByteArrayOutputStream's to an array of bytes
             //NOTE: This array of bytes is to later
             // be processed by the getUrlString(String) method,
             // where the bytes will be turned to String
@@ -479,8 +456,5 @@ public class QuotePictureDownloaderHandlerThread<T> extends HandlerThread {
             connection.disconnect();
         }
     }
-
-
-
 
 }
