@@ -16,6 +16,7 @@ import com.petertieu.android.quotesearch.R;
 //NOTE: The data passed (as extras) to this activity from the intents of the above fragments are:
     //1: QuotePicture ID
     //2: QuotePicture Picture byte array. NOTE: The bitmap byte array is transferred across instead of the bitmap, because bitmaps are too large to be extras
+@SuppressWarnings("FieldCanBeLocal")
 public class QuotePictureDetailActivity extends AppCompatActivity{
 
     private final static String TAG = "QPDActivity"; //Tag for Logcat
