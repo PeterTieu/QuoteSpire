@@ -1,174 +1,77 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures;
 
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.QuotePicture;
 import com.petertieu.android.quotesearch.R;
 
-import java.io.FileInputStream;
-
-public class QuotePictureDetailActivity extends AppCompatActivity implements QuotePictureDetailFragment.Callbacks{
-
-    private final static String TAG = "QPDActivity";
-
-    public final static String QUOTE_PICTURE_ID = "quotePictureIDKey";
-    public final static String QUOTE_PICTURE_BYTE_ARRAY_KEY = "quotePictureByteArrayKey";
 
 
-    private String mQuotePictureID;
-    private byte[] mQuotePictureByteArray;
-    private Bitmap mQuotePictureBitmap;
+//Activity that hosts the QuotePictureDetailFragment fragment - to display the Quote Picture selected in:
+//RandomQuotePicturesFragment, SearchQuotePicturesByCategoryFragment, or SearchQuotePicturesByAuthorFragment
+//NOTE: The data passed (as extras) to this activity from the intents of the above fragments are:
+    //1: QuotePicture ID
+    //2: QuotePicture Picture byte array. NOTE: The bitmap byte array is transferred across instead of the bitmap, because bitmaps are too large to be extras
+public class QuotePictureDetailActivity extends AppCompatActivity{
 
+    private final static String TAG = "QPDActivity"; //Tag for Logcat
 
-    @Override
-    public void scrollViewPagerBackward(){
-        //Do nothing
-    }
+    public final static String QUOTE_PICTURE_ID_KEY = "quotePictureIDKey"; //Key for Intent extra: Quote Picture ID
+    public final static String QUOTE_PICTURE_BYTE_ARRAY_KEY = "quotePictureByteArrayKey"; //Key for Intent extra: Bitmap Byte Array
 
-    @Override
-    public void scrollViewPagerForward(){
-        //Do nothing
-    }
+    private String mQuotePictureID; //Extracted Quote Picture ID
+    private byte[] mQuotePictureByteArray; //Extracted Bitmap Byte Array
 
 
 
 
-//    public static Intent newIntent(Context context, QuotePicture quotePicture, String quotePictureId, byte[] quotePictureByteArray){
-//
-//        Log.i(TAG, "newIntent(..) called");
-//
-//        Log.i(TAG, "ID in newIntent(): " + quotePictureId);
-//
-//        Intent intent  = new Intent(context, QuotePictureDetailActivity.class);
-//
-//        intent.putExtra(QUOTE_PICTURE_ID, quotePictureId);
-//
-//        intent.putExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray);
-//
-//
-//        return intent;
-//
-//    }
 
-
-
-
+    //Encapsulating intent method - called by: RandomQuotePicturesFragment, SearchQuotePicturesByCategoryFragment, or SearchQuotePicturesByAuthorFragment
+    // when a QuotePicture list item is clicked on
     public static Intent newIntent(Context context, String quotePictureId, byte[] quotePictureBitmapByteArray){
 
-        Log.i(TAG, "newIntent(..) called");
+        Log.i(TAG, "newIntent(..) called"); //Log to logcat
+        Log.i(TAG, "ID in newIntent(): " + quotePictureId); //Log to Logcat
 
-        Log.i(TAG, "ID in newIntent(): " + quotePictureId);
+        Intent intent  = new Intent(context, QuotePictureDetailActivity.class); //Create Intent to start this activity
 
-        Intent intent  = new Intent(context, QuotePictureDetailActivity.class);
+        intent.putExtra(QUOTE_PICTURE_ID_KEY, quotePictureId); //Send QuotePicture ID as extra
+        intent.putExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureBitmapByteArray); //Send Bitmap Byte Array as extra
 
-        intent.putExtra(QUOTE_PICTURE_ID, quotePictureId);
-
-        intent.putExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureBitmapByteArray);
-
-
-        return intent;
-
+        return intent; //Return Intent
     }
 
 
 
 
-
-
+    //Override onCreate(..) activity lifecycle callback method
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        Log.i(TAG, "onCreate(..) called");
+        Log.i(TAG, "onCreate(..) called"); //Log to Logcat
 
+        setContentView(R.layout.activity_quote_picture_detail); //et the View of the activity
 
+        mQuotePictureID = getIntent().getStringExtra(QUOTE_PICTURE_ID_KEY); //Retrieve intent extra: QuotePicture ID
+        mQuotePictureByteArray = getIntent().getByteArrayExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY); //Retrieve intent extra: Bitmap Byte Array
 
-        setContentView(R.layout.activity_quote_picture_detail);
-
-        mQuotePictureID = getIntent().getStringExtra(QUOTE_PICTURE_ID);
-        mQuotePictureByteArray = getIntent().getByteArrayExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY);
-
-
-//        Log.i(TAG, "ID in onCreate(): " + mQuotePicture.getId());
-
-
-
-
-
-
-
-
-        //Return the FragmentManager for interacting with fragments associated with this activity
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        //Find a fragment that was identified by the given ID
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        FragmentManager fragmentManager = getSupportFragmentManager(); //Create FragmentManager for interacting with fragments associated with this activity
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container); //Find a fragment that was identified by the given ID
 
         //If the fragment doesn't exist yet
         if (fragment == null){
-            //Create a fragment
-            fragment = createFragment();
-            //Start a series of edit operations on the Fragments associated with this FragmentManager
-            fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit();
+
+            //Create the QuotePictureDetailFragment fragment, passing as data (in the argument-bundle): QuotePicture ID... and... Bitmap Byte Array
+            fragment = QuotePictureDetailFragment.newInstance(mQuotePictureID, mQuotePictureByteArray);
+
+            fragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit(); //Add the Fragment and open it in the activity
         }
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-    protected Fragment createFragment(){
-
-        //Create argument-bundle to pass data to QuotePictureDetailFragment
-        Bundle argumentBundle = new Bundle();
-
-
-        argumentBundle.putString(QUOTE_PICTURE_ID, mQuotePictureID); //Add Quote Picture ID (String) to the argument-bundle
-
-
-        argumentBundle.putByteArray(QUOTE_PICTURE_BYTE_ARRAY_KEY, mQuotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
-
-        //Create QuotePictureDetailFragment
-        QuotePictureDetailFragment quotePictureDetailFragment = new QuotePictureDetailFragment();
-
-        //Link the argument-bundle to the QuotePictureDetailFragment object
-        quotePictureDetailFragment.setArguments(argumentBundle);
-
-        //Return the QuotePictureDetailFragment
-        return quotePictureDetailFragment;
-    }
-
-
-
-
-
-
-
-
-
 
 
 
