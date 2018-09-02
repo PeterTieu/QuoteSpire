@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchPicturesOfQuotes.SwipeTabs;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.petertieu.android.quotesearch.R;
 
-public class SearchPicturesOfQuotesAuthorFragment extends Fragment {
+public class SearchQPByAuthorFragment extends Fragment {
 
     //Log for Logcat
     private final String TAG = "SearchKeywordFragment";
