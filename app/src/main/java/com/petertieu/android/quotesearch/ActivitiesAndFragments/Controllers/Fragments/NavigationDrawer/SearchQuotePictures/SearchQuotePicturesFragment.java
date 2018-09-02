@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchPicturesOfQuotes;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.petertieu.android.quotesearch.R;
 
 
-public class SearchPicturesOfQuotesFragment extends Fragment {
+public class SearchQuotePicturesFragment extends Fragment {
 
 
     //Log for Logcat
@@ -24,7 +24,7 @@ public class SearchPicturesOfQuotesFragment extends Fragment {
     private ViewPager mViewPager;
 
 
-    public SearchPicturesOfQuotesFragment() {
+    public SearchQuotePicturesFragment() {
     }
 
 
@@ -45,7 +45,7 @@ public class SearchPicturesOfQuotesFragment extends Fragment {
         mTabLayout = (TabLayout) view.findViewById(R.id.search_tabs);
         mViewPager = (ViewPager) view.findViewById(R.id.search_view_pager);
 
-        mViewPager.setAdapter(new SearchPicturesOfQuotesFragmentPagerAdapter(getChildFragmentManager()));
+        mViewPager.setAdapter(new SearchQuotePicturesFragmentPagerAdapter(getChildFragmentManager()));
         mTabLayout.setupWithViewPager(mViewPager);
 
 
