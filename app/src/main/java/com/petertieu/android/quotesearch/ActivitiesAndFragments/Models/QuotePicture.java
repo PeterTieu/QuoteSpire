@@ -1,9 +1,5 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Models;
 
-import android.graphics.Bitmap;
-
-import java.io.Serializable;
-
 
 //Model for Qutoe Pictures
 //Appplicable to the following fragments:
@@ -19,6 +15,7 @@ public class QuotePicture{
     boolean mIsFavorite;
     String mQuotePictureDownloadURI;
     int mRandomQuotePicturePosition; //Only used for RandomQuotePicturesFragment
+    int mCategoryQuotePicturePosition; //Only used for SearchQPByCategoryFragment
     byte[] mQuotePictureBitmapByteArray;
 
     String mQuotePictureBitmapFilePath;
@@ -63,6 +60,16 @@ public class QuotePicture{
 
     public void setRandomQuotePicturePosition(int randomQuotePicturePosition) {
         mRandomQuotePicturePosition = randomQuotePicturePosition;
+    }
+
+
+    public int getCategoryQuotePicturePosition(){
+        return mCategoryQuotePicturePosition;
+    }
+
+
+    public void setCategoryQuotePicturePosition(int categoryQuotePiturePosition){
+        mCategoryQuotePicturePosition = categoryQuotePiturePosition;
     }
 
 
