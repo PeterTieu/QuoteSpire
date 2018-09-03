@@ -78,6 +78,11 @@
     <string name="advanced_search_suggestions">ADVANCED search suggestions...</string>
 
 
+    <!--SearchQuotePicturesByCategoryFragment-->
+    <string name="search_quote_pictures_by_category_search_view_hint">Search by Category</string>
+    <string name="search_quote_pictures_by_author_search_view_hint">Search by Author</string>
+
+
     <!--QuotePictureDetailActivity-->
     <string name="quote_picture">Quote Picture</string>
 
