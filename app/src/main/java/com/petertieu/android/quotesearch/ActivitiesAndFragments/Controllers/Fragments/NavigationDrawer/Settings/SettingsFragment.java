@@ -1,7 +1,6 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -18,13 +17,15 @@ import android.widget.Toast;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDaySharedPreferences;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorSharedPref;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategoryFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategorySharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByAdvanced.SearchQuotesByAdvancedFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByAuthor.SearchQuotesByAuthorSharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByCategory.SearchQuotesByCategorySharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByKeyword.SearchQuotesByKeywordSharedPref;
 import com.petertieu.android.quotesearch.R;
-
-import org.w3c.dom.Text;
 
 public class SettingsFragment extends Fragment {
 
@@ -115,10 +116,15 @@ public class SettingsFragment extends Fragment {
                                         SearchQuotesByKeywordSharedPref.setSearchQuotesByKeywordStoredQuery(getActivity(), null);
                                         SearchQuotesByAuthorSharedPref.setSearchQuotesByAuthorStoredQuery(getActivity(), null);
                                         SearchQuotesByCategorySharedPref.setSearchQuotesByCategoryStoredQuery(getActivity(), null);
+                                        SearchQPByCategorySharedPref.setSearchQuotesByCategoryStoredQuery(getActivity(), null);
+                                        SearchQPByAuthorSharedPref.setSearchQuotesByAuthorStoredQuery(getActivity(), null);
+                                        SearchQuotesByAuthorSharedPref.setSearchQuotesByAuthorStoredQuery(getActivity(), null);
 
                                         SearchQuotesByAdvancedFragment.sKeywordSearchQuery = null;
                                         SearchQuotesByAdvancedFragment.sAuthorSearchQuery = null;
                                         SearchQuotesByAdvancedFragment.sCategorySearchQuery = null;
+                                        SearchQPByCategoryFragment.sQuotePictureCategorySearchQuery = null;
+                                        SearchQPByAuthorFragment.sQuotePictureAuthorSearchQuery = null;
 
                                         Toast.makeText(getActivity(), "Cleared all recent search queries", Toast.LENGTH_LONG).show();
 
