@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Layout of SearchQPByCategoryFragment-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--Search query feedback text-->
+    <TextView
+        android:id="@+id/search_quote_pictures_by_author_searched"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:textColor="@color/white"
+        tools:ignore="SpUsage"/>
+
+    <!--RecyclerView for displaying the list of QuotePictures-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/author_quote_pictures_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <!--Layout for KEYWORD SEARCH SUGGESTIONS-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!--Search suggestion - Title line-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="-60dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center">
+
+            <!--Search suggestions text-->
+            <TextView
+                android:id="@+id/search_quote_pictures_by_author_search_suggestions_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/author_search_suggestions"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                tools:ignore="RtlHardcoded,SpUsage"/>
+
+            <!--Search suggestions refresh button-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestions_refresh"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_button_refresh"
+                tools:ignore="RtlHardcoded"/>
+        </LinearLayout>
+
+
+        <!--Search suggestion - Row 1-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+
+            <!--Search suggestion 1-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_one"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+
+            <!--Spacer-->
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp">
+            </View>
+
+            <!--Search suggestion 2-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_two"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+        </LinearLayout>
+
+
+        <!--Search suggestion - Row 2-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+
+            <!--Search suggestion 3-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_three"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+
+            <!--Spacer-->
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp">
+            </View>
+
+            <!--Search suggestion 4-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_four"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+        </LinearLayout>
+
+
+        <!--Search suggestion - Row 3-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+
+            <!--Search suggestion 5-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_five"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+
+            <!--Spacer-->
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp">
+            </View>
+
+            <!--Search suggestion 6-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_six"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+        </LinearLayout>
+
+
+        <!--Search suggestion - Row 4-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+
+            <!--Search suggestion 7-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_seven"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+
+            <!--Spacer-->
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp">
+            </View>
+
+            <!--Search suggestion 8-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_eight"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+        </LinearLayout>
+
+
+        <!--Search suggestion - Row 5-->
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+
+            <!--Search suggestion 9-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_nine"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+
+            <!--Spacer-->
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp">
+            </View>
+
+            <!--Search suggestion 10-->
+            <Button
+                android:id="@+id/search_quote_pictures_by_author_search_suggestion_ten"
+                android:width="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11dp"
+                tools:ignore="SpUsage"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
