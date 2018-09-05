@@ -13,13 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.FavoritesFragment;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.SwipeTabs.FavoriteQuotesFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.FavoritesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.MyQuotes.MyQuotesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.RandomQuotePicturesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotes.RandomQuotesFragment;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchPicturesOfQuotes.SearchPicturesOfQuotesFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SearchQuotePicturesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SearchQuotesFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.SettingsFragment;
 import com.petertieu.android.quotesearch.R;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     SearchQuotesFragment mSearchQuotesFragment = new SearchQuotesFragment();
     RandomQuotesFragment mRandomQuotesFragment = new RandomQuotesFragment();
     RandomQuotePicturesFragment mRandomQuotePicturesFragment = new RandomQuotePicturesFragment();
-    SearchPicturesOfQuotesFragment mSearchPicturesOfQuotesFragment = new SearchPicturesOfQuotesFragment();
+    SearchQuotePicturesFragment mSearchQuotePicturesFragment = new SearchQuotePicturesFragment();
     MyQuotesFragment mMyQuotesFragment = new MyQuotesFragment();
     FavoritesFragment mFavoritesFragment = new FavoritesFragment();
     SettingsFragment mSettingsFragment = new SettingsFragment();
@@ -139,11 +138,12 @@ public class MainActivity extends AppCompatActivity {
                                 return true;
 
                             case R.id.search_pictures_of_quotes:
-                                openFragment(mSearchPicturesOfQuotesFragment);
+                                openFragment(mSearchQuotePicturesFragment);
                                 return true;
 
                             case R.id.my_quotes:
                                 openFragment(mMyQuotesFragment);
+                                return true;
 
                             case R.id.favorites:
                                 openFragment(mFavoritesFragment);
