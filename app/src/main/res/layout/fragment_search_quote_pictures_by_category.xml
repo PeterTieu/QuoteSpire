@@ -10,7 +10,7 @@
 
     <!--Search query feedback text-->
     <TextView
-        android:id="@+id/search_quote_pictures_by_author_category_searched"
+        android:id="@+id/search_quote_pictures_by_category_searched"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
