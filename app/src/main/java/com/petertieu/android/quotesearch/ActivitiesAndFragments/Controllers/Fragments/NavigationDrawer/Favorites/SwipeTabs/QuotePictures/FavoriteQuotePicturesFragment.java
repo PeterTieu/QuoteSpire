@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.SwipeTabs;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.SwipeTabs.QuotePictures;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,14 +9,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -26,22 +23,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureViewPagerActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotePicturesManager;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.QuotePicture;
 import com.petertieu.android.quotesearch.R;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -55,7 +44,7 @@ public class FavoriteQuotePicturesFragment extends Fragment{
     //Log for Logcat
     private final String TAG = "FQPicturesFragment";
 
-    private RecyclerView mFavoriteQuotePicturesRecyclerView;
+    private static RecyclerView mFavoriteQuotePicturesRecyclerView;
     private GridLayoutManager mGridLayoutManager;
 
     private FavoriteQuotePicturesAdapter mFavoriteQuotePicturesAdapter;
@@ -101,37 +90,24 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
         mFavoriteQuotePicturesRecyclerView = (RecyclerView) view.findViewById(R.id.favorite_quote_pictures_recycler_view);
-
-
-        mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
-//        mGridLayoutManager.setReverseLayout(true);
-//        mGridLayoutManager.setStackFromEnd(true);
-
-
-        mFavoriteQuotePicturesRecyclerView.setLayoutManager(mGridLayoutManager);
-//        mFavoriteQuotesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
-
-
-
-
         mNoFavoriteQuotePicturesTextView = (TextView) view.findViewById(R.id.no_favorite_quote_pictures_text_view);
 
 
 
-        getActivity().setTitle("Favorites");
+        mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mFavoriteQuotePicturesRecyclerView.setLayoutManager(mGridLayoutManager);
 
 
 
 
 
+        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
+        Collections.reverse(mFavoriteQuotePictures); //Reverse the order of the List of QuotePicture objects SO THAT recently favorited QuotePicture object is displayed at the top of the RecyclerView
 
 
+        mFavoriteQuotePicturesAdapter = new FavoriteQuotePicturesAdapter(mFavoriteQuotePictures);
 
-
-
-
+        mFavoriteQuotePicturesRecyclerView.setAdapter(mFavoriteQuotePicturesAdapter);
 
 
 
@@ -142,16 +118,6 @@ public class FavoriteQuotePicturesFragment extends Fragment{
             mNoFavoriteQuotePicturesTextView.setVisibility(View.VISIBLE);
         }
 
-
-
-        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
-
-        Collections.reverse(mFavoriteQuotePictures); //Reverse the order of the List of QuotePicture objects SO THAT recently favorited QuotePicture object is displayed at the top of the RecyclerView
-
-        Log.i(TAG, "mFavoriteQuotePictures.size() " + mFavoriteQuotePictures.size());
-
-        mFavoriteQuotePicturesAdapter = new FavoriteQuotePicturesAdapter(mFavoriteQuotePictures);
-        mFavoriteQuotePicturesRecyclerView.setAdapter(mFavoriteQuotePicturesAdapter);
 
 
 
@@ -162,23 +128,23 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
+        getActivity().setTitle("Favorites");
         return view;
     }
 
 
 
 
-
-
-
-
-
     public void updateUI(){
 
+        getActivity().invalidateOptionsMenu(); //Refresh the options menu every time a list item is added/removed, so we could re-evaluate whether the menu item "Remove all" is still appropriate
 
 
-        //Refresh the options menu every time a list item is added/removed, so we could re-evaluate whether the menu item "Remove all" is still appropriate
-        getActivity().invalidateOptionsMenu();
+
+        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
+        Collections.reverse(mFavoriteQuotePictures); //Reverse the order of the List of QuotePicture objects SO THAT recently favorited QuotePicture object is displayed at the top of the RecyclerView
+        mFavoriteQuotePicturesAdapter = new FavoriteQuotePicturesAdapter(mFavoriteQuotePictures);
+        mFavoriteQuotePicturesRecyclerView.setAdapter(mFavoriteQuotePicturesAdapter);
 
 
 
@@ -188,30 +154,15 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         else{
             mNoFavoriteQuotePicturesTextView.setVisibility(View.VISIBLE);
         }
-
-
-        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
-
-        Log.i(TAG, "Adapter exists");
-
-        mFavoriteQuotePicturesAdapter.setFavoriteQuotePictures(mFavoriteQuotePictures);
-//            mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-
-        mFavoriteQuotePicturesAdapter.notifyDataSetChanged();
-//
-//        }
-
-
     }
 
 
 
-    private List<QuotePicture> mFavoriteQuotePictures;
+
 
     private class FavoriteQuotePicturesAdapter extends RecyclerView.Adapter<FavoriteQuotePictureViewHolder>{
 
-
-
+        private List<QuotePicture> mFavoriteQuotePictures;
 
 
 
@@ -297,7 +248,7 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
             mListItemView = (LinearLayout) view.findViewById(R.id.list_item_favorite_quote_picture_view);
 
-            mFavoriteQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_image_view);
+            mFavoriteQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_detail_fragment_quote_image_view);
 
 
 
@@ -310,11 +261,6 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         public void bind(QuotePicture favoriteQuotePicture, final int position){
 
             mFavoriteQuotePicture = favoriteQuotePicture;
-
-
-
-
-
 
 
 
@@ -342,29 +288,6 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
-
-//            Bitmap bitmap = null;
-//
-//            try {
-//                File f = new File(mFavoriteQuotePicture.getQuotePictureBitmapFilePath(), mFavoriteQuotePicture.getId() + ".jpg");
-//                bitmap = BitmapFactory.decodeStream(new FileInputStream(f));
-//                mFavoriteQuotePictureImageView.setImageBitmap(bitmap);
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
-
-
-
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//            byte[] quotePictureBitmapByteArray = stream.toByteArray();
-//            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).setQuotePictureBitmapByteArray(quotePictureBitmapByteArray);
-
-
-
-
-
-
             Log.i(TAG, "ID: " + mFavoriteQuotePicture.getId());
             Log.i(TAG, "Quote Picture Bitmap path: " + mFavoriteQuotePicture.getQuotePictureBitmapFilePath());
 
@@ -376,16 +299,6 @@ public class FavoriteQuotePicturesFragment extends Fragment{
             }
 
 
-
-
-
-
-
-//            List<QuotePicture> favoriteQuotePictures = FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures();
-//            Bitmap favoriteQuotePictureBitmap = favoriteQuotePictures.get(0).getQuotePictureBitmap();
-//            Drawable favoriteQuotePictureDrawable = new BitmapDrawable(getResources(), favoriteQuotePictureBitmap);
-//            mFavoriteQuotePictureImageView.setImageDrawable(favoriteQuotePictureDrawable);
-//            mFavoriteQuotePictureImageView.setVisibility(View.VISIBLE);
 
             Log.i(TAG, "CURRENT SIZE: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size());
             Log.i(TAG, "CURRENT ID: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId());
@@ -399,13 +312,13 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
                 @Override
                 public void onClick(View view) {
-                    Intent quotePictureActivityIntent = QuotePictureViewPagerActivity.newIntent(
+                    Intent favoriteQuotePictureViewPagerActivityIntent = FavoriteQuotePictureViewPagerActivity.newIntent(
                             getContext(),
                             FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size(),
-                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId(),
-                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getQuotePictureBitmapByteArray());
+                            mFavoriteQuotePicture.getQuotePictureBitmapFilePath(),
+                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId());
 
-                    startActivity(quotePictureActivityIntent);
+                    startActivity(favoriteQuotePictureViewPagerActivityIntent);
 
 
                 }
@@ -414,11 +327,6 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
         }
-
-
-
-
-
 
 
         private void loadImageFromStorage(String path, String quotePictureID) {
@@ -432,13 +340,6 @@ public class FavoriteQuotePicturesFragment extends Fragment{
             }
 
         }
-
-
-
-
-
-
-
 
 
     }
@@ -625,6 +526,8 @@ public class FavoriteQuotePicturesFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
+
+        updateUI(); //Update the UI in case a Quote Picture has been "un-favorited" in the FavoriteqQuotePictureDetailFragment, and then the user returns to this fragment with a back button
 
         Log.i(TAG, "onStart() called");
     }
