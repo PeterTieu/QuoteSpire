@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--Layout of RandomQuotePicturesFragment, SearchQuotePicturesByCategoryFragment, and SearchQuotePicturesByAuthorFragment-->
+<!--Layout of RandomQuotePicturesFragment-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
 
     <!--RecyclerView for displaying the list of QuotePictueres-->
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/quote_pictures_recycler_view"
+        android:id="@+id/random_quote_pictures_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
