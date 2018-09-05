@@ -87,6 +87,13 @@
     <string name="quote_picture">Quote Picture</string>
 
 
+    <!--MyQuotesFragment-->
+    <string name="add_new_quote">Add New Quote</string>
+    <string name="no_my_quotes_text">There are no Quotes...</string>
+    <string name="enter_the_quote_author">Enter the Quote Author</string>
+    <string name="enter_the_quote">Enter The Quote</string>
+
+
 
     <!--SettingsFragment-->
     <string name="push_notification">Push Notification</string>
