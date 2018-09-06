@@ -14,8 +14,11 @@ public class QuotePicture{
     String mId;
     boolean mIsFavorite;
     String mQuotePictureDownloadURI;
+
     int mRandomQuotePicturePosition; //Only used for RandomQuotePicturesFragment
     int mCategoryQuotePicturePosition; //Only used for SearchQPByCategoryFragment
+    int mAuthorQuotePicturePosition; //Only used for SearchQPByAuthorFragment
+
     byte[] mQuotePictureBitmapByteArray;
 
     String mQuotePictureBitmapFilePath;
@@ -70,6 +73,16 @@ public class QuotePicture{
 
     public void setCategoryQuotePicturePosition(int categoryQuotePiturePosition){
         mCategoryQuotePicturePosition = categoryQuotePiturePosition;
+    }
+
+
+    public int getAuthorQuotePicturePosition(){
+        return mAuthorQuotePicturePosition;
+    }
+
+
+    public void setAuthorQuotePicturePosition(int authorQuotePiturePosition){
+        mAuthorQuotePicturePosition = authorQuotePiturePosition;
     }
 
 
