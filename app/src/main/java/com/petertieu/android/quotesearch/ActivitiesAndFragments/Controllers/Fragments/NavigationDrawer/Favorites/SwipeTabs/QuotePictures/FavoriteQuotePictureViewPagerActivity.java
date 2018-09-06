@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.SwipeTabs.QuotePictures;
 
 
 import android.content.Context;
@@ -12,21 +12,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.FavoriteQuotePictureDetailFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureDetailFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotePicturesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.QuotePicture;
 import com.petertieu.android.quotesearch.R;
 
 import java.util.List;
 
-public class FavoriteQuotePictureViewPagerActivity extends AppCompatActivity implements QuotePictureDetailFragment.Callbacks{
+public class FavoriteQuotePictureViewPagerActivity extends AppCompatActivity{
 
 
 
-    @Override
-    public void scrollViewPagerBackward(){
 
-    }
 
 
 
@@ -172,21 +169,6 @@ public class FavoriteQuotePictureViewPagerActivity extends AppCompatActivity imp
 
 
 
-    @Override
-    public void scrollViewPagerForward(){
-
-        for (int i = 0; i < mActualSizeOfQuotePictursList; i++) {
-
-
-            if (mQuotePicturesList.get(i).getId().equals(mQuotePictureID)) {
-
-//                sViewPager.setCurrentItem(i);
-
-                sViewPager.setCurrentItem(i+1);
-                break;
-            }
-        }
-    }
 
 
 

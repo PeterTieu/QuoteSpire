@@ -1,11 +1,9 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes.SwipeTabs;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.SwipeTabs.Quotes;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
-import android.os.Parcelable;
-import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -89,13 +87,6 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-
-
-
-
-
-
-
     //Override the onCreateView(..) fragment lifecycle callback method
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -110,10 +101,10 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-
-
-
         mFavoriteQuotesRecyclerView = (RecyclerView) view.findViewById(R.id.favorite_quotes_recycler_view);
+        mNoFavoriteQuotesText = (TextView) view.findViewById(R.id.no_favorite_quotes_text);
+
+
 
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
@@ -129,22 +120,8 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-        mNoFavoriteQuotesText = (TextView) view.findViewById(R.id.no_favorite_quotes_text);
-
-
 
         getActivity().setTitle("Favorites");
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -172,9 +149,6 @@ public class FavoriteQuotesFragment extends Fragment {
 
         return view;
     }
-
-
-
 
 
 

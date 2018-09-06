@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.FavoriteQuotes;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.SwipeTabs.QuotePictures;
 
 import android.Manifest;
 import android.content.Context;
@@ -26,7 +26,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.FavoriteQuotePictureViewPagerActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotePicturesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.QuotePicture;
 import com.petertieu.android.quotesearch.R;
@@ -75,7 +74,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
         //Create argument-bundle to pass data to QuotePictureDetailFragment
         Bundle argumentBundle = new Bundle();
 
-//        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
+//        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID_KEY, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
 //        argumentBundle.putByteArray(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
 
         argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH, quotePictureBitmapFilePath);
@@ -134,7 +133,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 //            Log.i(TAG, "ID: " + mQuotePicture.getId());
 
 
-//            mQuotePictureID = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
+//            mQuotePictureID = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID_KEY);
 //            mQuotePictureByteArray = getArguments().getByteArray(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY);
 
             mQuotePictureBitmapFilePath = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH);
