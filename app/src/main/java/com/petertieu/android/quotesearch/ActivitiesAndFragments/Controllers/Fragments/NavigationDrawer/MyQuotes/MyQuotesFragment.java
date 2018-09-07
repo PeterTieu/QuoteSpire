@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,15 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class MyQuotesFragment extends Fragment{
 
@@ -33,16 +36,16 @@ public class MyQuotesFragment extends Fragment{
     private final String TAG = "MyQuotesFragment"; //Log for Logcat
 
     private LinearLayoutManager mLinearLayoutManager;
-    private static RecyclerView mMyQuotesRecyclerView;
-    private TextView mNoMyQuotesText;
+    private RecyclerView mMyQuotesRecyclerView;
+    private TextView mNoMyQuotesTextView;
 
-    private static MyQuotesAdapter mMyQuotesAdapter;
+    private MyQuotesAdapter mMyQuotesAdapter;
     private MyQuoteViewHolder mMyQuoteViewHolder;
 
 
 
 
-    private static List<Quote> mMyQuotesList = new ArrayList<>();
+    private List<Quote> mMyQuotesList = new ArrayList<>();
 
 
     private static final int REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = 1;   //Request code for receiving results from dialog fragment to delete Pix
@@ -89,14 +92,7 @@ public class MyQuotesFragment extends Fragment{
 
 
         mMyQuotesRecyclerView = (RecyclerView) view.findViewById(R.id.my_quotes_recycler_view);
-        mNoMyQuotesText = (TextView) view.findViewById(R.id.no_my_quotes_text);
-
-
-
-//        Quote quote1 = new Quote(UUID.randomUUID().toString());
-//        mMyQuotesList.add(quote1);
-
-
+        mNoMyQuotesTextView = (TextView) view.findViewById(R.id.no_my_quotes_text);
 
 
 
@@ -120,7 +116,7 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-        mNoMyQuotesText.setVisibility(View.GONE);
+        mNoMyQuotesTextView.setVisibility(View.GONE);
         mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
 
 
@@ -190,7 +186,7 @@ public class MyQuotesFragment extends Fragment{
             String quote = myQuote.getQuote();
 
 
-            myQuoteViewHolder.bindToQuote(ID, author, quote);
+            myQuoteViewHolder.bindToQuote(myQuote);
 
 
 
@@ -211,12 +207,16 @@ public class MyQuotesFragment extends Fragment{
     private class MyQuoteViewHolder extends RecyclerView.ViewHolder{
 
 
-        TextView authorTextView;
-        CheckBox favoriteIcon;
-        Button shareIcon;
-        TextView quoteTextView;
-        Button editIcon;
-        Button deleteIcon;
+        TextView mAuthorTextView;
+        CheckBox mFavoriteIcon;
+        Button mShareIcon;
+        Button mEditIcon;
+        Button mDeleteIcon;
+
+        TextView mQuoteTextView;
+
+
+        Quote mMyQuote;
 
 
 
@@ -225,10 +225,10 @@ public class MyQuotesFragment extends Fragment{
             super(view);
 
 
-            authorTextView = (TextView) view.findViewById(R.id.my_quote_author_name);
-            favoriteIcon = (CheckBox) view.findViewById(R.id.my_quote_favorite_icon);
-            shareIcon = (Button) view.findViewById(R.id.my_quote_share_icon);
-            quoteTextView = (TextView) view.findViewById(R.id.my_quote_quote);
+            mAuthorTextView = (TextView) view.findViewById(R.id.my_quote_author_name);
+            mFavoriteIcon = (CheckBox) view.findViewById(R.id.my_quote_favorite_icon);
+            mShareIcon = (Button) view.findViewById(R.id.my_quote_share_icon);
+            mQuoteTextView = (TextView) view.findViewById(R.id.my_quote_quote);
 
 
 
@@ -236,12 +236,117 @@ public class MyQuotesFragment extends Fragment{
         }
 
 
-        public void bindToQuote(String ID, String author, String quote){
+        public void bindToQuote(Quote myQuote){
 
-            authorTextView.setText(author);
-            quoteTextView.setText(quote);
+            mMyQuote = myQuote;
+
+
+            //============ mAuthorTextView ===========================
+            mAuthorTextView.setText(mMyQuote.getAuthor());
+
+
+
+
+
+            //============ mFavoriteIcon ===========================
+
+            try {
+                //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mMyQuote.getId()) != null) {
+
+                    mFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+
+                }
+                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mMyQuote.getId()) == null) {
+
+                    mFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
+
+                }
+
+
+            }
+            catch (NullPointerException npe){
+
+                mAuthorTextView.setVisibility(View.GONE);
+                mFavoriteIcon.setVisibility(View.GONE);
+                mShareIcon.setVisibility(View.GONE);
+                mQuoteTextView.setVisibility(View.GONE);
+
+
+                mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+
+            }
+
+
+
+
+
+
+            mFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+
+                    mFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
+
+
+                    if (isChecked == true){
+
+                        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mMyQuote.getId()) == null){
+                            FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mMyQuote);
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mMyQuote);
+                        }
+                        else{
+                            //Do nothing
+                        }
+
+                    }
+
+                    if (isChecked == false){
+                        FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mMyQuote);
+                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mMyQuote);
+
+                    }
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //============ mQuoteTextView ===========================
+            mQuoteTextView.setText("\"" + myQuote.getQuote() + "\"");
+
+
 
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -392,6 +497,11 @@ public class MyQuotesFragment extends Fragment{
 
 
             }
+
+
+            Toast toast = Toast.makeText(getContext(), "Added new Quote", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
 
 
 
