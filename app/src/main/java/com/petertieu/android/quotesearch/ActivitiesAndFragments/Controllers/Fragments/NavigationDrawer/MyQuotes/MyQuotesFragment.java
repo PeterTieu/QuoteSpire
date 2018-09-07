@@ -315,6 +315,31 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+            //============ mShareIcon ===========================
+
+            mShareIcon.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view){
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+
+                    shareIntent.setType("text/plain");
+
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Favorite Quote");
+
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getFavoriteQuoteShareString());
+
+                    shareIntent = Intent.createChooser(shareIntent, "Share Quote via");
+
+                    startActivity(shareIntent);
+                }
+
+            });
+
+
+
+
+
 
 
 
@@ -334,6 +359,15 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+
+
+    private String getFavoriteQuoteShareString(){
+        String favoriteQuoteQuoteString = "\"" + mMyQuote.getQuote() + "\"";
+
+        String quoteOfTheDayQuoteAuthorString = " - " + mMyQuote.getAuthor();
+
+        return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
+    }
 
 
 
