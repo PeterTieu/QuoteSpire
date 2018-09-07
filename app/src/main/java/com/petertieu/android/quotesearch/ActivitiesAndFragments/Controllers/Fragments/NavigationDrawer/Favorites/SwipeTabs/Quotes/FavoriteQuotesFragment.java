@@ -492,7 +492,19 @@ public class FavoriteQuotesFragment extends Fragment {
 //            if (mFavoriteQuote.getQuote() != null){
 //            }
 
-            mFavoriteQuoteAuthorName.setText(mFavoriteQuote.getAuthor());
+//            mFavoriteQuoteAuthorName.setText(mFavoriteQuote.getAuthor());
+
+            if (mFavoriteQuote.getAuthor().length() == 0){
+                mFavoriteQuoteAuthorName.setText("* No Author *");
+                mFavoriteQuoteAuthorName.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
+            }
+            else{
+                mFavoriteQuoteAuthorName.setText(mFavoriteQuote.getAuthor());
+                mFavoriteQuoteAuthorName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            }
+
+
+
 
 
             mFavoriteQuoteFavoriteIcon.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
@@ -500,7 +512,18 @@ public class FavoriteQuotesFragment extends Fragment {
 //            mFavoriteQuoteShareIcon
 
 
-            mFavoriteQuoteQuote.setText("\"" + mFavoriteQuote.getQuote() + "\"");
+//            mFavoriteQuoteQuote.setText("\"" + mFavoriteQuote.getQuote() + "\"");
+
+
+            if (mFavoriteQuote.getQuote().length() == 0){
+                mFavoriteQuoteQuote.setText("* No Quote Text *");
+                mFavoriteQuoteQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
+            }
+            else{
+                mFavoriteQuoteQuote.setText("\"" + mFavoriteQuote.getQuote() + "\"");
+                mFavoriteQuoteQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            }
+
         }
 
 
