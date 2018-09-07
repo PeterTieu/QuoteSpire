@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -67,7 +69,6 @@ public class MyQuotesFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-
         Log.i(TAG, "onCreate() called");
 
         setHasOptionsMenu(true);
@@ -115,9 +116,15 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+        if (mMyQuotesList.size() == 0){
+            mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+            mMyQuotesRecyclerView.setVisibility(View.GONE);
+        }
+        else{
+            mNoMyQuotesTextView.setVisibility(View.GONE);
+            mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
+        }
 
-        mNoMyQuotesTextView.setVisibility(View.GONE);
-        mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
 
 
         getActivity().setTitle("My Quotes");
@@ -242,7 +249,15 @@ public class MyQuotesFragment extends Fragment{
 
 
             //============ mAuthorTextView ===========================
-            mAuthorTextView.setText(mMyQuote.getAuthor());
+            if (mMyQuote.getAuthor().length() == 0){
+                mAuthorTextView.setText("* No Author *");
+                mAuthorTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
+            }
+            else{
+                mAuthorTextView.setText(mMyQuote.getAuthor());
+                mAuthorTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            }
+
 
 
 
@@ -349,7 +364,16 @@ public class MyQuotesFragment extends Fragment{
 
 
             //============ mQuoteTextView ===========================
-            mQuoteTextView.setText("\"" + myQuote.getQuote() + "\"");
+            if (mMyQuote.getQuote().length() == 0){
+                mQuoteTextView.setText("* No Quote Text *");
+                mQuoteTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
+            }
+            else{
+                mQuoteTextView.setText("\"" + myQuote.getQuote() + "\"");
+                mQuoteTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            }
+
+
 
 
 
@@ -533,10 +557,24 @@ public class MyQuotesFragment extends Fragment{
             }
 
 
+
+
+
+
             Toast toast = Toast.makeText(getContext(), "Added new Quote", Toast.LENGTH_LONG);
             toast.setGravity(Gravity.BOTTOM, 0, 0);
             toast.show();
 
+
+
+            if (mMyQuotesList.size() == 0){
+                mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+                mMyQuotesRecyclerView.setVisibility(View.GONE);
+            }
+            else{
+                mNoMyQuotesTextView.setVisibility(View.GONE);
+                mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
+            }
 
 
 
