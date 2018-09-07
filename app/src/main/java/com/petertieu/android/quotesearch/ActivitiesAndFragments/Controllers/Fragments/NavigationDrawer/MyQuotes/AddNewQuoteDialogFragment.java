@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.petertieu.android.quotesearch.R;
 
@@ -80,7 +81,7 @@ public class AddNewQuoteDialogFragment extends DialogFragment{
                 .setCustomTitle(dialogTitle)
                 .setMessage(null)
                 .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton(android.R.string.yes,
+                .setPositiveButton(R.string.add_quote,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -99,6 +100,17 @@ public class AddNewQuoteDialogFragment extends DialogFragment{
                                 // the 'positive' button ("Add Quote"), the list-item in MyQuotesFragment wouldn't be displayed until the Fragment view is reloaded
                                 inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
+
+
+                                //If NOTHING is typed into the Author.. AND... Quote EditTexts
+                                if (author.length() == 0 && quote.length() == 0){
+
+                                    Toast toast = Toast.makeText(getContext(), "No Quote Added", Toast.LENGTH_LONG);
+                                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                                    toast.show();
+
+                                    return;
+                                }
 
 
                                 sendResults(Activity.RESULT_OK, ID, author, quote);
