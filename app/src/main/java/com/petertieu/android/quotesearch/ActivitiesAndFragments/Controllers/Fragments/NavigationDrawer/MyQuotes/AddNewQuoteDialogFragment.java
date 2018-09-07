@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -65,6 +66,11 @@ public class AddNewQuoteDialogFragment extends DialogFragment{
 
 
 
+        //Force the soft-keyboard to show
+        // Without this implementation: When the DialogFragment is opened, mAuthorEditText focusses automatically, but the soft-keyboard doesn't show up automatically)
+        final InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
 
 
 
@@ -87,6 +93,11 @@ public class AddNewQuoteDialogFragment extends DialogFragment{
                                 Log.i(TAG, "Quote ID: " + ID);
                                 Log.i(TAG, "Quote Author: " + author);
                                 Log.i(TAG, "Quote Quote: " + quote);
+
+
+                                //Accidental code: Somehow, adding this line fixes the error whereby when the user manually closes the soft-keyboard before pressing
+                                // the 'positive' button ("Add Quote"), the list-item in MyQuotesFragment wouldn't be displayed until the Fragment view is reloaded
+                                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
 
 
