@@ -252,6 +252,7 @@ public class MyQuotesFragment extends Fragment{
             mFavoriteIcon = (CheckBox) view.findViewById(R.id.my_quote_favorite_icon);
             mShareIcon = (Button) view.findViewById(R.id.my_quote_share_icon);
             mQuoteTextView = (TextView) view.findViewById(R.id.my_quote_quote);
+            mDeleteIcon = (Button) view.findViewById(R.id.my_quote_delete_icon);
 
 
 
@@ -372,6 +373,26 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+
+            //============ mDeleteIcon ===========================
+            mDeleteIcon.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view){
+                    MyQuotesManager.get(getActivity()).deleteMyQuote(mMyQuote);
+
+                    mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
+                    mMyQuotesAdapter.notifyDataSetChanged();
+
+
+                    if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
+                        mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+                        mMyQuotesRecyclerView.setVisibility(View.GONE);
+                    }
+
+                }
+
+            });
 
 
 
