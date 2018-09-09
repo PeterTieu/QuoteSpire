@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.MyQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
@@ -47,7 +48,8 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-    private List<Quote> mMyQuotesList = new ArrayList<>();
+//    private List<Quote> mMyQuotesList = new ArrayList<>();
+//    private List<Quote> mMyQuotesList = MyQuotesManager.get(getContext()).
 
 
     private static final int REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = 1;   //Request code for receiving results from dialog fragment to delete Pix
@@ -109,14 +111,25 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-        mMyQuotesAdapter = new MyQuotesAdapter(mMyQuotesList);
+//        mMyQuotesAdapter = new MyQuotesAdapter(mMyQuotesList);
+        mMyQuotesAdapter = new MyQuotesAdapter(MyQuotesManager.get(getActivity()).getMyQuotes());
         mMyQuotesRecyclerView.setAdapter(mMyQuotesAdapter);
 
 
 
 
 
-        if (mMyQuotesList.size() == 0){
+//        if (mMyQuotesList.size() == 0){
+//            mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+//            mMyQuotesRecyclerView.setVisibility(View.GONE);
+//        }
+//        else{
+//            mNoMyQuotesTextView.setVisibility(View.GONE);
+//            mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
+//        }
+
+
+        if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
             mNoMyQuotesTextView.setVisibility(View.VISIBLE);
             mMyQuotesRecyclerView.setVisibility(View.GONE);
         }
@@ -150,12 +163,14 @@ public class MyQuotesFragment extends Fragment{
     private class MyQuotesAdapter extends RecyclerView.Adapter<MyQuoteViewHolder> {
 
 
-//        private List<Quote> mAdapterMyQuotesList;
+        private List<Quote> mMyQuotesList;
 
 
         public MyQuotesAdapter(List<Quote> quotesList){
             mMyQuotesList = quotesList;
+
         }
+
 
         public void setMyQuotesList(List<Quote> quotesList){
             mMyQuotesList = quotesList;
@@ -166,6 +181,7 @@ public class MyQuotesFragment extends Fragment{
         @Override
         public int getItemCount(){
             return mMyQuotesList.size();
+
         }
 
 
@@ -532,29 +548,64 @@ public class MyQuotesFragment extends Fragment{
 //            mMyQuotesRecyclerView.setAdapter(mMyQuotesAdapter);
 
 
-            mMyQuotesList.add(myQuote);
+
+
+//            mMyQuotesList.add(myQuote);
+            MyQuotesManager.get(getActivity()).addMyQuote(myQuote);
+
+
+
+
+
+
+
+
 
 //            mMyQuotesAdapter.setMyQuotesList(mMyQuotesList);
 //            mMyQuotesAdapter.notifyDataSetChanged();
+            mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
+            mMyQuotesAdapter.notifyDataSetChanged();
 
 
-            if (mMyQuotesList == null){
-                Log.i(TAG, "NULLLL");
-            }
-            else{
-                Log.i(TAG, "EXISTSSS");
 
 
-                for (Quote quotee : mMyQuotesList){
-
-                    Log.i(TAG, "mMyQuotesList ID: " + quotee.getId());
-                    Log.i(TAG, "mMyQuotesList Author: " + quotee.getAuthor());
-                    Log.i(TAG, "mMyQuotesList Quote: " + quotee.getQuote());
-
-                }
 
 
-            }
+
+
+
+//            if (mMyQuotesList == null){
+//                Log.i(TAG, "NULLLL");
+//            }
+//            else{
+//                Log.i(TAG, "EXISTSSS");
+//
+//
+//                for (Quote quotee : mMyQuotesList){
+//
+//                    Log.i(TAG, "mMyQuotesList ID: " + quotee.getId());
+//                    Log.i(TAG, "mMyQuotesList Author: " + quotee.getAuthor());
+//                    Log.i(TAG, "mMyQuotesList Quote: " + quotee.getQuote());
+//
+//                }
+//
+//
+//            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -567,7 +618,17 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-            if (mMyQuotesList.size() == 0){
+//            if (mMyQuotesList.size() == 0){
+//                mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+//                mMyQuotesRecyclerView.setVisibility(View.GONE);
+//            }
+//            else{
+//                mNoMyQuotesTextView.setVisibility(View.GONE);
+//                mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
+//            }
+
+
+            if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
                 mNoMyQuotesTextView.setVisibility(View.VISIBLE);
                 mMyQuotesRecyclerView.setVisibility(View.GONE);
             }
