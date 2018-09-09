@@ -1,6 +1,7 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.MyQuotes;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -30,8 +30,9 @@ import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.MyQuotesM
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.callback.Callback;
 
 public class MyQuotesFragment extends Fragment{
 
@@ -53,17 +54,29 @@ public class MyQuotesFragment extends Fragment{
 
 
     private static final int REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = 1;   //Request code for receiving results from dialog fragment to delete Pix
-    private static final String IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = "AddNewQuoteDialogFragment";                                                 //Identifier of dialog fragment of DatePicker
+    private static final String IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = "AddNewMyQuoteDialogFragment"; //Identifier of AddMyQuoteDialogFragment
+
+    private static final int REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = 2; //Request code for receiving boolean result on whether user confirmed deletion of the Quote
+    private static final String IDENTIFIER_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = "DeleteMyQuoteConfrmationDialogFragment"; //Identifier of dialog fragment of DeleteMyQuoteConfirmationDialogFragment
+
+
+
+
+
+
+
 
 
 
 
 
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
+    public void onAttach(Context context){
+        super.onAttach(context);
 
         Log.i(TAG, "onAttach() called");
+
+
     }
 
 
@@ -110,23 +123,10 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-//        mMyQuotesAdapter = new MyQuotesAdapter(mMyQuotesList);
         mMyQuotesAdapter = new MyQuotesAdapter(MyQuotesManager.get(getActivity()).getMyQuotes());
         mMyQuotesRecyclerView.setAdapter(mMyQuotesAdapter);
 
 
-
-
-
-//        if (mMyQuotesList.size() == 0){
-//            mNoMyQuotesTextView.setVisibility(View.VISIBLE);
-//            mMyQuotesRecyclerView.setVisibility(View.GONE);
-//        }
-//        else{
-//            mNoMyQuotesTextView.setVisibility(View.GONE);
-//            mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
-//        }
 
 
         if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
@@ -141,10 +141,6 @@ public class MyQuotesFragment extends Fragment{
 
 
         getActivity().setTitle("My Quotes");
-
-
-
-
 
 
 
@@ -209,7 +205,7 @@ public class MyQuotesFragment extends Fragment{
             String quote = myQuote.getQuote();
 
 
-            myQuoteViewHolder.bindToQuote(myQuote);
+            myQuoteViewHolder.bindToQuote(myQuote, position);
 
 
 
@@ -225,6 +221,7 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+    boolean mConfirmDelete = false;
 
 
     private class MyQuoteViewHolder extends RecyclerView.ViewHolder{
@@ -240,6 +237,7 @@ public class MyQuotesFragment extends Fragment{
 
 
         Quote mMyQuote;
+        int mPosition;
 
 
 
@@ -260,9 +258,10 @@ public class MyQuotesFragment extends Fragment{
         }
 
 
-        public void bindToQuote(Quote myQuote){
+        public void bindToQuote(Quote myQuote, int position){
 
             mMyQuote = myQuote;
+            mPosition = position;
 
 
             //============ mAuthorTextView ===========================
@@ -379,16 +378,10 @@ public class MyQuotesFragment extends Fragment{
 
                 @Override
                 public void onClick(View view){
-                    MyQuotesManager.get(getActivity()).deleteMyQuote(mMyQuote);
-
-                    mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
-                    mMyQuotesAdapter.notifyDataSetChanged();
 
 
-                    if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
-                        mNoMyQuotesTextView.setVisibility(View.VISIBLE);
-                        mMyQuotesRecyclerView.setVisibility(View.GONE);
-                    }
+                    deleteMyQuoteConfirmationDialogFragment(mMyQuote.getAuthor(), mMyQuote.getQuote(), mPosition); //Open DialogFragment to confirm Quote deletion
+
 
                 }
 
@@ -422,19 +415,33 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-    private String getFavoriteQuoteShareString(){
-        String favoriteQuoteQuoteString = "\"" + mMyQuote.getQuote() + "\"";
-
-        String quoteOfTheDayQuoteAuthorString = " - " + mMyQuote.getAuthor();
-
-        return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
-    }
 
 
 
 
+        private String getFavoriteQuoteShareString() {
+            String favoriteQuoteQuoteString = "\"" + mMyQuote.getQuote() + "\"";
+
+            String quoteOfTheDayQuoteAuthorString = " - " + mMyQuote.getAuthor();
+
+            return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
+        }
 
 
+
+
+
+
+        //Helper method - open DialogFramgent to confirm Quote deletion
+        private void deleteMyQuoteConfirmationDialogFragment(String author, String quote, int position){
+            FragmentManager fragmentManager = getFragmentManager();
+
+            DeleteMyQuoteConfirmationDialogFragment deleteMyQuoteConfirmationDialogFragment = DeleteMyQuoteConfirmationDialogFragment.newInstance(author, quote, position);
+
+            deleteMyQuoteConfirmationDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT);
+
+            deleteMyQuoteConfirmationDialogFragment.show(fragmentManager, IDENTIFIER_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT);
+        }
 
 
 
@@ -494,7 +501,7 @@ public class MyQuotesFragment extends Fragment{
             case (R.id.menu_item_add_new_quote):
 
 
-                addQuotesDialogFragment();
+                addMyQuoteDialogFragment();
 
                 return true;
 
@@ -507,16 +514,16 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-    private void addQuotesDialogFragment() {
+    private void addMyQuoteDialogFragment() {
 
         FragmentManager fragmentManager = getFragmentManager();
 
-        AddNewQuoteDialogFragment addNewQuoteDialogFragment = AddNewQuoteDialogFragment.newInstance();
+        AddNewMyQuoteDialogFragment addNewMyQuoteDialogFragment = AddNewMyQuoteDialogFragment.newInstance();
 
-        addNewQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT);
+        addNewMyQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT);
 
 
-        addNewQuoteDialogFragment.show(fragmentManager, IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT);
+        addNewMyQuoteDialogFragment.show(fragmentManager, IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT);
 
 
     }
@@ -548,9 +555,9 @@ public class MyQuotesFragment extends Fragment{
 
         if (requestCode == REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT){
 
-            String ID = intent.getStringExtra(AddNewQuoteDialogFragment.EXTRA_ID);
-            String author = intent.getStringExtra(AddNewQuoteDialogFragment.EXTRA_AUTHOR);
-            String quote = intent.getStringExtra(AddNewQuoteDialogFragment.EXTRA_QUOTE);
+            String ID = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_ID);
+            String author = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_AUTHOR);
+            String quote = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_QUOTE);
 
             Log.i(TAG, "onActivityResult(..) ID: " + ID);
             Log.i(TAG, "onActivityResult(..) AUTHOR: " + author);
@@ -563,72 +570,12 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-
-//            mMyQuotesAdapter = new MyQuotesAdapter(mMyQuotesList);
-//            mMyQuotesRecyclerView.setAdapter(mMyQuotesAdapter);
-
-
-
-
-//            mMyQuotesList.add(myQuote);
             MyQuotesManager.get(getActivity()).addMyQuote(myQuote);
 
 
 
-
-
-
-
-
-
-//            mMyQuotesAdapter.setMyQuotesList(mMyQuotesList);
-//            mMyQuotesAdapter.notifyDataSetChanged();
             mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
             mMyQuotesAdapter.notifyDataSetChanged();
-
-
-
-
-
-
-
-
-
-//            if (mMyQuotesList == null){
-//                Log.i(TAG, "NULLLL");
-//            }
-//            else{
-//                Log.i(TAG, "EXISTSSS");
-//
-//
-//                for (Quote quotee : mMyQuotesList){
-//
-//                    Log.i(TAG, "mMyQuotesList ID: " + quotee.getId());
-//                    Log.i(TAG, "mMyQuotesList Author: " + quotee.getAuthor());
-//                    Log.i(TAG, "mMyQuotesList Quote: " + quotee.getQuote());
-//
-//                }
-//
-//
-//            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -638,15 +585,6 @@ public class MyQuotesFragment extends Fragment{
             toast.show();
 
 
-
-//            if (mMyQuotesList.size() == 0){
-//                mNoMyQuotesTextView.setVisibility(View.VISIBLE);
-//                mMyQuotesRecyclerView.setVisibility(View.GONE);
-//            }
-//            else{
-//                mNoMyQuotesTextView.setVisibility(View.GONE);
-//                mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
-//            }
 
 
             if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
@@ -660,17 +598,55 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+        }
 
 
 
 
+        if (requestCode == REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT){
 
+            boolean confirmDelete = intent.getBooleanExtra(DeleteMyQuoteConfirmationDialogFragment.EXTRA_SHOULD_DELETE_MY_QUOTE_ID, false);
+            int position = intent.getIntExtra(DeleteMyQuoteConfirmationDialogFragment.EXTRA_POSITION_ID, 0);
+
+
+
+
+            if (confirmDelete){
+
+                //=========== Delete the Quote =====================================================
+                List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes(); //Get full list of Quotes
+                MyQuotesManager.get(getActivity()).deleteMyQuote(myQuotesList.get(position)); //Delete the Quote based on its position in the list
+
+
+                //=========== Update RecyclerView Adapter =====================================================
+                mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes()); //
+                mMyQuotesAdapter.notifyDataSetChanged();
+
+
+                //=========== Configure View =====================================================
+                //If NO Quotes are present, show the Text saying "There are no Quotes..."
+                if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
+                    mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+                    mMyQuotesRecyclerView.setVisibility(View.GONE);
+                }
+
+
+                ///=========== Show Toast =====================================================
+                Toast quoteDeleteToast = Toast.makeText(getActivity(), "Quote deleted", Toast.LENGTH_LONG);
+                quoteDeleteToast.show();
+            }
 
         }
 
 
 
+
     }
+
+
+
+
+
 
 
 
