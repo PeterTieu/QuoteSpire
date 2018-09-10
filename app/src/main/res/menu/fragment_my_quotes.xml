@@ -10,4 +10,11 @@
         android:icon="@drawable/ic_button_add"
         app:showAsAction="always" />
 
+
+    <item
+        android:id="@+id/menu_item_remove_all_my_quotes"
+        android:title="@string/remove_all_my_quotes"
+        app:showAsAction="never" />
+
+
 </menu>
