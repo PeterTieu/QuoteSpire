@@ -53,11 +53,17 @@ public class MyQuotesFragment extends Fragment{
 //    private List<Quote> mMyQuotesList = MyQuotesManager.get(getContext()).
 
 
-    private static final int REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = 1;   //Request code for receiving results from dialog fragment to delete Pix
+    private static final int REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = 1;   //Request code for receiving results from dialog fragment to ADD MyQuote
     private static final String IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = "AddNewMyQuoteDialogFragment"; //Identifier of AddMyQuoteDialogFragment
 
-    private static final int REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = 2; //Request code for receiving boolean result on whether user confirmed deletion of the Quote
+
+    private static final int REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT = 2; //Request code for receiving results from dialog fragment to EDIT MyQuote
+    private static final String IDENTIFIER_EDIT_MY_QUOTE_DIALOG_FRAGMENT = "EditMyQuoteDialogFragment"; //Identifier of EditMyQuoteDialogFragment
+
+
+    private static final int REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = 3; //Request code for receiving boolean result on whether user confirmed DELETION of the Quote
     private static final String IDENTIFIER_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = "DeleteMyQuoteConfrmationDialogFragment"; //Identifier of dialog fragment of DeleteMyQuoteConfirmationDialogFragment
+
 
 
 
@@ -250,6 +256,7 @@ public class MyQuotesFragment extends Fragment{
             mFavoriteIcon = (CheckBox) view.findViewById(R.id.my_quote_favorite_icon);
             mShareIcon = (Button) view.findViewById(R.id.my_quote_share_icon);
             mQuoteTextView = (TextView) view.findViewById(R.id.my_quote_quote);
+            mEditIcon = (Button) view.findViewById(R.id.my_quote_edit_icon);
             mDeleteIcon = (Button) view.findViewById(R.id.my_quote_delete_icon);
 
 
@@ -307,7 +314,6 @@ public class MyQuotesFragment extends Fragment{
                 mNoMyQuotesTextView.setVisibility(View.VISIBLE);
 
             }
-
 
 
 
@@ -371,6 +377,32 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+            //============ mEditIcon ===========================
+
+            mEditIcon.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view){
+
+
+                    editMyQuoteDialogFragment(mMyQuote.getAuthor(), mMyQuote.getQuote(), mMyQuote.getId(), mPosition);
+
+
+//                    mMyQuote.setAuthor("yooo");
+//                    mMyQuote.setQuote("Hellooooppp");
+//                    MyQuotesManager.get(getContext()).updateMyQuotesDatabase(mMyQuote);
+
+
+//                    mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes()); //
+//                    mMyQuotesAdapter.notifyDataSetChanged();
+
+                }
+
+            });
+
+
+
+
 
 
             //============ mDeleteIcon ===========================
@@ -427,6 +459,20 @@ public class MyQuotesFragment extends Fragment{
             return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
         }
 
+
+
+
+
+
+        private void editMyQuoteDialogFragment(String author, String quote, String ID, int position){
+            FragmentManager fragmentManager = getFragmentManager();
+
+            EditMyQuoteDialogFragment editMyQuoteDialogFragment = EditMyQuoteDialogFragment.newInstance(author, quote, ID, position);
+
+            editMyQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT);
+
+            editMyQuoteDialogFragment.show(fragmentManager, IDENTIFIER_EDIT_MY_QUOTE_DIALOG_FRAGMENT);
+        }
 
 
 
@@ -596,9 +642,49 @@ public class MyQuotesFragment extends Fragment{
                 mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
             }
 
-
-
         }
+
+
+
+
+
+
+
+
+
+
+        if (requestCode == REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT) {
+
+            String author = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_AUTHOR);
+            String quote = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_QUOTE);
+            String ID = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_ID);
+
+
+            Quote editedQuote = new Quote(ID);
+            editedQuote.setAuthor(author);
+            editedQuote.setQuote(quote);
+
+
+            MyQuotesManager.get(getActivity()).updateMyQuotesDatabase(editedQuote);
+
+
+            mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
+            mMyQuotesAdapter.notifyDataSetChanged();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
