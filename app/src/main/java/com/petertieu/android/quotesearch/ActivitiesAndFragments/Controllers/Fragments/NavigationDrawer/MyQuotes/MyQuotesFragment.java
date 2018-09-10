@@ -3,6 +3,7 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -56,12 +57,15 @@ public class MyQuotesFragment extends Fragment{
     private static final int REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = 1;   //Request code for receiving results from dialog fragment to ADD MyQuote
     private static final String IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = "AddNewMyQuoteDialogFragment"; //Identifier of AddMyQuoteDialogFragment
 
+    private static final int REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT = 2; //Request code for receiving results from dialog on whether user confirmed REMOVE ALL of MyQuotes
+    private static final String  IDENTIFIER_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT = "RemoveAllMyQuotesConfirmationDialogFragment"; //Identifier of RemoveAllMyQuotesConfirmationDialogFragment
 
-    private static final int REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT = 2; //Request code for receiving results from dialog fragment to EDIT MyQuote
+
+    private static final int REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT = 3; //Request code for receiving results from dialog fragment to EDIT MyQuote
     private static final String IDENTIFIER_EDIT_MY_QUOTE_DIALOG_FRAGMENT = "EditMyQuoteDialogFragment"; //Identifier of EditMyQuoteDialogFragment
 
 
-    private static final int REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = 3; //Request code for receiving boolean result on whether user confirmed DELETION of the Quote
+    private static final int REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = 4; //Request code for receiving boolean result on whether user confirmed DELETION of the Quote
     private static final String IDENTIFIER_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = "DeleteMyQuoteConfrmationDialogFragment"; //Identifier of dialog fragment of DeleteMyQuoteConfirmationDialogFragment
 
 
@@ -523,10 +527,21 @@ public class MyQuotesFragment extends Fragment{
 
         MenuItem addNewQuoteItem = menu.findItem(R.id.menu_item_add_new_quote);
 
-
-
 //        refreshItem.setEnabled(true); //Enable the "Refresh" menu item button
         addNewQuoteItem.getIcon().setAlpha(255); //Set the "Refresh" menu item button to 'full color' (i.e. white)
+
+
+        MenuItem removeAllMyQuotes = menu.findItem(R.id.menu_item_remove_all_my_quotes);
+
+
+
+        if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
+            removeAllMyQuotes.setVisible(false);
+        }
+        else{
+            removeAllMyQuotes.setVisible(true);
+        }
+
 
     }
 
@@ -555,7 +570,9 @@ public class MyQuotesFragment extends Fragment{
 
             case (R.id.menu_item_remove_all_my_quotes):
 
-                removeAllMyQuotes();
+
+                removeAllMyQuotesConfirmationDialogFragment();
+//                removeAllMyQuotes();
 
                 return true;
 
@@ -586,19 +603,23 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-    private void removeAllMyQuotes() {
 
-        List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes();
+    public void removeAllMyQuotesConfirmationDialogFragment(){
 
-        for (Quote myQuote : myQuotesList){
-            MyQuotesManager.get(getActivity()).deleteMyQuote(myQuote);
-        }
+        FragmentManager fragmentManager = getFragmentManager();
 
+        int myQuotesListSize = MyQuotesManager.get(getActivity()).getMyQuotes().size();
 
-        mMyQuotesAdapter.setMyQuotesList(myQuotesList);
-        mMyQuotesAdapter.notifyDataSetChanged();
+        RemoveAllMyQuotesConfirmationDialogFragment removeAllMyQuotesConfirmationDialogFragment = RemoveAllMyQuotesConfirmationDialogFragment.newInstance(myQuotesListSize);
 
+        removeAllMyQuotesConfirmationDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT);
+
+        removeAllMyQuotesConfirmationDialogFragment.show(fragmentManager, IDENTIFIER_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT);
     }
+
+
+
+
 
 
 
@@ -668,7 +689,27 @@ public class MyQuotesFragment extends Fragment{
                 mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
             }
 
+
+            getActivity().invalidateOptionsMenu();
+
         }
+
+
+
+
+
+
+
+
+
+        if (requestCode == REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT){
+            boolean shouldRemoveAllMyQuotes = intent.getBooleanExtra(RemoveAllMyQuotesConfirmationDialogFragment.EXTRA_SHOULD_REMOVE_ALL_MY_QUOTES, false);
+
+            if (shouldRemoveAllMyQuotes){
+                removeAllMyQuotes();
+            }
+        }
+
 
 
 
@@ -692,6 +733,7 @@ public class MyQuotesFragment extends Fragment{
 
 
             MyQuotesManager.get(getActivity()).updateMyQuotesDatabase(editedQuote);
+            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(editedQuote);
 
 
             mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
@@ -754,6 +796,46 @@ public class MyQuotesFragment extends Fragment{
 
 
     }
+
+
+
+
+
+
+
+
+
+    private void removeAllMyQuotes() {
+
+        List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes();
+
+        for (Quote myQuote : myQuotesList){
+            MyQuotesManager.get(getActivity()).deleteMyQuote(myQuote);
+        }
+
+
+        mMyQuotesAdapter.setMyQuotesList(myQuotesList);
+        mMyQuotesAdapter.notifyDataSetChanged();
+
+
+        mNoMyQuotesTextView.setVisibility(View.VISIBLE);
+        mMyQuotesRecyclerView.setVisibility(View.GONE);
+
+
+        getActivity().invalidateOptionsMenu();
+
+
+        Snackbar snackbar = Snackbar.make(mMyQuotesRecyclerView, "All Quotes removed from My Quotes", Snackbar.LENGTH_LONG);
+
+        View snackBarView = snackbar.getView();
+        snackBarView.setMinimumHeight(150);
+        snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
+
+        snackbar.show();
+
+
+    }
+
 
 
 
