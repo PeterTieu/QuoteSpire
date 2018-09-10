@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Dialog fragment layout - for EditMyQuoteDialogFragment-->
+
+<android.support.v7.widget.AlertDialogLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_fragment_add_new_my_quote"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+            app:counterMaxLength="35">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_my_quote_author_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="top"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:inputType="textCapWords"
+                android:textSize="18dp"
+                android:hint="@string/author"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="800">
+
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_my_quote_quote_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:gravity="top"
+                android:maxLength="1000"
+                android:maxLines="4"
+                android:inputType="textCapSentences|textMultiLine"
+                android:textSize="18dp"
+                android:hint="@string/quote"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+</android.support.v7.widget.AlertDialogLayout>
