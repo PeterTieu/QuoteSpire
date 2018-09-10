@@ -547,9 +547,18 @@ public class MyQuotesFragment extends Fragment{
             case (R.id.menu_item_add_new_quote):
 
 
+
                 addMyQuoteDialogFragment();
 
                 return true;
+
+
+            case (R.id.menu_item_remove_all_my_quotes):
+
+                removeAllMyQuotes();
+
+                return true;
+
 
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -571,6 +580,23 @@ public class MyQuotesFragment extends Fragment{
 
         addNewMyQuoteDialogFragment.show(fragmentManager, IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT);
 
+
+    }
+
+
+
+
+    private void removeAllMyQuotes() {
+
+        List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes();
+
+        for (Quote myQuote : myQuotesList){
+            MyQuotesManager.get(getActivity()).deleteMyQuote(myQuote);
+        }
+
+
+        mMyQuotesAdapter.setMyQuotesList(myQuotesList);
+        mMyQuotesAdapter.notifyDataSetChanged();
 
     }
 
