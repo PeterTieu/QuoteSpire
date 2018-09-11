@@ -23,10 +23,10 @@ public class StartupBroadcastReceiver extends BroadcastReceiver{
         //"Received broadcast intent: android.intent.action.BOOT_COMPLETED"
         Log.i(TAG, "Received broadcast intent: " + intent.getAction());
 
-        boolean pushNotificationState = QuoteOfTheDaySharedPreferences.getPushNotificationState(context);
+        boolean isPushNotificationOn = QuoteOfTheDaySharedPreferences.isPushNotificationOn(context);
 
 
-        QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(context, pushNotificationState);
+        QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(context, isPushNotificationOn);
 
 
 
