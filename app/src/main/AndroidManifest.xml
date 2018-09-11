@@ -8,7 +8,7 @@
 
 
 
-    <permission android:name="quoteOfTheDay_PRIVATE_PERMISSION"
+    <permission android:name="com.petertieu.android.quotesearch.PRIVATE"
                 android:protectionLevel="signature"/>
 
 
@@ -38,7 +38,7 @@
 
 
     <!--Ask to access the permission that is declared above (in <permission.../>)-->
-    <uses-permission android:name="quoteOfTheDay_PRIVATE_PERMISSION"/>
+    <uses-permission android:name="com.petertieu.android.quotesearch.PRIVATE"/>
 
 
 
@@ -103,7 +103,7 @@
 
 
         <activity
-            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.FavoriteQuotePictureViewPagerActivity"
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.SwipeTabs.QuotePictures.FavoriteQuotePictureViewPagerActivity"
             android:label="@string/quote_picture"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:parentActivityName=".ActivitiesAndFragments.Controllers.Activities.IntroActivity"
@@ -176,16 +176,14 @@
 
 
 
-
-
-
         <receiver
             android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayPushNotificationBroadcastReceiver"
             android:exported="false">
 
             <intent-filter
                 android:priority="-999">
-                <action android:name="ACTION_SHOW_PUSH_NOTIFICATION"/>
+                <action
+                    android:name="com.petertieu.android.quotesearch.SHOW_NOTIFICATION"/>
 
 
             </intent-filter>
