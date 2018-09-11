@@ -33,7 +33,7 @@ import java.util.List;
 public class RandomQuotesFragment extends Fragment {
 
 
-    private static final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 7;
+    private static final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 12;
 
     //Log for Logcat
     private final String TAG = "RandomQuotesFragment";
@@ -196,15 +196,16 @@ public class RandomQuotesFragment extends Fragment {
                 //If the last Random Quote has been creted
             try{
 
-                if (mQuotePosition[0] == NUMBER_OF_RANDOM_QUOTES_TO_LOAD-1){
-                    shouldEnableRandomiseMenuItem = true;
-                    getActivity().invalidateOptionsMenu();
-                }
-                //If the last Random Quote has NOT been created yet
-                else{
-                    shouldEnableRandomiseMenuItem = false;
-                    getActivity().invalidateOptionsMenu();
-                }
+                getActivity().invalidateOptionsMenu();
+//                if (mQuotePosition[0] == NUMBER_OF_RANDOM_QUOTES_TO_LOAD-1){
+//                    shouldEnableRandomiseMenuItem = true;
+//                    getActivity().invalidateOptionsMenu();
+//                }
+//                //If the last Random Quote has NOT been created yet
+//                else{
+//                    shouldEnableRandomiseMenuItem = false;
+//                    getActivity().invalidateOptionsMenu();
+//                }
 
             }
             catch (NullPointerException npe){
@@ -567,16 +568,39 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-        //If the flag to enable the "Randomise" menu item is TRUE
-        if (shouldEnableRandomiseMenuItem == true){
+        int actualSizeOfRandomQuotesList = 0;
 
-            randomiseItem.setEnabled(true);
+        for (Quote randomQuote : mRandomQuotes){
 
+            if (randomQuote == null){
+            }
+            if (randomQuote != null){
+                actualSizeOfRandomQuotesList++;
+            }
         }
-        //If the flag to enable the "Randomise" menu item is FALSE
+
+
+
+        if (actualSizeOfRandomQuotesList == NUMBER_OF_RANDOM_QUOTES_TO_LOAD){
+            shouldEnableRandomiseMenuItem = true;
+            randomiseItem.setEnabled(true);
+        }
         else{
+            shouldEnableRandomiseMenuItem = false;
             randomiseItem.setEnabled(false);
         }
+
+
+//        //If the flag to enable the "Randomise" menu item is TRUE
+//        if (shouldEnableRandomiseMenuItem == true){
+//
+//            randomiseItem.setEnabled(true);
+//
+//        }
+//        //If the flag to enable the "Randomise" menu item is FALSE
+//        else{
+//            randomiseItem.setEnabled(false);
+//        }
     }
 
 
@@ -603,7 +627,7 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-                //Perform fetching of new Random Quotes via the AsyncTask
+                //Perforrm fetching of new Random Quotes via the AsyncTask
                 for (int i = 0; i < NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++) {
 
                     if (mRandomQuotes.get(i) == null){
