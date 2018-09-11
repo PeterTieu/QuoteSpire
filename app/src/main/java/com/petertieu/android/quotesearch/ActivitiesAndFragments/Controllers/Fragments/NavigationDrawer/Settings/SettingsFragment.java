@@ -15,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.DynamicBroadcastReceiver;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDaySharedPreferences;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
@@ -27,7 +28,7 @@ import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Frag
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByKeyword.SearchQuotesByKeywordSharedPref;
 import com.petertieu.android.quotesearch.R;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends DynamicBroadcastReceiver{
 
 
     //Log for Logcat
@@ -55,7 +56,13 @@ public class SettingsFragment extends Fragment {
 
 
 
-        mPushNotificationSwitch.setChecked(QuoteOfTheDaySharedPreferences.getPushNotificationState(getContext()));
+
+        boolean isPushNotificationOn = QuoteOfTheDayIntentService.isPushNotificationIntentServiceOn(getActivity());
+        QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getActivity(), isPushNotificationOn);
+
+
+
+        mPushNotificationSwitch.setChecked(QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
 
 
         mPushNotificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -63,22 +70,25 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
                 if (isChecked == true){
-                    QuoteOfTheDaySharedPreferences.setPushNotificationState(getContext(), true);
+//                    QuoteOfTheDaySharedPreferences.setPushNotificationState(getContext(), true);
 
                     QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), true);
 
-                    Log.i(TAG, "Push notification state: " + QuoteOfTheDaySharedPreferences.getPushNotificationState(getContext()));
+                    Log.i(TAG, "Push notification state: " + QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
                 }
                 else{
-                    QuoteOfTheDaySharedPreferences.setPushNotificationState(getContext(), false);
+//                    QuoteOfTheDaySharedPreferences.setPushNotificationState(getContext(), false);
 
                     QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), false);
 
-                    Log.i(TAG, "Push notification state: " + QuoteOfTheDaySharedPreferences.getPushNotificationState(getContext()));
+                    Log.i(TAG, "Push notification state: " + QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
                 }
 
             }
         });
+
+
+
 
 
 
@@ -133,7 +143,6 @@ public class SettingsFragment extends Fragment {
                         .create();
 
                 alertDialog.show();
-
             }
         });
 
