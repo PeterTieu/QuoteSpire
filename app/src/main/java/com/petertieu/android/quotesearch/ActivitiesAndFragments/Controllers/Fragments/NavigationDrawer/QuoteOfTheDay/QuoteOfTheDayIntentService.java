@@ -4,35 +4,43 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class QuoteOfTheDayIntentService extends IntentService{
 
     private static final String TAG = "QODIntentService";
 
-//    private static final long INTENT_SERVICE_TIME_INTERVAL = TimeUnit.HOURS.toMillis(4);
     private static final long INTENT_SERVICE_TIME_INTERVAL = TimeUnit.MINUTES.toMillis(1);
+//    private static final long INTENT_SERVICE_TIME_INTERVAL = TimeUnit.MINUTES.toMillis(60);
 
-    public static final String ACTION_SHOW_PUSH_NOTIFICATION = "ACTION_SHOW_PUSH_NOTIFICATION";
+    public static final String ACTION_SHOW_PUSH_NOTIFICATION = "com.petertieu.android.quotesearch.SHOW_NOTIFICATION";
+
+    public static final String PRIVATE_PERMISSION = "com.petertieu.android.quotesearch.PRIVATE";
 
     public static final String ORDERED_BROADCAST_INTENT_REQUEST_CODE = "ORDERED_BROADCAST_INTENT_REQUEST_CODE";
 
     public static final String PUSH_NOTIFICATION_REQUEST_CODE = "PUSH_NOTIFICATION_REQUEST_CODE";
 
-    public static final String PRIVATE_PERMISSION = "quoteOfTheDay_PRIVATE_PERMISSION";
+
 
 
     //Make the Intent a SINGLETON, so that only ONE instance of this Intent is created and linked to this IntentService class
@@ -48,7 +56,7 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
-    public static boolean getPushNotificationIntentServiceState(Context context){
+    public static boolean isPushNotificationIntentServiceOn(Context context){
 
         //Refer the Intent reference variable (pushNotificationIntentServiceState) to the Intent SINGLETON object of this class
         Intent pushNotificationIntentService = QuoteOfTheDayIntentService.newIntent(context);
@@ -69,7 +77,15 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
-    public static void setPushNotificationIntentServiceState(Context context, boolean pushNotificationState){
+
+
+    public static Context mContext;
+
+
+    public static void setPushNotificationIntentServiceState(Context context, boolean isPushNotificationOn){
+
+        mContext = context;
+
 
         //Refer the Intent reference variable (pushNotificationServiceIntent) to the Intent SINGLETON object of this class
         Intent pushNotificationIntentService = QuoteOfTheDayIntentService.newIntent(context);
@@ -83,21 +99,93 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
-        if (pushNotificationState == true) {
-            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
+
+
+
+
+//        AlarmManager alarmMgr;
+        PendingIntent alarmIntent;
+//
+//        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//
+//        Intent pushNotificationIntentService = QuoteOfTheDayIntentService.newIntent(context);
+////        PendingIntent pendingIntent = PendingIntent.getService(context, 0, pushNotificationIntentService, 0);
+//
+////        Intent intent = new Intent(context, QuoteOfTheDayIntentService.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, pushNotificationIntentService, 0);
+
+        // Set the alarm to start at 8:30 a.m.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (isPushNotificationOn) {
+
+//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
+            Log.i(TAG, "ALARMMM");
+
+//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
+//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
+//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 12, pendingIntent);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // setRepeating() lets you specify a precise custom interval--in this case,
+            // 20 minutes.
+//            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 1, alarmIntent);
 
         }
         else{
             alarmManager.cancel(pendingIntent);
-
             pendingIntent.cancel();
+
+//            alarmMgr.cancel(alarmIntent);
+
         }
 
 
-        QuoteOfTheDaySharedPreferences.setPushNotificationState(context, pushNotificationState);
+        QuoteOfTheDaySharedPreferences.setPushNotificationState(context, isPushNotificationOn);
 
 
     }
+
+
+
 
 
 
@@ -113,26 +201,179 @@ public class QuoteOfTheDayIntentService extends IntentService{
         Log.i(TAG, "Received an intent: " + intent);
 
 
-        Quote latestQuoteOfTheDay;
+        Quote latestQuoteOfTheDay = new Quote("FirstID");
+        latestQuoteOfTheDay.setId("FirstLatestQuoteOfTheDayID");
 
 
-        String storedQuoteOfTheDayId = QuoteOfTheDaySharedPreferences.getQuoteOfTheDayId(this);
+        String storedQuoteOfTheDayId = QuoteOfTheDaySharedPreferences.getStoredQuoteOfTheDayId(this);
+
+
+        if (storedQuoteOfTheDayId == null){
+            storedQuoteOfTheDayId = "FirstStoredQuoteOfTheDayID";
+        }
+
+
+
 
         latestQuoteOfTheDay = new GetQuoteOfTheDay().getQuoteOfTheDay();
 
         String latestQuoteOfTheDayId = latestQuoteOfTheDay.getId();
+
         String latestQuoteOfTheDayString = latestQuoteOfTheDay.getQuote();
 
 
-//        if (storedQuoteOfTheDayId.equals(latestQuoteOfTheDayId)){
-//            Log.i(TAG, "Quote of the Day UNCHANGED");
-//        }
-//        else{
-//            Log.i(TAG, "Quote of the Day CHANGED");
+
+
+
+
+
+
+        if (storedQuoteOfTheDayId.equals(latestQuoteOfTheDayId)){
+            Log.i(TAG, "Quote of the Day UNCHANGED");
+
+            Log.i(TAG, "storedQuoteOfTheDayId: " + storedQuoteOfTheDayId);
+            Log.i(TAG, "latestQuoteOfTheDayId: " + latestQuoteOfTheDayId);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//            NotificationManager mNotificationManager;
+//
+//            Resources resources = getResources();
+//
+//            Intent ii = new Intent(mContext.getApplicationContext(), IntroActivity.class);
+//            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
 //
 //
-//            //=======CREATE A NOTIFICATION TO USE (When there is a new result ID================
+//            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+//            bigText.bigText("hello");
+//            bigText.setBigContentTitle("Today's Bible Verse");
+//            bigText.setSummaryText("Text in detail");
 //
+//            Notification notification = new NotificationCompat.Builder(mContext, "notify_001")
+//                    .setTicker(resources.getString(R.string.new_quote_of_the_day_title))
+//                    .setSmallIcon(R.mipmap.ic_launcher_round)
+//                    .setContentTitle(resources.getString(R.string.new_quote_of_the_day_title))
+//                    .setContentText(latestQuoteOfTheDayString)
+//                    .setContentIntent(pendingIntent)
+//                    .setPriority(Notification.PRIORITY_MAX)
+//                    .setAutoCancel(true)
+//                    .setStyle(bigText)
+//                    .build();
+//
+//
+//
+//
+//
+//
+//            mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                NotificationChannel channel = new NotificationChannel("notify_001", "Channel human readable title", NotificationManager.IMPORTANCE_DEFAULT);
+//                mNotificationManager.createNotificationChannel(channel);
+//            }
+//
+//
+//            mNotificationManager.notify(0, notification);
+//
+//
+//
+//
+//
+//
+//            showBackgroundNotification(0, notification);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//            NotificationManager mNotificationManager;
+//
+//
+//            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_001");
+//            Intent ii = new Intent(mContext.getApplicationContext(), IntroActivity.class);
+//            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
+//
+//            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+//            bigText.bigText("hello");
+//            bigText.setBigContentTitle("Today's Bible Verse");
+//            bigText.setSummaryText("Text in detail");
+//
+//
+//            mBuilder.setContentIntent(pendingIntent);
+//            mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+//            mBuilder.setContentTitle("Your Title");
+//            mBuilder.setContentText("Your text");
+//            mBuilder.setPriority(Notification.PRIORITY_MAX);
+//            mBuilder.setStyle(bigText);
+//
+//            mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+//
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                NotificationChannel channel = new NotificationChannel("notify_001", "Channel human readable title", NotificationManager.IMPORTANCE_DEFAULT);
+//                mNotificationManager.createNotificationChannel(channel);
+//            }
+//
+//
+//            mNotificationManager.notify(0, mBuilder.build());
+
+
+
+
+
+
+
+
+
+
+        }
+        else{
+            Log.i(TAG, "Quote of the Day CHANGED");
+
+            Log.i(TAG, "storedQuoteOfTheDayId: " + storedQuoteOfTheDayId);
+            Log.i(TAG, "latestQuoteOfTheDayId: " + latestQuoteOfTheDayId);
+
+
+            //=======CREATE A NOTIFICATION TO USE (When there is a new result ID================
+
 //            Resources resources = getResources();
 //
 //            Intent introActivityIntent = IntroActivity.newIntent(this);
@@ -151,10 +392,7 @@ public class QuoteOfTheDayIntentService extends IntentService{
 //
 //
 //
-//
 //            showBackgroundNotification(0, notification);
-//
-//        }
 
 
 
@@ -163,36 +401,70 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
-        //=======CREATE A NOTIFICATION TO USE (When there is a new result ID================
-
-        Resources resources = getResources();
-
-        Intent introActivityIntent = IntroActivity.newIntent(this);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, introActivityIntent, 0);
-
-        Notification notification = new NotificationCompat.Builder(this)
-                .setTicker(resources.getString(R.string.new_quote_of_the_day_title))
-                .setSmallIcon(android.R.drawable.ic_menu_report_image)
-                .setContentTitle(resources.getString(R.string.new_quote_of_the_day_title))
-                .setContentText("hello")
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .build();
-
-
-
-
-
-        showBackgroundNotification(0, notification);
 
 
 
 
 
 
+            NotificationManager mNotificationManager;
 
-        QuoteOfTheDaySharedPreferences.setQuoteOfTheDayId(this, latestQuoteOfTheDayId);
+            Resources resources = getResources();
+
+            Intent ii = new Intent(mContext.getApplicationContext(), IntroActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
+
+
+            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+            bigText.bigText("hello");
+            bigText.setBigContentTitle("Today's Bible Verse");
+            bigText.setSummaryText("Text in detail");
+
+            Notification notification = new NotificationCompat.Builder(mContext, "notify_001")
+                    .setTicker(resources.getString(R.string.new_quote_of_the_day_title))
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setContentTitle(resources.getString(R.string.new_quote_of_the_day_title))
+                    .setContentText(latestQuoteOfTheDayString)
+                    .setContentIntent(pendingIntent)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setAutoCancel(true)
+                    .setStyle(bigText)
+                    .build();
+
+
+
+
+
+
+            mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("notify_001", "Channel human readable title", NotificationManager.IMPORTANCE_DEFAULT);
+                mNotificationManager.createNotificationChannel(channel);
+            }
+
+
+            mNotificationManager.notify(0, notification);
+
+
+
+
+
+
+            showBackgroundNotification(0, notification);
+
+
+
+        }
+
+
+
+
+
+
+
+        QuoteOfTheDaySharedPreferences.setStoredQuoteOfTheDayId(this, latestQuoteOfTheDayId);
 
 
 
@@ -212,6 +484,27 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
         return isNetworkConnected;
+    }
+
+
+
+
+
+
+
+
+    private void showBackgroundNotification1(int requestCode, Notification notification){
+
+        Intent intent = new Intent(ACTION_SHOW_PUSH_NOTIFICATION);
+
+        intent.putExtra(ORDERED_BROADCAST_INTENT_REQUEST_CODE, requestCode);
+
+
+        intent.putExtra(PUSH_NOTIFICATION_REQUEST_CODE, notification);
+
+        sendOrderedBroadcast(intent, PRIVATE_PERMISSION, null, null, Activity.RESULT_OK, null, null);
+
+
     }
 
 
