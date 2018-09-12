@@ -391,15 +391,6 @@ public class MyQuotesFragment extends Fragment{
 
                     editMyQuoteDialogFragment(mMyQuote.getAuthor(), mMyQuote.getQuote(), mMyQuote.getId(), mPosition);
 
-
-//                    mMyQuote.setAuthor("yooo");
-//                    mMyQuote.setQuote("Hellooooppp");
-//                    MyQuotesManager.get(getContext()).updateMyQuotesDatabase(mMyQuote);
-
-
-//                    mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes()); //
-//                    mMyQuotesAdapter.notifyDataSetChanged();
-
                 }
 
             });
@@ -471,7 +462,7 @@ public class MyQuotesFragment extends Fragment{
         private void editMyQuoteDialogFragment(String author, String quote, String ID, int position){
             FragmentManager fragmentManager = getFragmentManager();
 
-            EditMyQuoteDialogFragment editMyQuoteDialogFragment = EditMyQuoteDialogFragment.newInstance(author, quote, ID, position);
+            EditMyQuoteDialogFragment editMyQuoteDialogFragment = EditMyQuoteDialogFragment.newInstance(author, quote, ID);
 
             editMyQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT);
 

@@ -21,7 +21,7 @@ import com.petertieu.android.quotesearch.R;
 
 import java.util.UUID;
 
-public class AddNewQuoteDialogFragment extends DialogFragment{
+public class AddNewMyQuoteDialogFragment extends DialogFragment{
 
     private static final String TAG = "AddNewMyQuoteDF";
 
@@ -34,10 +34,10 @@ public class AddNewQuoteDialogFragment extends DialogFragment{
 
 
 
-    public static AddNewQuoteDialogFragment newInstance(){
-        AddNewQuoteDialogFragment addNewQuoteDialogFragment = new AddNewQuoteDialogFragment();
+    public static AddNewMyQuoteDialogFragment newInstance(){
+        AddNewMyQuoteDialogFragment addNewMyQuoteDialogFragment = new AddNewMyQuoteDialogFragment();
 
-        return addNewQuoteDialogFragment;
+        return addNewMyQuoteDialogFragment;
     }
 
 
@@ -60,7 +60,7 @@ public class AddNewQuoteDialogFragment extends DialogFragment{
 
 
 
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_add_new_quote, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_add_new_my_quote, null);
 
         mAuthorEditText = (EditText) view.findViewById(R.id.add_new_quote_author_edit_text);
         mQuoteEditText = (EditText) view.findViewById(R.id.add_new_quote_quote_edit_text);

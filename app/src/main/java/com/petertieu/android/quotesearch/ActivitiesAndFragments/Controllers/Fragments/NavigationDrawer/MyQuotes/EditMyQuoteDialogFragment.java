@@ -37,7 +37,6 @@ public class EditMyQuoteDialogFragment extends DialogFragment{
     private static final String ARGUMENT_BUNDLE_MY_QUOTE_ID = "argumentBundleMyQuoteID";
     private static final String ARGUMENT_BUNDLE_MY_QUOTE_AUTHOR = "argumentBundleMyQuoteAuthor";
     private static final String ARGUMENT_BUNDLE_MY_QUOTE_QUOTE = "argumentBundleMyQuoteQuote";
-    private static final String ARGUMENT_BUNDLE_MY_QUOTE_POSITION = "argumentBundleMyQuotePosition";
 
 
     public static final String EXTRA_AUTHOR = "extraAuthor";
@@ -49,14 +48,13 @@ public class EditMyQuoteDialogFragment extends DialogFragment{
 
 
 
-    public static EditMyQuoteDialogFragment newInstance(String author, String quote, String ID, int position){
+    public static EditMyQuoteDialogFragment newInstance(String author, String quote, String ID){
 
         Bundle argumentBundle = new Bundle();
 
         argumentBundle.putString(ARGUMENT_BUNDLE_MY_QUOTE_ID, ID);
         argumentBundle.putString(ARGUMENT_BUNDLE_MY_QUOTE_AUTHOR, author);
         argumentBundle.putString(ARGUMENT_BUNDLE_MY_QUOTE_QUOTE, quote);
-        argumentBundle.putInt(ARGUMENT_BUNDLE_MY_QUOTE_POSITION, position);
 
         EditMyQuoteDialogFragment editMyQuoteDialogFragment = new EditMyQuoteDialogFragment();
 
@@ -79,7 +77,6 @@ public class EditMyQuoteDialogFragment extends DialogFragment{
         final String ID = getArguments().getString(ARGUMENT_BUNDLE_MY_QUOTE_ID);
         String author = getArguments().getString(ARGUMENT_BUNDLE_MY_QUOTE_AUTHOR);
         String quote = getArguments().getString(ARGUMENT_BUNDLE_MY_QUOTE_QUOTE);
-        final int position = getArguments().getInt(ARGUMENT_BUNDLE_MY_QUOTE_POSITION);
 
 
 
@@ -157,7 +154,7 @@ public class EditMyQuoteDialogFragment extends DialogFragment{
                                 }
 
 
-                                sendResults(Activity.RESULT_OK, editedAuthor, editedQuote, ID, position);
+                                sendResults(Activity.RESULT_OK, editedAuthor, editedQuote, ID);
                             }
 
 
@@ -167,7 +164,7 @@ public class EditMyQuoteDialogFragment extends DialogFragment{
 
 
 
-    private void sendResults(int resultCode, String editedAuthor, String editedQuote, String ID, int position){
+    private void sendResults(int resultCode, String editedAuthor, String editedQuote, String ID){
 
         if (getTargetFragment() == null){
             return;
@@ -176,10 +173,9 @@ public class EditMyQuoteDialogFragment extends DialogFragment{
 
         Intent intent = new Intent();
 
-        intent.putExtra(EXTRA_ID, ID);
         intent.putExtra(EXTRA_AUTHOR, editedAuthor);
         intent.putExtra(EXTRA_QUOTE, editedQuote);
-        intent.putExtra(EXTRA_POSITION, position);
+        intent.putExtra(EXTRA_ID, ID);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }

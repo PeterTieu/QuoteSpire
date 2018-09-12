@@ -678,8 +678,7 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-        Snackbar snackbar = Snackbar
-                .make(mFavoriteQuotesRecyclerView, "All Quotes removed from Favorites", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(mFavoriteQuotesRecyclerView, "All Quotes removed from Favorites", Snackbar.LENGTH_LONG);
 
 //                .setAction("UNDO", new View.OnClickListener() {
 //                    @Override
