@@ -19,45 +19,45 @@ public abstract class DynamicBroadcastReceiver extends Fragment {
 
 
 
-//    private BroadcastReceiver mDynamicBroadcastReceiver = new BroadcastReceiver() {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            Toast.makeText(getActivity(), "Received a BroadcastIntent: " + intent.getAction(), Toast.LENGTH_LONG).show();
-//
-//            Log.i(TAG, "Received a BroadcastIntent: " + intent.getAction());
-//
-//
-//            setResultCode(Activity.RESULT_CANCELED);
-//
-//        }
-//    };
-//
-//
-//
-//
-//    @Override
-//    public void onStart(){
-//        super.onStart();
-//
-//        Log.i(TAG, "onStart() called");
-//
-//        IntentFilter intentFilter = new IntentFilter(QuoteOfTheDayIntentService.ACTION_SHOW_PUSH_NOTIFICATION);
-//
-//        getActivity().registerReceiver(mDynamicBroadcastReceiver, intentFilter, QuoteOfTheDayIntentService.PRIVATE_PERMISSION, null);
-//    }
-//
-//
-//
-//
-//    @Override
-//    public void onStop(){
-//        super.onStop();
-//
-//        Log.i(TAG, "onStop() called");
-//
-//        getActivity().unregisterReceiver(mDynamicBroadcastReceiver);
-//    }
+    private BroadcastReceiver mDynamicBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(getActivity(), "Received a BroadcastIntent: " + intent.getAction(), Toast.LENGTH_LONG).show();
+
+            Log.i(TAG, "Received a BroadcastIntent: " + intent.getAction());
+
+
+            setResultCode(Activity.RESULT_CANCELED);
+
+        }
+    };
+
+
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        Log.i(TAG, "onStart() called");
+
+        IntentFilter intentFilter = new IntentFilter(QuoteOfTheDayIntentService.ACTION_SHOW_PUSH_NOTIFICATION);
+
+        getActivity().registerReceiver(mDynamicBroadcastReceiver, intentFilter, QuoteOfTheDayIntentService.PRIVATE_PERMISSION, null);
+    }
+
+
+
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        Log.i(TAG, "onStop() called");
+
+        getActivity().unregisterReceiver(mDynamicBroadcastReceiver);
+    }
 
 
 }
