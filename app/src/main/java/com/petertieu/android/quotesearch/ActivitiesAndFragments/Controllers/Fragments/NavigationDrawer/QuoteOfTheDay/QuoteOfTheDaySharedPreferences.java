@@ -12,35 +12,40 @@ public class QuoteOfTheDaySharedPreferences {
 
 
 
+    public static String getStoredQuoteOfTheDayId(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(LATEST_QUOTE_OF_THE_DAY_ID, null);
+    }
 
-    public static void setQuoteOfTheDayId(Context context, String latestQuoteOfTheDayId){
+
+
+    public static void setStoredQuoteOfTheDayId(Context context, String latestQuoteOfTheDayId){
         PreferenceManager.getDefaultSharedPreferences(context)
                          .edit()
                          .putString(LATEST_QUOTE_OF_THE_DAY_ID, latestQuoteOfTheDayId)
                          .apply();
     }
 
-    public static String getQuoteOfTheDayId(Context context){
+
+
+
+
+
+    public static boolean isPushNotificationOn(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
-                                .getString(LATEST_QUOTE_OF_THE_DAY_ID, null);
+                .getBoolean(PUSH_NOTIFICATION_STATE, false);
     }
 
 
 
-
-
-    public static void setPushNotificationState(Context context, boolean pushNotificationState){
+    public static void setPushNotificationState(Context context, boolean isPushNotificationOn){
         PreferenceManager.getDefaultSharedPreferences(context)
                          .edit()
-                         .putBoolean(PUSH_NOTIFICATION_STATE, pushNotificationState)
+                         .putBoolean(PUSH_NOTIFICATION_STATE, isPushNotificationOn)
                          .apply();
     }
 
 
-    public static boolean getPushNotificationState(Context context){
-        return PreferenceManager.getDefaultSharedPreferences(context)
-                                .getBoolean(PUSH_NOTIFICATION_STATE, false);
-    }
 
 
 

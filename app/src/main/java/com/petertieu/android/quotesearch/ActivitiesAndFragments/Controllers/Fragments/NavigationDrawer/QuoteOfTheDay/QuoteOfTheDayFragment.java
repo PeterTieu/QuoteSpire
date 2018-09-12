@@ -1602,6 +1602,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
+        Log.i(TAG, "onOptionsItemsSelected(..) called"); //Log lifecycle callback
+
         switch (menuItem.getItemId()){
             case (R.id.menu_item_refresh_quote_of_the_day_fragment):
 

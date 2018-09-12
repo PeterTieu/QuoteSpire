@@ -6,8 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationManagerCompat;
-
-
+import android.util.Log;
 
 
 public class QuoteOfTheDayPushNotificationBroadcastReceiver extends BroadcastReceiver{
@@ -17,6 +16,8 @@ public class QuoteOfTheDayPushNotificationBroadcastReceiver extends BroadcastRec
 
     @Override
     public void onReceive(Context context, Intent intent){
+
+        Log.i(TAG, "received result: " + getResultCode());
 
         if (getResultCode() != Activity.RESULT_OK){
             return;
