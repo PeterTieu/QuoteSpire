@@ -14,9 +14,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
@@ -100,25 +98,11 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
-
-
-
-//        AlarmManager alarmMgr;
-        PendingIntent alarmIntent;
-//
-//        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-//
-//        Intent pushNotificationIntentService = QuoteOfTheDayIntentService.newIntent(context);
-////        PendingIntent pendingIntent = PendingIntent.getService(context, 0, pushNotificationIntentService, 0);
-//
-////        Intent intent = new Intent(context, QuoteOfTheDayIntentService.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, pushNotificationIntentService, 0);
-
         // Set the alarm to start at 8:30 a.m.
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 10);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.MINUTE, 8);
 
 
 
@@ -134,47 +118,17 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
         if (isPushNotificationOn) {
 
-//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
             Log.i(TAG, "ALARMMM");
 
-//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
-//            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
-//            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
-            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 12, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
+//            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 12, pendingIntent);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // setRepeating() lets you specify a precise custom interval--in this case,
-            // 20 minutes.
-//            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 1, alarmIntent);
 
         }
         else{
             alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();
 
-//            alarmMgr.cancel(alarmIntent);
 
         }
 
@@ -241,19 +195,53 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
+            NotificationManager mNotificationManager;
+
+            Resources resources = getResources();
+
+            Intent ii = new Intent(mContext.getApplicationContext(), IntroActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, ii, 0);
+
+
+            NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+            bigText.setSummaryText("Quote of the Day");
+            bigText.setBigContentTitle(latestQuoteOfTheDay.getAuthor());
+            bigText.bigText("\"" + latestQuoteOfTheDay.getQuote() + "\"");
+
+
+            Notification notification = new NotificationCompat.Builder(mContext, "notify_001")
+                    .setTicker(resources.getString(R.string.new_quote_of_the_day_title))
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setContentTitle("\"" + latestQuoteOfTheDay.getQuote() + "\"")
+                    .setContentText(latestQuoteOfTheDay.getAuthor())
+                    .setContentIntent(pendingIntent)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setAutoCancel(true)
+                    .setStyle(bigText)
+                    .build();
 
 
 
 
 
 
+            mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("notify_001", "Quote of the Day", NotificationManager.IMPORTANCE_DEFAULT);
+                mNotificationManager.createNotificationChannel(channel);
+            }
+
+
+            mNotificationManager.notify(0, notification);
 
 
 
 
 
 
-
+            showBackgroundNotification(0, notification);
 
 
 
@@ -416,9 +404,9 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
             NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-            bigText.bigText("hello");
-            bigText.setBigContentTitle("Today's Bible Verse");
-            bigText.setSummaryText("Text in detail");
+            bigText.bigText("Quote Search");
+            bigText.setBigContentTitle("Quote of the Day");
+            bigText.setSummaryText(latestQuoteOfTheDay.getQuote());
 
             Notification notification = new NotificationCompat.Builder(mContext, "notify_001")
                     .setTicker(resources.getString(R.string.new_quote_of_the_day_title))
@@ -440,7 +428,7 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("notify_001", "Channel human readable title", NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationChannel channel = new NotificationChannel("notify_001", "Quote of the Day Title", NotificationManager.IMPORTANCE_DEFAULT);
                 mNotificationManager.createNotificationChannel(channel);
             }
 
@@ -488,24 +476,6 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
-
-
-
-
-
-    private void showBackgroundNotification1(int requestCode, Notification notification){
-
-        Intent intent = new Intent(ACTION_SHOW_PUSH_NOTIFICATION);
-
-        intent.putExtra(ORDERED_BROADCAST_INTENT_REQUEST_CODE, requestCode);
-
-
-        intent.putExtra(PUSH_NOTIFICATION_REQUEST_CODE, notification);
-
-        sendOrderedBroadcast(intent, PRIVATE_PERMISSION, null, null, Activity.RESULT_OK, null, null);
-
-
-    }
 
 
 
