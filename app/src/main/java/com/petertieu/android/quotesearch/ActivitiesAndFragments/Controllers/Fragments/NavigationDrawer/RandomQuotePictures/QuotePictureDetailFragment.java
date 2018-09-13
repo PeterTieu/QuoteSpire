@@ -37,7 +37,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 
 //Fragment to display the QuotePicture RecyclerView list-item selected in:
-//RandomQuotePicturesFragment, SearchQuotePicturesByCategoryFragment, or SearchQuotePicturesByAuthorFragment.
+//RandomQuotePicturesFragment, SearchQPByCategoryFragment, or SearchQPByAuthorFragment.
 //NOTE: This Fragment is hosted by: QuotePictureDetailActivity
 @SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "SpellCheckingInspection", "RedundantCast"})
 public class QuotePictureDetailFragment extends Fragment{

@@ -12,7 +12,7 @@ import com.petertieu.android.quotesearch.R;
 
 
 //Activity that hosts the QuotePictureDetailFragment fragment - to display the Quote Picture selected in:
-//RandomQuotePicturesFragment, SearchQuotePicturesByCategoryFragment, or SearchQuotePicturesByAuthorFragment
+//RandomQuotePicturesFragment, SearchQPByCategoryFragment, or SearchQPByAuthorFragment
 //NOTE: The data passed (as extras) to this activity from the intents of the above fragments are:
     //1: QuotePicture ID
     //2: QuotePicture Picture byte array. NOTE: The bitmap byte array is transferred across instead of the bitmap, because bitmaps are too large to be extras
@@ -31,7 +31,7 @@ public class QuotePictureDetailActivity extends AppCompatActivity{
 
 
 
-    //Encapsulating intent method - called by: RandomQuotePicturesFragment, SearchQuotePicturesByCategoryFragment, or SearchQuotePicturesByAuthorFragment
+    //Encapsulating intent method - called by: RandomQuotePicturesFragment, SearchQPByCategoryFragment, or SearchQPByAuthorFragment
     // when a QuotePicture list item is clicked on
     public static Intent newIntent(Context context, String quotePictureId, byte[] quotePictureBitmapByteArray){
 

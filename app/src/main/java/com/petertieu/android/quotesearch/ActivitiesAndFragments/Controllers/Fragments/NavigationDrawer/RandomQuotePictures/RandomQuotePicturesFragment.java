@@ -148,10 +148,10 @@ public class RandomQuotePicturesFragment extends Fragment {
 
         Log.i(TAG, "onCreateView(..) called");  //Log in Logcat
 
-        View view = layoutInflater.inflate(R.layout.fragment_quote_pictures, viewGroup, false); //Inflate View
+        View view = layoutInflater.inflate(R.layout.fragment_random_quote_pictures, viewGroup, false); //Inflate View
 
 
-        mRandomPicturesOfQuotesRecyclerView = view.findViewById(R.id.quote_pictures_recycler_view); //Assign RecyclerView member variable to the view
+        mRandomPicturesOfQuotesRecyclerView = view.findViewById(R.id.random_quote_pictures_recycler_view); //Assign RecyclerView member variable to the view
 
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2); //Create LayoutManager to link the RecyclerView to
 
