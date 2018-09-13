@@ -16,7 +16,10 @@ import android.view.WindowManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDay;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDayAuthorQuote;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDayCategoryQuote;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.MyService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDaySharedPreferences;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
@@ -102,6 +105,24 @@ public class IntroActivity extends AppCompatActivity {
 
 
 //        new GetQuoteOfTheDayAsyncTask().execute();
+
+
+
+
+
+        //TODO:
+        if (QuoteOfTheDaySharedPreferences.isPushNotificationSwitchPressed(IntroActivity.this) == false){
+
+            QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(IntroActivity.this, true);
+
+            //Start Service
+            String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+            Intent startIntent = new Intent(IntroActivity.this, MyService.class);
+            startIntent.setAction(ACTION_START_SERVICE);
+            IntroActivity.this.startService(startIntent);
+        }
+
+
 
 
 
