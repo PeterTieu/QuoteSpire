@@ -30,7 +30,7 @@ public class QuoteOfTheDayIntentService extends IntentService{
     private static final String TAG = "QODIntentService";
 
     private static final long INTENT_SERVICE_TIME_INTERVAL = TimeUnit.MINUTES.toMillis(1);
-    public static final String ACTION_SHOW_PUSH_NOTIFICATION = "com.petertieu.android.quotesearch.SHOW_NOTIFICATION";
+    public static final String ACTION_SHOW_PUSH_NOTIFICATION = "com.petertieu.android.quotesearch.ACTION_SHOW_PUSH_NOTIFICATION";
     public static final String PRIVATE_PERMISSION = "com.petertieu.android.quotesearch.PRIVATE";
     public static final String ORDERED_BROADCAST_INTENT_REQUEST_CODE = "ORDERED_BROADCAST_INTENT_REQUEST_CODE";
     public static final String PUSH_NOTIFICATION_REQUEST_CODE = "PUSH_NOTIFICATION_REQUEST_CODE";
@@ -58,10 +58,10 @@ public class QuoteOfTheDayIntentService extends IntentService{
     public static boolean isPushNotificationIntentServiceOn(Context context){
 
         //Refer the Intent reference variable (pushNotificationIntentServiceState) to the Intent SINGLETON object of this class
-        Intent pushNotificationIntentService = QuoteOfTheDayIntentService.newIntent(context);
+        Intent pushNotificationIntentServiceIntent = QuoteOfTheDayIntentService.newIntent(context);
 
         //Retrieve a PendingIntent (if it exists), so as to start the service
-        PendingIntent pendingIntent = PendingIntent.getService(context, 0, pushNotificationIntentService, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, pushNotificationIntentServiceIntent, PendingIntent.FLAG_NO_CREATE);
 
         //If PendingIntent EXISTS
         if (pendingIntent != null){
@@ -141,6 +141,8 @@ public class QuoteOfTheDayIntentService extends IntentService{
         if (storedQuoteOfTheDayId.equals(latestQuoteOfTheDayId)){
             Log.i(TAG, "Quote of the Day UNCHANGED");
             //Do nothing
+//            Notification notification = createPushNotification(latestQuoteOfTheDay);
+//            showBackgroundNotification(0, notification);
         }
         else {
             Log.i(TAG, "Quote of the Day CHANGED");

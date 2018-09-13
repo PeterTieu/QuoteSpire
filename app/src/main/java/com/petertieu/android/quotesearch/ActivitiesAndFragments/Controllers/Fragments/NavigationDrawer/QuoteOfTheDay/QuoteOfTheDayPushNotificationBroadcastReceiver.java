@@ -17,7 +17,7 @@ public class QuoteOfTheDayPushNotificationBroadcastReceiver extends BroadcastRec
     @Override
     public void onReceive(Context context, Intent intent){
 
-        Log.i(TAG, "received result: " + getResultCode());
+//        Log.i(TAG, "received result: " + getResultCode());
 
         if (getResultCode() != Activity.RESULT_OK){
             return;
