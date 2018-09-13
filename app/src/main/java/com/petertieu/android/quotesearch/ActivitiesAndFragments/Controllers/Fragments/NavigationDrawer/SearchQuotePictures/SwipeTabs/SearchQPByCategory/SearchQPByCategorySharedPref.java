@@ -11,7 +11,7 @@ public class SearchQPByCategorySharedPref {
 
 
     //Set (write) the search query into SharedPreferences
-    public static void setSearchQuotesByAuthorStoredQuery(Context context, String searchQPByCategorySearchQuery){
+    public static void setSearchQuotesByCategoryStoredQuery(Context context, String searchQPByCategorySearchQuery){
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(SEARCH_QUOTE_PICTURES_BY_CATEGORY_SEARCH_QUERY_KEY, searchQPByCategorySearchQuery)
@@ -20,7 +20,7 @@ public class SearchQPByCategorySharedPref {
 
 
     //Get (read) the search query from SharedPreferences
-    public static String getSearchQuotesByAuthorStoredQuery(Context context){
+    public static String getSearchQuotesByCategoryStoredQuery(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(SEARCH_QUOTE_PICTURES_BY_CATEGORY_SEARCH_QUERY_KEY, null);
     }

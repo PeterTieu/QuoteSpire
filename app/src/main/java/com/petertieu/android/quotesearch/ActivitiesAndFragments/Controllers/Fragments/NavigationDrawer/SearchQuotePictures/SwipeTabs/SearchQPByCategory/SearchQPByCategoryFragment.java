@@ -50,7 +50,7 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
     private final String TAG = "SQPByCategoryFragment"; //Log for Logcat
 
     //-------------- SEARCH variables ------------------------------------
-    private final static int NUMBER_OF_CATEGORY_QUOTE_PICTURES_TO_LOAD = 12; //Number of quotes to load upon search
+    private final static int NUMBER_OF_CATEGORY_QUOTE_PICTURES_TO_LOAD = 10; //Number of quotes to load upon search
 
 
     //-------------- LIST variables ------------------------------------
@@ -88,7 +88,7 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
     private static boolean shouldDisplaySearchResultsWhenFragmentIsReloaded; //Flag that is activated when a search has begun or the search items are in View.
 
     //-------------- OTHER variables ------------------------------------
-    private static String sSearchQuery; //Search query obtained from SearchView
+    public static String sQuotePictureCategorySearchQuery; //Search query obtained from SearchView
 
 
 
@@ -242,7 +242,7 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
 
 
             //---------- Configure View variables ----------------------
-            mCategorySearchedText.setText(Html.fromHtml("Category searched: " + " " + " \"" +"<i>" + sSearchQuery.toUpperCase() + "</i>" + "\"")); //Text for displaying the Category Searched
+            mCategorySearchedText.setText(Html.fromHtml("Category searched: " + " " + " \"" +"<i>" + sQuotePictureCategorySearchQuery.toUpperCase() + "</i>" + "\"")); //Text for displaying the Category Searched
 
             mCategoryQuotePicturesAdapter = new CategoryQuotePicturesAdapter(sCategoryQuotePictureQuotes); //Create a new RecyclerView Adapter
             mCategoryQuotePictureRecyclerView.setAdapter(mCategoryQuotePicturesAdapter); //Set up the RecyclerView to the RecyclerView Adapter
@@ -420,11 +420,11 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
             public boolean onQueryTextSubmit(String searchQuery){
                 Log.d(TAG, "Submitted query: " + searchQuery);
 
-//                sSearchQuery = searchQuery.replaceAll("( +)","-").trim(); //Replace all space characters (either single or multiple spaces) to a single hyphen character in the search query
+//                sQuotePictureCategorySearchQuery = searchQuery.replaceAll("( +)","-").trim(); //Replace all space characters (either single or multiple spaces) to a single hyphen character in the search query
 
-                sSearchQuery = searchQuery;
+                sQuotePictureCategorySearchQuery = searchQuery;
 
-                SearchQPByCategorySharedPref.setSearchQuotesByCategoryStoredQuery(getActivity(), sSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
+                SearchQPByCategorySharedPref.setSearchQuotesByCategoryStoredQuery(getActivity(), sQuotePictureCategorySearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
                 mSearchView.onActionViewCollapsed(); //Collapse the SearchView
 
@@ -437,7 +437,7 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
 
 
                 mCategorySearchedText.setVisibility(View.VISIBLE); //Show the "Searched Text" TextView
-                mCategorySearchedText.setText(Html.fromHtml("Category searched: " + " " + " \"" +"<i>" +  sSearchQuery.toUpperCase() + "</i>" + "\"")); //Update the "Searched Text" text
+                mCategorySearchedText.setText(Html.fromHtml("Category searched: " + " " + " \"" +"<i>" +  sQuotePictureCategorySearchQuery.toUpperCase() + "</i>" + "\"")); //Update the "Searched Text" text
 
 
                 mCategoryQuotePictureRecyclerView.setVisibility(View.VISIBLE); //Show the RecyclerView
@@ -453,7 +453,7 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
 
                     Integer quotePosition = i; //Let the quote position equal the index
 
-                    mGetCategoryQuotePictureAsyncTasksList.set(i, new GetCategoryQuotePictureAsyncTask(sSearchQuery)); //Assign the AsyncTask reference in the List to a new AsyncTask object
+                    mGetCategoryQuotePictureAsyncTasksList.set(i, new GetCategoryQuotePictureAsyncTask(sQuotePictureCategorySearchQuery)); //Assign the AsyncTask reference in the List to a new AsyncTask object
                     mGetCategoryQuotePictureAsyncTasksList.get(i).execute(quotePosition); //Execute the AsyncTask object (i.e. begin fetching the Quote)
                 }
 
@@ -530,7 +530,7 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
 
                 cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the Category query
 
-                Toast.makeText(getActivity(), "Cleared Search Results for: " + sSearchQuery.toUpperCase(), Toast.LENGTH_LONG).show(); //Create Toast notifying that the search results have been cleared
+                Toast.makeText(getActivity(), "Cleared Search Results for: " + sQuotePictureCategorySearchQuery.toUpperCase(), Toast.LENGTH_LONG).show(); //Create Toast notifying that the search results have been cleared
 
                 return true;
 
