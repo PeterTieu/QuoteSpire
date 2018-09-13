@@ -149,7 +149,7 @@
             IOW, a standalone receiver is a broadcast receiver of the system.
             This means that even if the app isn't running, this broadcast receiver still listens and receives broadcast intents from the system
         -->
-        <receiver android:name=".ActivitiesAndFragments.Backend.StartupBroadcastReceiver">
+        <receiver android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.StartupBroadcastReceiver">
 
             <!--...Then...
             ...after having registered the StartupReceiver (standalone receiver) to the system...
@@ -175,6 +175,9 @@
 
 
 
+        <service
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.MyService"/>
+
 
         <receiver
             android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayPushNotificationBroadcastReceiver"
@@ -183,7 +186,7 @@
             <intent-filter
                 android:priority="-999">
                 <action
-                    android:name="com.petertieu.android.quotesearch.SHOW_NOTIFICATION"/>
+                    android:name="com.petertieu.android.quotesearch.ACTION_SHOW_PUSH_NOTIFICATION"/>
 
 
             </intent-filter>
