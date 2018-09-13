@@ -2,6 +2,7 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.DynamicBroadcastReceiver;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.MyService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDaySharedPreferences;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
@@ -57,6 +59,10 @@ public class SettingsFragment extends DynamicBroadcastReceiver{
 
 
 
+
+
+
+
         boolean isPushNotificationOn = QuoteOfTheDayIntentService.isPushNotificationIntentServiceOn(getActivity());
         QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getActivity(), isPushNotificationOn);
 
@@ -69,19 +75,34 @@ public class SettingsFragment extends DynamicBroadcastReceiver{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
+
                 if (isChecked == true){
-//                    QuoteOfTheDaySharedPreferences.setPushNotificationState(getContext(), true);
+
+                    QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
 
                     QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), true);
 
-                    Log.i(TAG, "Push notification state: " + QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
+                    //Start Service
+                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+                    Intent startIntent = new Intent(getContext(), MyService.class);
+                    startIntent.setAction(ACTION_START_SERVICE);
+                    getActivity().startService(startIntent);
+
+
                 }
                 else{
-//                    QuoteOfTheDaySharedPreferences.setPushNotificationState(getContext(), false);
+
+                    QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
 
                     QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), false);
 
-                    Log.i(TAG, "Push notification state: " + QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
+
+                    //Stop Service
+                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+                    Intent startIntent = new Intent(getContext(), MyService.class);
+                    startIntent.setAction(ACTION_START_SERVICE);
+                    getActivity().stopService(startIntent);
+
                 }
 
             }
