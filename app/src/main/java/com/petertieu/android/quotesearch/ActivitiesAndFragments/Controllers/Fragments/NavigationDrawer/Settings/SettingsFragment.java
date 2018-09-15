@@ -179,6 +179,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
@@ -189,9 +192,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.MainActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDaySharedPreferences;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorSharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategoryFragment;
@@ -205,8 +210,10 @@ import com.petertieu.android.quotesearch.R;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
 
-    Preference mClearQueries;
-    CheckBoxPreference mDailyNotifications;
+//    Preference mApplicationThemePreference;
+    Preference mClearQueriesPreference;
+    CheckBoxPreference mQODDailyNotificationsPreference;
+    Preference mQODCheckTimePreference;
 
 
     @Override
@@ -215,14 +222,49 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
-        mClearQueries = findPreference(getString(R.string.clear_queries_preference));
-        mDailyNotifications = (CheckBoxPreference) findPreference(getString(R.string.daily_notification_checkbox_preference));
+//        mApplicationThemePreference = (Preference) findPreference(getString(R.string.application_theme_preference));
+        mClearQueriesPreference = (Preference) findPreference(getString(R.string.clear_queries_preference));
+        mQODDailyNotificationsPreference = (CheckBoxPreference) findPreference(getString(R.string.daily_notification_checkbox_preference));
+        mQODCheckTimePreference = (Preference) findPreference(getString(R.string.quote_of_the_day_check_time_preference));
 
 
 
 
 
-        mClearQueries.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+//        mApplicationThemePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//
+//                getActivity().setTheme(R.style.AppThemeLight);
+//
+//                getActivity().recreate();
+//
+////                Fragment currentFragment = new QuoteOfTheDayFragment();
+////                FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+////                fragTransaction.detach(currentFragment);
+////                fragTransaction.attach(currentFragment);
+////                fragTransaction.commit();
+//
+////                Fragment currentFragment = new SettingsFragment();
+////                FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+////                fragTransaction.detach(currentFragment);
+////                fragTransaction.attach(currentFragment);
+////                fragTransaction.commit();
+//
+//
+//                return false;
+//            }
+//        });
+
+
+
+
+
+
+
+
+        mClearQueriesPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -285,15 +327,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         boolean isPushNotificationOn = QuoteOfTheDayIntentService.isPushNotificationIntentServiceOn(getActivity());
         QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getActivity(), isPushNotificationOn);
-        mDailyNotifications.setChecked(QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
+        mQODDailyNotificationsPreference.setChecked(QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
 
 
-        mDailyNotifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mQODDailyNotificationsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
 
-                boolean isChecked = Boolean.valueOf(newValue.toString());
+                boolean isChecked = Boolean.valueOf(newValue.toString()); //Get the 'checked' state of the CheckBoxPreference
 
 
 
@@ -337,6 +379,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
+        mQODCheckTimePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                //Create FragmentManager
+                FragmentManager fragmentManager = getFragmentManager();
+
+                //Create DateDialogFragment fragment
+                TimePickerDialogFragment timePickerDialogFragment = TimePickerDialogFragment.newInstance(QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateTime);
+
+                //Start the dialog fragment
+                timePickerDialogFragment.setTargetFragment(PixDetailFragment.this, REQUEST_CODE_DIALOG_FRAGMENT_DATE);
+
+                //Show dialog
+                timePickerDialogFragment.show(fragmentManager, IDENTIFIER_DIALOG_FRAGMENT_DATE);
+
+                return false;
+            }
+        });
 
 
 
@@ -404,16 +465,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
