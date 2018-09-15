@@ -100,8 +100,34 @@
 
 
     <!--SettingsFragment-->
+    <string name="contents">Contents</string>
+
+    <string name="application_theme_preference">application_theme_preference</string>
+    <string name="application_theme">Application Theme</string>
+    <string name="theme_info">The app is using </string>
     <string name="push_notification">Push Notification</string>
-    <string name="clear_recent_search_queries">Clear Recent Search Queries</string>
+
+    <string name="clear_queries_preference">clear_queries_preference</string>
+    <string name="clear_queries">Clear Queries</string>
+    <string name="clear_all_recent_search_queries">Clear all recent search queries</string>
+
+    <string name="daily_notification_checkbox_preference">daily_notification_checkbox_preference</string>
+    <string name="daily_notification">Daily Notifications</string>
+    <string name="notify_me_when_a_new_quote_of_the_day_is_available">Notify me when a new Quote of The Day is available</string>
+
+    <string name="quote_of_the_day_check_time_preference">quote_of_the_day_check_time_preference</string>
+    <string name="quote_of_the_day_check_time">Check Time</string>
+    <string name="time_the_check_if_a_new_quote_of_the_day_is_avaialable">The time to check if a new Quote of The Day is </string>
+
+    <string name="general">General</string>
+
+    <string name="share_app_preference">share_app_preference</string>
+    <string name="share_app">Share App</string>
+    <string name="tell_your_friends_about_this_app">Tell your friends about this app</string>
+
+    <string name="about_app_preference">about_app_preference</string>
+    <string name="about_app">About App</string>
+    <string name="information_about_this_app">Information about this app</string>
 
 
     <!--QuotePictureDetailFragment AND FavoriteQuotePictureDetailFragment-->
