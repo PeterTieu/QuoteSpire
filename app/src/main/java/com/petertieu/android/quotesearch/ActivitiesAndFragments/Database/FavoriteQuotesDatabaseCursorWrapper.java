@@ -5,8 +5,6 @@ import android.database.CursorWrapper;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 
-import java.util.List;
-
 public class FavoriteQuotesDatabaseCursorWrapper extends CursorWrapper{
 
     public FavoriteQuotesDatabaseCursorWrapper(Cursor cursor){

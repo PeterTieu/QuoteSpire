@@ -97,6 +97,7 @@ public class FavoriteQuotePicturesManager {
             favoriteQuotePicturesDatabaseCursorWrapper.moveToFirst();
 
 
+
             return favoriteQuotePicturesDatabaseCursorWrapper.getQuotePictureFromFavoriteQuotePicturesDatabase();
         }
 
@@ -124,6 +125,9 @@ public class FavoriteQuotePicturesManager {
                 favoriteQuotePictures.add(favoriteQuotePicturesDatabaseCursorWrapper.getQuotePictureFromFavoriteQuotePicturesDatabase());
                 favoriteQuotePicturesDatabaseCursorWrapper.moveToNext();
             }
+
+//            favoriteQuotePicturesDatabaseCursorWrapper.close();
+
         } finally {
             favoriteQuotePicturesDatabaseCursorWrapper.close();
         }
