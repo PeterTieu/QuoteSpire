@@ -171,16 +171,16 @@
 
 
         <service
-            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService"/>
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService"/>
 
 
 
         <service
-            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.MyService"/>
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService"/>
 
 
         <receiver
-            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayPushNotificationBroadcastReceiver"
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayPushNotificationBroadcastReceiver"
             android:exported="false">
 
             <intent-filter
