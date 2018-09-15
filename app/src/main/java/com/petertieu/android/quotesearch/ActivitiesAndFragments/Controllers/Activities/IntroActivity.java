@@ -1,6 +1,5 @@
 package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -16,11 +15,9 @@ import android.view.WindowManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDay;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDayAuthorQuote;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDayCategoryQuote;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.MyService;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayIntentService;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDaySharedPreferences;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDaySharedPreferences;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 

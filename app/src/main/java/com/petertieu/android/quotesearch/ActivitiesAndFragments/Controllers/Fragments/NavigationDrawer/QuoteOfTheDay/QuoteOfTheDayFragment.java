@@ -20,11 +20,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.DynamicBroadcastReceiver;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
-public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver{
+public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
     //Log for Logcat
     private final String TAG = "QuoteOfTheDayFragment";
