@@ -51,7 +51,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
 
     //-------------- SEARCH variables ------------------------------------
     private static final int NUMBER_OF_QUOTES_TO_LOAD = 10; //Number of quotes to load upon search
-    private static String sSearchQuery;
+    private static String sSearchQuery; //Search query obtained from SearchView
     private TextView mAuthorSearchedText;
 
 
@@ -198,7 +198,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
             mSearchQuotesByAuthorQuoteRecyclerView.setAdapter(sSearchQuotesByAuthorQuoteAdapter); //Set up the RecyclerView to the RecyclerView Adapter
         }
 
-        //If a Search has not begun/is in place, then display the SEARCH SUGGESTIONS
+        //If a Search has NOT begun/is in place, then display the SEARCH SUGGESTIONS
         else{
             //---------- Configure View variables ----------------------
             mAuthorSearchedText.setVisibility(View.GONE);
@@ -239,7 +239,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
                 "Niels Bohr", "Aristotle", "Max Planck", "Francis Crick", "Rosalind Franklin", "Archimedes", "Richard Feyman", "Alfred Nobel", "Neil deGrasse Tyson",
                 "Robert Boyle", "Erwin Schrodinger", "Thomas Edison", "William Shakespeare", "Barack Obama", "Oprah Winfrey", "Tom Cruise", "Matt Damon",
                 "Elvis Presley", "Brad Pitt", "Elon Musk", "Bill Gates", "Mark Zuckerberg", "Warren Buffett", "Napoleon Bonaparte", "Christopher Columubus",
-                "Arnaold Schwarzenegger", "Rihanna", "Will Smith", "Katy Perry", "Talor Swift", "Steven Spielberg", "Britney Spears", "Elton John", "Tiger Woods",
+                "Arnaold Schwarzenegger", "Rihanna", "Will Smith", "Steven Spielberg", "Britney Spears", "Elton John", "Tiger Woods",
                 "Michael Jordan", "David Beckham", "Roger Federer", "Serena Williams", "Abraham Lincoln", "Marilyn Monroe", "Mahatma Gandhi", "Socrates", "Confucius",
                 "Steve Jobs", "Usain Bolt", "Hugh Jackman", "J.K. Rowling", "J.R.R. Tolkien", "Kevin Hart", "Neil Armstrong", "John Lennon", "Quentin Tarantino",
                 "Angelina Jolie", "Richard Branson", "George Orwell", "Beethoven", "Anne Frank", "Madonna", "Julius Caesar", "Alexander The Great", "Eminem",
@@ -367,7 +367,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
             public boolean onQueryTextSubmit(String searchQuery){
                 Log.d(TAG, "Submitted query: " + searchQuery);
 
-//                sSearchQuery = searchQuery.replaceAll("( +)","-").trim(); //Replace all space characters (either single or multiple spaces) to a single hyphen character in the search query
+//                sQuotePictureCategorySearchQuery = searchQuery.replaceAll("( +)","-").trim(); //Replace all space characters (either single or multiple spaces) to a single hyphen character in the search query
 
                 sSearchQuery = searchQuery;
 
@@ -514,7 +514,7 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
 
     //AsyncTask for fetching a Quote based on the search query
     //GENERIC TYPES:
-    //#1: PARAMS:   Integer: Type passed to execute(). NOTE: It could be passed in multiples (e.g. ..execute(1, 2, 3, 4))
+    //#1: PARAMS:   Integer: Type passed to execute(..). NOTE: It could be passed in multiples (e.g. ..execute(1, 2, 3, 4))
     //#2: PROGRESS: Void: Type published during background computation
     //#3: RESULTS:  Quote: Type returned from doInBackground()
     @SuppressLint("StaticFieldLeak")
