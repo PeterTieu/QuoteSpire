@@ -176,9 +176,11 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.Gravity;
@@ -187,6 +189,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDaySharedPreferences;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorSharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategoryFragment;
@@ -201,7 +206,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
     Preference mClearQueries;
-    Preference mDailyNotifications;
+    CheckBoxPreference mDailyNotifications;
 
 
     @Override
@@ -211,7 +216,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
         mClearQueries = findPreference(getString(R.string.clear_queries_preference));
-        mDailyNotifications = findPreference(getString(R.string.daily_notification_checkbox_preference));
+        mDailyNotifications = (CheckBoxPreference) findPreference(getString(R.string.daily_notification_checkbox_preference));
 
 
 
@@ -278,36 +283,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
-
+        boolean isPushNotificationOn = QuoteOfTheDayIntentService.isPushNotificationIntentServiceOn(getActivity());
+        QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getActivity(), isPushNotificationOn);
+        mDailyNotifications.setChecked(QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
 
 
         mDailyNotifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object object) {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
 
 
+                boolean isChecked = Boolean.valueOf(newValue.toString());
 
 
-
-                return false;
-            }
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-        mPushNotificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
 
                 if (isChecked == true){
@@ -339,8 +327,63 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 }
 
+
+
+
+                return true;
             }
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        mPushNotificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//
+//
+//                if (isChecked == true){
+//
+//                    QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
+//
+//                    QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), true);
+//
+//                    //Start Service
+//                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+//                    Intent startIntent = new Intent(getContext(), MyService.class);
+//                    startIntent.setAction(ACTION_START_SERVICE);
+//                    getActivity().startService(startIntent);
+//
+//
+//                }
+//                else{
+//
+//                    QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
+//
+//                    QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), false);
+//
+//
+//                    //Stop Service
+//                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+//                    Intent startIntent = new Intent(getContext(), MyService.class);
+//                    startIntent.setAction(ACTION_START_SERVICE);
+//                    getActivity().stopService(startIntent);
+//
+//                }
+//
+//            }
+//        });
 
 
 
