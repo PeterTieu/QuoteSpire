@@ -237,7 +237,7 @@ public class SearchQuotesByCategoryFragment extends Fragment implements View.OnC
                 "Motivation", "Opportunities", "Government", "Truth", "People", "Universe", "Harmony", "Duty", "Culture", "Education", "Soul", "Mind", "Work", "Mind-Body-Spirit",
                 "Cosmic", "Self-Improvement", "Money", "Wealth", "Aspirations", "Inspirational", "Beliefs", "Self-Help", "Startup", "Time", "Politics", "Teaching", "Futurism",
                 "Poetry", "Confidence", "Trust", "Hope", "Humanity", "Future", "War", "Peace", "Society", "Psychology", "Greatness", "Progress", "Meaning", "Knowledge", "Zen",
-                "Meditation", "Reality", "Mindfulness", "Imagination", "Technology", "Science", "Funny", "Comedy", "Humor", "Sarcasm", "Nautre");
+                "Meditation", "Reality", "Mindfulness", "Imagination", "Technology", "Science", "Funny", "Comedy", "Humor", "Sarcasm", "Nature");
 
         //Shuffle the List of al possible Search Suggestions
         Collections.shuffle(mSearchSuggestionsFullList);
