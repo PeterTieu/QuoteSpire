@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDay;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.SettingsFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
@@ -36,11 +37,13 @@ public class QuoteOfTheDayIntentService extends IntentService{
     public static final String ORDERED_BROADCAST_INTENT_REQUEST_CODE = "ORDERED_BROADCAST_INTENT_REQUEST_CODE";
     public static final String PUSH_NOTIFICATION_REQUEST_CODE = "PUSH_NOTIFICATION_REQUEST_CODE";
 
-    private static final int ALARM_MANAGER_START_HOUR = 10;
-    private static final int ALARM_MANAGER_START_MINUTE = 5;
-    private static final int ALARM_MANAGER_REPEAT_INTERVAL_HOURS = 4;
 
     public static Context sContext;
+    public static int ALARM_MANAGER_START_HOUR = 10; //Default HOUR
+    public static int ALARM_MANAGER_START_MINUTE = 5; //Default MINUTE
+    private static final int ALARM_MANAGER_REPEAT_INTERVAL_HOURS = 4;
+
+
 
 
     //Make the Intent a SINGLETON, so that only ONE instance of this Intent is created and linked to this IntentService class
@@ -88,6 +91,7 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
 
 
+
         // Set the alarm to start at 8:30 a.m.
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -95,8 +99,10 @@ public class QuoteOfTheDayIntentService extends IntentService{
         calendar.set(Calendar.MINUTE, ALARM_MANAGER_START_MINUTE);
 
 
+
         if (isPushNotificationOn) {
 //            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
+//            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 1, pendingIntent);
             alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 60 * ALARM_MANAGER_REPEAT_INTERVAL_HOURS, pendingIntent);
         }
         else{
@@ -144,6 +150,8 @@ public class QuoteOfTheDayIntentService extends IntentService{
             //Do nothing
 //            Notification notification = createPushNotification(latestQuoteOfTheDay);
 //            showBackgroundNotification(0, notification);
+//            Log.i(TAG, "ALARM_MANAGER_START_HOUR: " + ALARM_MANAGER_START_HOUR);
+//            Log.i(TAG, "ALARM_MANAGER_START_MINUTE: " + ALARM_MANAGER_START_MINUTE);
         }
         else {
             Log.i(TAG, "Quote of the Day CHANGED");
