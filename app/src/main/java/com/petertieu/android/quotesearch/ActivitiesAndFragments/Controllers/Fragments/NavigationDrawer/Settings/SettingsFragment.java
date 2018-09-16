@@ -175,28 +175,28 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 //}
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.MainActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDaySharedPreferences;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.QuoteOfTheDayFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorSharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategoryFragment;
@@ -209,11 +209,17 @@ import com.petertieu.android.quotesearch.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
+    private static final String TAG = "SettingsFragment";
 
 //    Preference mApplicationThemePreference;
     Preference mClearQueriesPreference;
-    CheckBoxPreference mQODDailyNotificationsPreference;
+    CheckBoxPreference mDailyNotificationCheckBoxPreference;
+    CheckBoxPreference mDailyNotificationsCheckBoxPreferenceSummary;
     Preference mQODCheckTimePreference;
+
+    private static final int REQUEST_CODE_DIALOG_FRAGMENT_TIME_PICKER = 1; //Request code for receiving results from contact activity/app
+    private static final String IDENTIFIER_DIALOG_FRAGMENT_TIME_PICKER = "DialogFragmentTimePicker";
+
 
 
     @Override
@@ -221,41 +227,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.preferences);
 
 
+        getActivity().setTitle("Settings");
 
 //        mApplicationThemePreference = (Preference) findPreference(getString(R.string.application_theme_preference));
-        mClearQueriesPreference = (Preference) findPreference(getString(R.string.clear_queries_preference));
-        mQODDailyNotificationsPreference = (CheckBoxPreference) findPreference(getString(R.string.daily_notification_checkbox_preference));
-        mQODCheckTimePreference = (Preference) findPreference(getString(R.string.quote_of_the_day_check_time_preference));
+        mClearQueriesPreference = (Preference) findPreference(getString(R.string.clear_queries_preference_key));
+        mDailyNotificationCheckBoxPreference = (CheckBoxPreference) findPreference(getString(R.string.daily_notification_checkbox_preference_key));
+        mQODCheckTimePreference = (Preference) findPreference(getString(R.string.check_time_preference_key));
 
 
 
-
-
-
-//        mApplicationThemePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//            @Override
-//            public boolean onPreferenceClick(Preference preference) {
-//
-//                getActivity().setTheme(R.style.AppThemeLight);
-//
-//                getActivity().recreate();
-//
-////                Fragment currentFragment = new QuoteOfTheDayFragment();
-////                FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-////                fragTransaction.detach(currentFragment);
-////                fragTransaction.attach(currentFragment);
-////                fragTransaction.commit();
-//
-////                Fragment currentFragment = new SettingsFragment();
-////                FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
-////                fragTransaction.detach(currentFragment);
-////                fragTransaction.attach(currentFragment);
-////                fragTransaction.commit();
-//
-//
-//                return false;
-//            }
-//        });
 
 
 
@@ -327,10 +307,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         boolean isPushNotificationOn = QuoteOfTheDayIntentService.isPushNotificationIntentServiceOn(getActivity());
         QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getActivity(), isPushNotificationOn);
-        mQODDailyNotificationsPreference.setChecked(QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
+        mDailyNotificationCheckBoxPreference.setChecked(QuoteOfTheDaySharedPreferences.isPushNotificationOn(getContext()));
 
 
-        mQODDailyNotificationsPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        mDailyNotificationCheckBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
@@ -379,21 +359,55 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
+
+
+
+
+
+
+        int pickedHour = QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateHour(getContext());
+        int pickedMinute = QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateMinute(getContext());
+
+        String pickedHourString;
+        String pickedMinuteString;
+        String am_pm;
+
+        if (pickedHour > 12){
+            pickedHourString = Integer.toString(pickedHour - 12);
+            am_pm = "PM";
+        }
+        else{
+            am_pm = "AM";
+            pickedHourString = Integer.toString(pickedHour);
+        }
+
+
+        if (pickedMinute < 10){
+            pickedMinuteString = "0" + Integer.toString(pickedMinute);
+        }
+        else{
+            pickedMinuteString = Integer.toString(pickedMinute);
+        }
+
+
+        mQODCheckTimePreference.setSummary(
+                Html.fromHtml(getResources().getString(R.string.check_time_preference_summary) + " " +
+                        "<b>" + " " + pickedHourString + ":" + pickedMinuteString + am_pm + "</b>"));
+
+
+
+
+
+
+
         mQODCheckTimePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                //Create FragmentManager
-                FragmentManager fragmentManager = getFragmentManager();
-
-                //Create DateDialogFragment fragment
-                TimePickerDialogFragment timePickerDialogFragment = TimePickerDialogFragment.newInstance(QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateTime);
-
-                //Start the dialog fragment
-                timePickerDialogFragment.setTargetFragment(PixDetailFragment.this, REQUEST_CODE_DIALOG_FRAGMENT_DATE);
-
-                //Show dialog
-                timePickerDialogFragment.show(fragmentManager, IDENTIFIER_DIALOG_FRAGMENT_DATE);
+                FragmentManager fragmentManager = getFragmentManager(); //Create FragmentManager
+                TimePickerDialogFragment timePickerDialogFragment = TimePickerDialogFragment.newInstance(QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateHour(getContext()), QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateMinute(getContext())); //Create TimePickerDialogFragment
+                timePickerDialogFragment.setTargetFragment(SettingsFragment.this, REQUEST_CODE_DIALOG_FRAGMENT_TIME_PICKER); //Start the dialog fragment
+                timePickerDialogFragment.show(fragmentManager, IDENTIFIER_DIALOG_FRAGMENT_TIME_PICKER); //Show dialog
 
                 return false;
             }
@@ -406,56 +420,71 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
-
-
-
-//        mPushNotificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//
-//
-//                if (isChecked == true){
-//
-//                    QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
-//
-//                    QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), true);
-//
-//                    //Start Service
-//                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
-//                    Intent startIntent = new Intent(getContext(), MyService.class);
-//                    startIntent.setAction(ACTION_START_SERVICE);
-//                    getActivity().startService(startIntent);
-//
-//
-//                }
-//                else{
-//
-//                    QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
-//
-//                    QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), false);
-//
-//
-//                    //Stop Service
-//                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
-//                    Intent startIntent = new Intent(getContext(), MyService.class);
-//                    startIntent.setAction(ACTION_START_SERVICE);
-//                    getActivity().stopService(startIntent);
-//
-//                }
-//
-//            }
-//        });
+    }
 
 
 
 
 
+
+    //Override onActivityResult(..) callback method
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        //Log in Logcat
+        Log.i(TAG, "onActivityResult(..) called");
+
+        //If a result code DOES NOT exist
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+
+        if (requestCode == REQUEST_CODE_DIALOG_FRAGMENT_TIME_PICKER) {
+            //Get Time object from Date dialog fragment
+            int pickedHour = (int) intent.getIntExtra(TimePickerDialogFragment.EXTRA_PICKED_HOUR, 10);
+            int pickedMinute = (int) intent.getIntExtra(TimePickerDialogFragment.EXTRA_PICKED_MINUTE, 5);
+
+            Log.i(TAG, "pickedHour: " + pickedHour);
+            Log.i(TAG, "pickedMinute: " + pickedMinute);
+
+            QuoteOfTheDaySharedPreferences.setQuoteOfTheDayUpdateHour(getContext(), pickedHour);
+            QuoteOfTheDaySharedPreferences.setQuoteOfTheDayUpdateMinute(getContext(), pickedMinute);
+
+            QuoteOfTheDayIntentService.ALARM_MANAGER_START_HOUR = QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateHour(getContext());
+            QuoteOfTheDayIntentService.ALARM_MANAGER_START_MINUTE = QuoteOfTheDaySharedPreferences.getQuoteOfTheDayUpdateMinute(getContext());
+
+
+            String pickedHourString;
+            String pickedMinuteString;
+            String am_pm;
+
+            if (pickedHour > 12){
+                pickedHourString = Integer.toString(pickedHour - 12);
+                am_pm = "PM";
+            }
+            else{
+                am_pm = "AM";
+                pickedHourString = Integer.toString(pickedHour);
+            }
+
+
+            if (pickedMinute < 10){
+                pickedMinuteString = "0" + Integer.toString(pickedMinute);
+            }
+            else{
+                pickedMinuteString = Integer.toString(pickedMinute);
+            }
+
+
+            mQODCheckTimePreference.setSummary(
+                            Html.fromHtml(getResources().getString(R.string.check_time_preference_summary) + " " +
+                            "<b>" + " " + pickedHourString + ":" + pickedMinuteString + am_pm + "</b>"));
+        }
 
 
 
     }
-
-
 
 
 
