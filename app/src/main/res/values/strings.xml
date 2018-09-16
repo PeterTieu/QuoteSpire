@@ -100,26 +100,27 @@
 
 
     <!--SettingsFragment-->
-    <string name="contents">Contents</string>
+    <string name="contents_preference_category_key">contents_preference_category_key</string>
+    <string name="contents_preference_category_key_title">Contents</string>
+    <string name="clear_queries_preference_key">clear_queries_preference_key</string>
+    <string name="clear_queries_preference_title">Clear Queries</string>
+    <string name="clear_queries_preference_summary">Clear all recent search queries</string>
 
-    <string name="application_theme_preference">application_theme_preference</string>
-    <string name="application_theme">Application Theme</string>
-    <string name="theme_info">The app is using </string>
-    <string name="push_notification">Push Notification</string>
 
-    <string name="clear_queries_preference">clear_queries_preference</string>
-    <string name="clear_queries">Clear Queries</string>
-    <string name="clear_all_recent_search_queries">Clear all recent search queries</string>
+    <string name="quote_of_the_day_preference_category_key">quote_of_the_day_preference_category_key</string>
+    <string name="quote_of_the_day_preference_category_title">Quote of The Day</string>
+    <string name="daily_notification_checkbox_preference_key">daily_notification_checkbox_preference_key</string>
+    <string name="daily_notification_checkbox_preference_title">Daily Notification</string>
+    <string name="daily_notification_checkbox_preference_summary">Notify me when a new Quote of The Day is available</string>
 
-    <string name="daily_notification_checkbox_preference">daily_notification_checkbox_preference</string>
-    <string name="daily_notification">Daily Notifications</string>
-    <string name="notify_me_when_a_new_quote_of_the_day_is_available">Notify me when a new Quote of The Day is available</string>
+    <string name="check_time_preference_key">quote_of_the_day_check_time_preference_key</string>
+    <string name="check_time_preference_title">Check Time</string>
+    <string name="check_time_preference_summary">When to check if a new Quote of The Day is available: </string>
 
-    <string name="quote_of_the_day_check_time_preference">quote_of_the_day_check_time_preference</string>
-    <string name="quote_of_the_day_check_time">Check Time</string>
-    <string name="time_the_check_if_a_new_quote_of_the_day_is_avaialable">The time to check if a new Quote of The Day is </string>
 
-    <string name="general">General</string>
+
+    <string name="general_preference_category_key">general_preference_category_key</string>
+    <string name="general_preference_category_title">General</string>
 
     <string name="share_app_preference">share_app_preference</string>
     <string name="share_app">Share App</string>
