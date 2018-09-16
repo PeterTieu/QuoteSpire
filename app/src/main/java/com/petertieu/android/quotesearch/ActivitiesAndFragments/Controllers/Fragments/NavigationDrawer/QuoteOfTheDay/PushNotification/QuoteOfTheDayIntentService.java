@@ -97,7 +97,7 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
         if (isPushNotificationOn) {
 //            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
-            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * ALARM_MANAGER_REPEAT_INTERVAL_HOURS, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 60 * ALARM_MANAGER_REPEAT_INTERVAL_HOURS, pendingIntent);
         }
         else{
             alarmManager.cancel(pendingIntent);
