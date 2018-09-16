@@ -194,6 +194,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.MainActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDaySharedPreferences;
@@ -205,6 +206,7 @@ import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Frag
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByAuthor.SearchQuotesByAuthorSharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByCategory.SearchQuotesByCategorySharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByKeyword.SearchQuotesByKeywordSharedPref;
+import com.petertieu.android.quotesearch.BuildConfig;
 import com.petertieu.android.quotesearch.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -214,8 +216,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 //    Preference mApplicationThemePreference;
     Preference mClearQueriesPreference;
     CheckBoxPreference mDailyNotificationCheckBoxPreference;
-    CheckBoxPreference mDailyNotificationsCheckBoxPreferenceSummary;
     Preference mQODCheckTimePreference;
+    Preference mShareAppPreference;
+    Preference mAboutAppPreference;
 
     private static final int REQUEST_CODE_DIALOG_FRAGMENT_TIME_PICKER = 1; //Request code for receiving results from contact activity/app
     private static final String IDENTIFIER_DIALOG_FRAGMENT_TIME_PICKER = "DialogFragmentTimePicker";
@@ -224,7 +227,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.preferences);
+        addPreferencesFromResource(R.xml.preferences_settings);
 
 
         getActivity().setTitle("Settings");
@@ -233,7 +236,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mClearQueriesPreference = (Preference) findPreference(getString(R.string.clear_queries_preference_key));
         mDailyNotificationCheckBoxPreference = (CheckBoxPreference) findPreference(getString(R.string.daily_notification_checkbox_preference_key));
         mQODCheckTimePreference = (Preference) findPreference(getString(R.string.check_time_preference_key));
-
+        mShareAppPreference = (Preference) findPreference(getString(R.string.share_app_preference_key));
+        mAboutAppPreference = (Preference) findPreference(getString(R.string.about_app_preference_key));
 
 
 
@@ -420,7 +424,42 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
+
+
+        mShareAppPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.share_app_implicit_intent_subject));
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote_implicit_intent_text));
+                shareIntent = Intent.createChooser(shareIntent, getResources().getString(R.string.share_app_implicit_intent_chooser_text));
+
+                startActivity(shareIntent);
+
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
+
+
+
+
 
 
 
