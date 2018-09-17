@@ -14,20 +14,20 @@
 
         <item
             android:id="@+id/search_quote"
-            android:icon="@drawable/ic_menu_search"
+            android:icon="@drawable/ic_menu_search_quotes"
             android:title="@string/search_quotes" />
 
 
 
         <item
             android:id="@+id/random_quote_pictures"
-            android:icon="@drawable/ic_menu_picture"
+            android:icon="@drawable/ic_menu_random_quote_pictures"
             android:title="@string/random_quote_pictures" />
 
 
         <item
             android:id="@+id/search_pictures_of_quotes"
-            android:icon="@drawable/ic_menu_search"
+            android:icon="@drawable/ic_menu_search_quote_pictures"
             android:title="@string/search_pictures_of_quotes" />
 
 
