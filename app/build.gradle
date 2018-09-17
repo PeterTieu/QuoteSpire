@@ -27,7 +27,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0' //Add dependency for circular ImageView as header for the navigation drawer
     implementation 'com.commit451:PhotoView:1.2.4' //Add dependency to get the PhotoViewAttacher class, which is used to add the zoom-effect to ImageViews
     implementation 'com.github.ybq:Android-SpinKit:1.1.0' //Add dependency to get a library of various ProgressBars (i.e. Views that are displayed when something is loading)
-    implementation 'com.android.support:preference-v7:23.4.0' //Add dependency for Preference view features for the SettingsFragment
+    implementation 'com.android.support:preference-v7:23.3.0' //Add dependency for Preference view features for the SettingsFragment
     implementation 'com.android.support:preference-v14:23.4.0' //Add dependency for material design of Preference view for the SettingsFragment
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
