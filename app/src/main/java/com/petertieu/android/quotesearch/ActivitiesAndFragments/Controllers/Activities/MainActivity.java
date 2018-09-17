@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     //================= Declare INSTANCE VARIABLES ==============================================================
+    public static String PACKAGE_NAME;
+
 
     //Layout reference variables
     private DrawerLayout mDrawerLayout;         //Layout of the MainActivity
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PACKAGE_NAME = getApplicationContext().getPackageName();
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
