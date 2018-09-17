@@ -16,10 +16,10 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 //import android.widget.TextView;
 //import android.widget.Toast;
 //
-//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.DynamicBroadcastReceiver;
-//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService;
-//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
-//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDaySharedPreferences;
+//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.DynamicBroadcastReceiver;
+//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.MyService;
+//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.QuoteOfTheDayIntentService;
+//import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.QuoteOfTheDaySharedPreferences;
 //import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
 //import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorSharedPref;
 //import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategoryFragment;
@@ -181,7 +181,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
@@ -194,19 +193,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.MainActivity;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDaySharedPreferences;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorFragment;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.MyService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.QuoteOfTheDayIntentService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.QuoteOfTheDaySharedPreferences;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByAuthor.SearchQPByAuthorSharedPref;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategoryFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotePictures.SwipeTabs.SearchQPByCategory.SearchQPByCategorySharedPref;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByAdvanced.SearchQuotesByAdvancedFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByAuthor.SearchQuotesByAuthorSharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByCategory.SearchQuotesByCategorySharedPref;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.SearchQuotes.SwipeTabs.SearchQuotesByKeyword.SearchQuotesByKeywordSharedPref;
-import com.petertieu.android.quotesearch.BuildConfig;
 import com.petertieu.android.quotesearch.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -222,6 +216,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private static final int REQUEST_CODE_DIALOG_FRAGMENT_TIME_PICKER = 1; //Request code for receiving results from contact activity/app
     private static final String IDENTIFIER_DIALOG_FRAGMENT_TIME_PICKER = "DialogFragmentTimePicker";
+    private static final String IDENTIFIER_DIALOG_FRAGMENT_ABOUT_APP = "DialogFragmentAboutApp";
 
 
 
@@ -281,13 +276,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                         SearchQuotesByCategorySharedPref.setSearchQuotesByCategoryStoredQuery(getActivity(), null);
                                         SearchQPByCategorySharedPref.setSearchQuotesByCategoryStoredQuery(getActivity(), null);
                                         SearchQPByAuthorSharedPref.setSearchQuotesByAuthorStoredQuery(getActivity(), null);
-                                        SearchQuotesByAuthorSharedPref.setSearchQuotesByAuthorStoredQuery(getActivity(), null);
-
-                                        SearchQuotesByAdvancedFragment.sKeywordSearchQuery = null;
-                                        SearchQuotesByAdvancedFragment.sAuthorSearchQuery = null;
-                                        SearchQuotesByAdvancedFragment.sCategorySearchQuery = null;
-                                        SearchQPByCategoryFragment.sQuotePictureCategorySearchQuery = null;
-                                        SearchQPByAuthorFragment.sQuotePictureAuthorSearchQuery = null;
 
                                         Toast.makeText(getActivity(), "Cleared all recent search queries", Toast.LENGTH_LONG).show();
 
@@ -385,6 +373,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             pickedHourString = Integer.toString(pickedHour);
         }
 
+        if (pickedHour == 0){
+            pickedHourString = "12";
+        }
+
 
         if (pickedMinute < 10){
             pickedMinuteString = "0" + Integer.toString(pickedMinute);
@@ -446,7 +438,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
+        mAboutAppPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
 
+                FragmentManager fragmentManager = getFragmentManager();
+
+                AboutAppDialogFragment aboutAppDialogFragment = AboutAppDialogFragment.newInstance();
+
+
+                aboutAppDialogFragment.show(fragmentManager, IDENTIFIER_DIALOG_FRAGMENT_ABOUT_APP);
+
+                return false;
+
+            }
+        });
 
 
 
@@ -507,6 +513,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 pickedHourString = Integer.toString(pickedHour);
             }
 
+            if (pickedHour == 0){
+                pickedHourString = "12";
+            }
+
+
 
             if (pickedMinute < 10){
                 pickedMinuteString = "0" + Integer.toString(pickedMinute);
@@ -519,6 +530,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             mQODCheckTimePreference.setSummary(
                             Html.fromHtml(getResources().getString(R.string.check_time_preference_summary) + " " +
                             "<b>" + " " + pickedHourString + ":" + pickedMinuteString + am_pm + "</b>"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+            QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
+
+            //RESET the Service (i.e. start and stop it) so that changes in the update time in QuoteOfTheDayIntentService would be applied
+            String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+            Intent startIntent = new Intent(getContext(), MyService.class);
+            startIntent.setAction(ACTION_START_SERVICE);
+            getActivity().stopService(startIntent); //Stop Service
+            getActivity().startService(startIntent); //Start Service
+
         }
 
 
