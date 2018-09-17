@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--Dialog fragment layout - for Pix delete confirmation-->
+<!--Dialog fragment layout - for MyQuote delete confirmation-->
 
 <android.support.v7.widget.AlertDialogLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

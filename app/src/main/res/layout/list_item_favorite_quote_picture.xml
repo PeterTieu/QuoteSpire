@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<!--Layout for list item of RandomQuotePicturesFragment, SearchQuotePicturesByAuthorFragment, and SearchQuotePicturesByCategoryFragment-->
+<!--Layout for list item of RandomQuotePicturesFragment, SearchQPByAuthorFragment, and SearchQPByCategoryFragment-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,7 +14,7 @@
 
     <ImageView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/favorite_quote_picture_image_view"
+        android:id="@+id/favorite_quote_picture_detail_fragment_quote_image_view"
         android:layout_width="match_parent"
         android:layout_height="115dp"
         android:layout_gravity="center"

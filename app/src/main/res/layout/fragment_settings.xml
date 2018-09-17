@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
 
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:text="@string/push_notification"
+            android:text="@string/daily_notification_checkbox_preference_title"
             android:textSize="20sp"/>
 
         <Switch
@@ -29,7 +29,8 @@
             android:switchMinWidth="60dp"
             android:layout_marginRight="10dp"
             android:gravity="center_vertical"
-            android:layout_gravity="right"/>
+            android:layout_gravity="right"
+            android:checked="true"/>
 
     </LinearLayout>
 
@@ -48,7 +49,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="20dp"
             android:gravity="center_vertical"
-            android:text="@string/clear_recent_search_queries"
+            android:text="@string/clear_queries_preference_summary"
             android:background="?android:attr/selectableItemBackground"
             android:textSize="20sp"/>
 
