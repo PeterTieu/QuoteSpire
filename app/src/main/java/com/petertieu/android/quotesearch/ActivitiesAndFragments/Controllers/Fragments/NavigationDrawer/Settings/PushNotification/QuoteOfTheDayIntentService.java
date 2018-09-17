@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -18,7 +18,6 @@ import android.util.Log;
 
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.GetQuoteOfTheDay;
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.SettingsFragment;
 import com.petertieu.android.quotesearch.ActivitiesAndFragments.Models.Quote;
 import com.petertieu.android.quotesearch.R;
 
@@ -103,7 +102,8 @@ public class QuoteOfTheDayIntentService extends IntentService{
         if (isPushNotificationOn) {
 //            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), INTENT_SERVICE_TIME_INTERVAL, pendingIntent);
 //            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 1, pendingIntent);
-            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 60 * ALARM_MANAGER_REPEAT_INTERVAL_HOURS, pendingIntent);
+//            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 60 * ALARM_MANAGER_REPEAT_INTERVAL_HOURS, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 1000 * 60 * 60 * 4, pendingIntent);
         }
         else{
             alarmManager.cancel(pendingIntent);

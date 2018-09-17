@@ -1,4 +1,4 @@
-package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification;
+package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification;
 
 
 import android.app.Activity;
@@ -10,7 +10,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService;
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.QuoteOfTheDayIntentService;
 
 
 public abstract class DynamicBroadcastReceiver extends Fragment {
@@ -23,7 +23,7 @@ public abstract class DynamicBroadcastReceiver extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getActivity(), "Received a BroadcastIntent: " + intent.getAction(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "Received a BroadcastIntent: " + intent.getAction(), Toast.LENGTH_LONG).show();
 
             Log.i(TAG, "Received a BroadcastIntent: " + intent.getAction());
 
