@@ -189,6 +189,8 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -223,6 +225,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences_settings);
+
+        setHasOptionsMenu(true);
 
 
         getActivity().setTitle("Settings");
@@ -461,6 +465,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
 
+    }
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
     }
 
 
