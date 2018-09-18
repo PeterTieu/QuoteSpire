@@ -4,7 +4,7 @@
     <string name="quote_of_the_day">QUOTE  OF  THE  DAY</string>
     <string name="search_quotes">Search Quotes</string>
     <string name="random_quote_pictures">Random Quote Pictures</string>
-    <string name="search_pictures_of_quotes">Search Pictures of Quotes</string>
+    <string name="search_quote_pictures">Search Quote Pictures</string>
     <string name="random_quotes">Random Quotes</string>
     <string name="favorites">Favorites</string>
     <string name="settings">Settings</string>
@@ -122,13 +122,16 @@
     <string name="general_preference_category_key">general_preference_category_key</string>
     <string name="general_preference_category_title">General</string>
 
-    <string name="share_app_preference">share_app_preference</string>
-    <string name="share_app">Share App</string>
-    <string name="tell_your_friends_about_this_app">Tell your friends about this app</string>
+    <string name="share_app_preference_key">share_app_preference_key</string>
+    <string name="share_app_preference_title">Share App</string>
+    <string name="share_app_preference_summary">Tell your friends about this app</string>
+    <string name="share_app_implicit_intent_subject">Share this App</string>
+    <string name="share_quote_implicit_intent_text">Try Quote Studio app and stay inspired everyday. https://play.google.com/store/apps/details?id=com.tieutech.android.quotestudio</string>
+    <string name="share_app_implicit_intent_chooser_text">Share this App via</string>
 
-    <string name="about_app_preference">about_app_preference</string>
-    <string name="about_app">About App</string>
-    <string name="information_about_this_app">Information about this app</string>
+    <string name="about_app_preference_key">about_app_preference_key</string>
+    <string name="about_app_preference_title">About App</string>
+    <string name="about_app_preference_summary">Information about this app</string>
 
 
     <!--QuotePictureDetailFragment AND FavoriteQuotePictureDetailFragment-->
