@@ -60,7 +60,7 @@ public class MyService extends Service {
         Notification notification = new NotificationCompat.Builder(this)
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setTicker(getResources().getString(R.string.app_name))
-                .setContentText(getResources().getString(R.string.search_pictures_of_quotes))
+                .setContentText(getResources().getString(R.string.search_quote_pictures))
                 .setSmallIcon(R.drawable.ic_button_add)
                 .setContentIntent(contentPendingIntent)
                 .setOngoing(true)
