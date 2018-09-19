@@ -1,57 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <group android:checkableBehavior="single">
+
+
+
+    <group
+        android:id="@+id/list_group_dashboard"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/quote_of_the_day_quote_title"
             android:icon="@drawable/ic_menu_dashboard"
             android:title="@string/dashboard" />
-
-        <item
-            android:id="@+id/random_quotes"
-            android:icon="@drawable/ic_menu_random_quotes"
-            android:title="@string/random_quotes" />
-
-
-        <item
-            android:id="@+id/random_quote_pictures"
-            android:icon="@drawable/ic_menu_random_quote_pictures"
-            android:title="@string/random_quote_pictures" />
-
-
-        <item
-            android:id="@+id/search_quote"
-            android:icon="@drawable/ic_menu_search_quotes"
-            android:title="@string/search_quotes" />
-
-
+    </group>
 
 
 
 
         <item
-            android:id="@+id/search_pictures_of_quotes"
-            android:icon="@drawable/ic_menu_search_quote_pictures"
-            android:title="@string/search_quote_pictures" />
+            android:title="@string/random">
+
+            <menu>
+
+                <group android:checkableBehavior="single">
+
+                    <item
+                        android:id="@+id/random_quotes"
+                        android:icon="@drawable/ic_menu_random_quotes"
+                        android:title="@string/random_quotes"/>
+
+
+                    <item
+                        android:id="@+id/random_quote_pictures"
+                        android:icon="@drawable/ic_menu_random_quote_pictures"
+                        android:title="@string/random_quote_pictures"/>
+
+                </group>
+
+            </menu>
+        </item>
+
+
 
 
         <item
-            android:id="@+id/my_quotes"
-            android:icon="@drawable/ic_menu_my_quotes"
-            android:title="@string/my_quotes" />
+            android:title="@string/search">
+            <menu>
+                <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/search_quote"
+                    android:icon="@drawable/ic_menu_search_quotes"
+                    android:title="@string/search_quotes"/>
+
+
+                <item
+                    android:id="@+id/search_pictures_of_quotes"
+                    android:icon="@drawable/ic_menu_search_quote_pictures"
+                    android:title="@string/search_quote_pictures"/>
+
+                </group>
+            </menu>
+        </item>
+
+
 
 
         <item
-            android:id="@+id/favorites"
-            android:icon="@drawable/ic_menu_favorites"
-            android:title="@string/favorites" />
+            android:title="@string/personal">
+            <menu>
+                <group android:checkableBehavior="single">
+
+                    <item
+                        android:id="@+id/my_quotes"
+                        android:icon="@drawable/ic_menu_my_quotes"
+                        android:title="@string/my_quotes"/>
 
 
-        <item
-            android:id="@+id/settings"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="@string/settings" />
+                    <item
+                        android:id="@+id/favorites"
+                        android:icon="@drawable/ic_menu_favorites"
+                        android:title="@string/favorites"/>
 
+                </group>
+            </menu>
+        </item>
+
+
+
+
+    <group
+        android:id="@+id/list_group_settings"
+        android:checkableBehavior="single">
+            <item
+                android:id="@+id/settings"
+                android:icon="@drawable/ic_menu_settings"
+                android:title="@string/settings"/>
 
     </group>
+
+
 </menu>
