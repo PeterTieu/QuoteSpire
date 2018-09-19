@@ -43,13 +43,13 @@
         android:title="@string/general_preference_category_title">
 
         <Preference
-            android:key="@string/share_app_preference"
-            android:title="@string/share_app"
-            android:summary="@string/tell_your_friends_about_this_app"/>
+            android:key="@string/share_app_preference_key"
+            android:title="@string/share_app_preference_title"
+            android:summary="@string/share_app_preference_summary"/>
         <Preference
-            android:key="@string/about_app_preference"
-            android:title="@string/about_app"
-            android:summary="@string/information_about_this_app"/>
+            android:key="@string/about_app_preference_key"
+            android:title="@string/about_app_preference_title"
+            android:summary="@string/about_app_preference_summary"/>
     </PreferenceCategory>
 
 
