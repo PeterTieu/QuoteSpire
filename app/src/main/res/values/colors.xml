@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+
+    <!--Top pull-down menu AND IntroActivity-->
+    <color name="colorPrimaryDark">#735227</color>
+
+    <!--Options menu-->
+    <color name="colorPrimary">#967448</color>
+
+    <!--CheckboxPreference in SettingsFragment-->
+    <color name="colorAccent">#e8b351</color>
+
+    <!--Navigation header-->
+    <color name="navigationHeader">#887b4e</color>
+
+    <!--TabsLayout in SearchQuotesFragment, SearchQuotePicturesFragment and FavoritesFragment-->
+    <color name="tabLayout">#56446a</color>
+
+    <!--"Undo" Snackbar button in FavoriteQuotesFragment and FavoriteQuotePicturesFragment AND ChecboxPreference in SettingsFragment-->
+    <color name="light_light_teal">#189bd6</color>
+
+    <!--Titles in QuoteOfTheDayFragment-->
+    <color name="quoteTitle">#e8b351</color>
+
+    <color name="quoteAuthor">#6e2fab</color>
+
+    <color name="quoteCategory">#91176e</color>
+
+
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -11,8 +35,18 @@
 
     <color name="teal">#093c53</color>
     <color name="light_teal">#0f5a7c</color>
-    <color name="light_light_teal">#189bd6</color>
+
 
     <color name="orange">#e8b351</color>
     <color name="favorite_on">#dd7d46</color>
+
+
+
+    <!--Navigation Drawer-->
+        <!--Header-->
+    <color name="dark_gold">#7a5729</color>
+    <color name="gold">#9a6d33</color>
+    <color name="purple">#91239d</color>
+
+
 </resources>
