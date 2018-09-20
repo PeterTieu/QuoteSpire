@@ -20,11 +20,24 @@
     <color name="light_light_teal">#189bd6</color>
 
     <!--Titles in QuoteOfTheDayFragment-->
-    <color name="quoteTitle">#e8b351</color>
+    <!--<color name="quoteTitle">#e8b351</color>-->
+    <!--<color name="quoteAuthor">#6e2fab</color>-->
+    <!--<color name="quoteCategory">#91176e</color>-->
 
-    <color name="quoteAuthor">#6e2fab</color>
+    <!--Quote TITLE-->
+    <color name="quoteTitle">#6e2fab</color>
 
+    <!--Quote AUTHOR-->
+    <color name="quoteAuthor">#e8b351</color>
+
+    <!--Quote CATEGORY-->
     <color name="quoteCategory">#91176e</color>
+
+    <color name="navigationHeaderText">#4c3c5e</color>
+
+
+    <!--Quote "unavailable" message-->
+    <color name="quote_unavailable">#b8a669</color>
 
 
 
