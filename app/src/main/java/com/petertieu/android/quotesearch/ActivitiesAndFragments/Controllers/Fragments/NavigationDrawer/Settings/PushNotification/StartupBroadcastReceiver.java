@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity;
+
 
 //Base class for code that receives and handles broadcast intents sent by Context.sendBroadcast(Intent)
 public class StartupBroadcastReceiver extends BroadcastReceiver{
 
     private static final String TAG = "StartupBR";
+
 
 
     @Override
@@ -20,10 +23,21 @@ public class StartupBroadcastReceiver extends BroadcastReceiver{
         //"Received broadcast intent: android.intent.action.BOOT_COMPLETED"
         Log.i(TAG, "Received broadcast intent: " + intent.getAction());
 
-        boolean isPushNotificationOn = QuoteOfTheDaySharedPreferences.isPushNotificationOn(context);
+//        boolean isPushNotificationOn = QuoteOfTheDaySharedPreferences.isPushNotificationOn(context);
+//        QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(context, isPushNotificationOn);
+//        QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(sContext, true);
 
 
+
+        boolean isPushNotificationOn = QuoteOfTheDayIntentService.isPushNotificationIntentServiceOn(context);
         QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(context, isPushNotificationOn);
+
+        //Start Service
+        String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+        Intent startIntent = new Intent(context, MyService.class);
+        startIntent.setAction(ACTION_START_SERVICE);
+        context.startService(startIntent);
+
 
 
 
