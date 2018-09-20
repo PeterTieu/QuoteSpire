@@ -11,29 +11,91 @@
 <!--</resources>-->
 
 
-
-
 <resources>
 
-<!-- Base application theme. -->
-<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-    <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-    <item name="elevation">0dp</item>
+    <!-- Base application theme. -->
+    <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
 
-    <item name="android:textColor">@color/black</item>
-</style>
+        <!--Top pull-down menu-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 
-<style name="AppTheme.NoActionBar">
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-</style>
+        <!--Options menu-->
+        <item name="colorPrimary">@color/colorPrimary</item>
 
-<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+        <!--"Undo" button in Snackbar AND CheckboxPreference in SettingsFragment-->
+        <item name="colorAccent">@color/light_light_teal</item>
 
-<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+        <!--<item name="elevation">0dp</item>-->
+
+
+
+
+        <item name="android:textColor">@color/black</item>
+
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
+
+        <item name="android:itemBackground">@color/purple</item>
+
+
+
+
+
+
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+  <style name="AppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
+      <!-- Customize your theme here. -->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="elevation">0dp</item>-->
+
+        <item name="android:textColor">@color/black</item>
+
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+
+
+
+
+
+
+
+    <style name="AppThemeDark.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+
+
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
+
+
+
+
 
 </resources>
 
