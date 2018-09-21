@@ -49,12 +49,16 @@
                                 This makes the app throw a "TransactionTooLargeException". Making largeHeapt=true avoids this.-->
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_quotespire_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_quotespire_logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:theme="@style/AppThemeDark"
         android:largeHeap="true">
+
+
+
+        <!--android:theme="@style/Theme.AppCompat.NoActionBar"-->
 
 
 
@@ -149,7 +153,7 @@
             IOW, a standalone receiver is a broadcast receiver of the system.
             This means that even if the app isn't running, this broadcast receiver still listens and receives broadcast intents from the system
         -->
-        <receiver android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.StartupBroadcastReceiver">
+        <receiver android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.StartupBroadcastReceiver">
 
             <!--...Then...
             ...after having registered the StartupReceiver (standalone receiver) to the system...
@@ -171,16 +175,16 @@
 
 
         <service
-            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayIntentService"/>
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.QuoteOfTheDayIntentService"/>
 
 
 
         <service
-            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.MyService"/>
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.MyService"/>
 
 
         <receiver
-            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.QuoteOfTheDay.PushNotification.QuoteOfTheDayPushNotificationBroadcastReceiver"
+            android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.QuoteOfTheDayPushNotificationBroadcastReceiver"
             android:exported="false">
 
             <intent-filter
