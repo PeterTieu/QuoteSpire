@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/navigation_drawer_header_height"
-    android:background="?attr/colorPrimaryDark"
+    android:background="@color/navigationHeader"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
@@ -13,12 +13,21 @@
     android:paddingRight="16dp"
     android:gravity="bottom">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="@dimen/navigation_drawer_header_image_size"
-        android:layout_height="@dimen/navigation_drawer_header_image_size"
-        android:layout_gravity="center"
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+        <!--android:layout_width="@dimen/navigation_drawer_header_image_size"-->
+        <!--android:layout_height="@dimen/navigation_drawer_header_image_size"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:src="@drawable/navigation_drawer_header_logo"-->
+        <!--android:id="@+id/circleView"/>-->
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/navigation_drawer_header_image_height"
+        android:layout_gravity="top"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ic_menu"
+        android:src="@drawable/navigation_drawer_header_logo"
         android:id="@+id/circleView"/>
 
 
@@ -28,8 +37,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingTop="8dp"
-        android:text="Welcome to QuoteSearch"
-        android:textSize="16sp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:text="@string/navigation_drawer_header_text"
+        android:textSize="18sp"
+        android:typeface="sans"
+        android:textStyle="bold"
+        android:textColor="@color/navigationHeaderText"/>
 
 </LinearLayout>

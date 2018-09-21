@@ -30,7 +30,7 @@
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/quoteTitle"
             android:textSize="17dp"
             android:textStyle="bold"/>
 
@@ -102,7 +102,7 @@
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
         android:gravity="right"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/quoteAuthor"
         android:textIsSelectable="true"
         android:textSize="14dp"/>
 
@@ -114,7 +114,7 @@
         android:layout_marginLeft="70dp"
         android:layout_marginTop="5dp"
         android:paddingBottom="20dp"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/quoteCategory"
         android:textSize="14dp"/>
 
 </LinearLayout>
