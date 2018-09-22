@@ -41,34 +41,46 @@ public class AboutAppDialogFragment extends DialogFragment{
         //Inflate the layout of the AlertDialog
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_about_app, null);
 
-        //Create and customise the dialog title
-        TextView dialogTitle = new TextView(getActivity());
-        dialogTitle.setText("About Quote Studio");
-        dialogTitle.setTextSize(24);
-        dialogTitle.setHeight(120);
-        dialogTitle.setGravity(Gravity.CENTER);
-        dialogTitle.setTypeface(null, Typeface.BOLD);
-        dialogTitle.setTextColor(getResources().getColor(R.color.colorAccent));
-        dialogTitle.setBackgroundColor(getResources().getColor(R.color.orange));
+//        //Create and customise the dialog title
+//        TextView dialogTitle = new TextView(getActivity());
+//        dialogTitle.setText("About Quote Studio");
+//        dialogTitle.setTextSize(24);
+//        dialogTitle.setHeight(120);
+//        dialogTitle.setGravity(Gravity.CENTER);
+//        dialogTitle.setTypeface(null, Typeface.BOLD);
+//        dialogTitle.setTextColor(getResources().getColor(R.color.colorAccent));
+//        dialogTitle.setBackgroundColor(getResources().getColor(R.color.orange));
+
+
+
+        //Set-up custom title to display in the dialog
+        TextView dialogTitle = new TextView(getActivity()); //Create TextView object
+        dialogTitle.setText("\nAbout QuoteSpire\n"); //Set curentDescriptionEditTextString on TextView
+        dialogTitle.setTextSize(22); //Set size of curentDescriptionEditTextString
+        dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
+        dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
+        dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
+
 
 
 
         //Create the AlertDialog
-        android.support.v7.app.AlertDialog alertDialog = new android.support.v7.app.AlertDialog
+        final AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity())
                 .setView(view)
                 .setCustomTitle(dialogTitle)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setMessage(Html.fromHtml(
                         "<br>" + "</br>" + //New Line
-                                "Quote Studio is your personal and wholy comprehensive app for Quotes!" + " " +
+                                "QuoteSpire is your personal and wholy comprehensive app for Quotes!" + " " +
                                 "<br>" + "</br>" + //New Line
                                 "<br>" + "</br>" + //New Line
                                 "Be motivated everyday by quotes and beautiful pictures of quotes from the world's best quote REST API, TheySaidSo." +
                                 "<br>" + "</br>" + //New Line
                                 "<br>" + "</br>" + //New Line
                                 "<b>" + "Tap into " + "</b>" +
-                                "an endless library of quotes from numerous philosophers, writers, thinkers and great minds whose words have shed wisdom and inspiration in the world!" +
+                                "a virtually endless and constantly growing library of quotes from numerous philosophers, writers, thinkers and great minds whose words have shed wisdom and inspiration in the world!" +
                                 "<br>" + "</br>" + // New Line
                                 "<br>" + "</br>" + //New Line
                                 "<b>" + "Features " + "</b>" +
@@ -86,6 +98,20 @@ public class AboutAppDialogFragment extends DialogFragment{
                                 "<div style=\"text-align:center\">" + "Brought to you by TieuTech" + "</div>"))
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
+
+
+
+
+        //Set colors of negative and positive buttons
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+            }
+        });
+
+
 
 
         //If the screen orientation is PORTRAIT
