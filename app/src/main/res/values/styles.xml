@@ -37,7 +37,8 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
 
-        <item name="android:itemBackground">@color/purple</item>
+        <!--Color for options menu DROPDOWN menu item-->
+        <item name="android:itemBackground">@color/dropdownMenuItem</item>
 
 
 
@@ -45,8 +46,6 @@
 
 
     </style>
-
-
 
 
 
