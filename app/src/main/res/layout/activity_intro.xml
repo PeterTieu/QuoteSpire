@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/introActivityBackground"
     tools:context="com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity">
 
     <!--App logo-->
@@ -23,7 +23,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_menu_quote_of_the_day"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:src="@drawable/navigation_drawer_header_logo"
             android:contentDescription="@string/app_name"/>
 
     </LinearLayout>
