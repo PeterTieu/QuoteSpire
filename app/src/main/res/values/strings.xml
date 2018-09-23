@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">QuoteSearch</string>
+    <string name="app_name">QuoteSpire</string>
+
+
+
+    <!--Navigation Drawer Header-->
+    <string name="navigation_drawer_header_text">Your Quotes Portal</string>
 
 
     <!--Navigation Drawer-->
