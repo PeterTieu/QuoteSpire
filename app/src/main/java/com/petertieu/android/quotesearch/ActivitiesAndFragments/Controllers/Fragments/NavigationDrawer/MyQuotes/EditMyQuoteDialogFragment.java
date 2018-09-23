@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.petertieu.android.quotesearch.R;
-
-import java.util.UUID;
 
 public class EditMyQuoteDialogFragment extends DialogFragment{
 
@@ -88,7 +85,7 @@ public class EditMyQuoteDialogFragment extends DialogFragment{
         dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
         dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
         dialogTitle.setTextColor(getResources().getColor(R.color.orange)); //Set curentDescriptionEditTextString color
-        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey)); //Set curentDescriptionEditTextString background color
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.FavoriteQuotesAndMyQuotesListItems)); //Set curentDescriptionEditTextString background color
 
 
 

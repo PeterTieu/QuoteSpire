@@ -55,14 +55,24 @@ public class RemoveAllMyQuotesConfirmationDialogFragment extends DialogFragment{
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_delete_my_quote_confirmation, null);
 
 
+//        //Set-up custom title to display in the dialog
+//        TextView dialogTitle = new TextView(getActivity()); //Create TextView object
+//        dialogTitle.setText("\nDelete Quote\n"); //Set curentDescriptionEditTextString on TextView
+//        dialogTitle.setTextSize(22); //Set size of curentDescriptionEditTextString
+//        dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
+//        dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
+//        dialogTitle.setTextColor(getResources().getColor(R.color.orange)); //Set curentDescriptionEditTextString color
+//        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey)); //Set curentDescriptionEditTextString background color
+
+
         //Set-up custom title to display in the dialog
         TextView dialogTitle = new TextView(getActivity()); //Create TextView object
-        dialogTitle.setText("\nDelete Quote\n"); //Set curentDescriptionEditTextString on TextView
+        dialogTitle.setText("\nRemove All\n"); //Set curentDescriptionEditTextString on TextView
         dialogTitle.setTextSize(22); //Set size of curentDescriptionEditTextString
         dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
         dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
-        dialogTitle.setTextColor(getResources().getColor(R.color.orange)); //Set curentDescriptionEditTextString color
-        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey)); //Set curentDescriptionEditTextString background color
+        dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
 
 
 
