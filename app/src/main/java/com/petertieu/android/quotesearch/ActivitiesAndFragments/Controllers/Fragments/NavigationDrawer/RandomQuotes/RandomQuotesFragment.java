@@ -2,13 +2,16 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -587,6 +590,9 @@ public class RandomQuotesFragment extends Fragment {
             shouldEnableRandomiseMenuItem = false;
             randomiseItem.setEnabled(false);
         }
+
+
+
 
 
 //        //If the flag to enable the "Randomise" menu item is TRUE

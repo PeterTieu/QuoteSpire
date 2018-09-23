@@ -407,7 +407,7 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         dialogTitle.setGravity(Gravity.CENTER);
         dialogTitle.setTypeface(null, Typeface.BOLD);
         dialogTitle.setTextColor(getResources().getColor(R.color.orange));
-        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey));
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.FavoriteQuotesAndMyQuotesListItems));
 
         int favoriteQuotePicturesDatabaseSize = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size();
 
