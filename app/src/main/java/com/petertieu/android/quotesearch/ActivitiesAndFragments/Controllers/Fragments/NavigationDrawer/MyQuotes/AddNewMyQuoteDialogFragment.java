@@ -54,8 +54,8 @@ public class AddNewMyQuoteDialogFragment extends DialogFragment{
         dialogTitle.setTextSize(22); //Set size of curentDescriptionEditTextString
         dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
         dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
-        dialogTitle.setTextColor(getResources().getColor(R.color.orange)); //Set curentDescriptionEditTextString color
-        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey)); //Set curentDescriptionEditTextString background color
+        dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
 
 
 
@@ -75,7 +75,7 @@ public class AddNewMyQuoteDialogFragment extends DialogFragment{
 
 
 
-        return new AlertDialog
+        final AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity())
                 .setView(view)
                 .setCustomTitle(dialogTitle)
@@ -119,6 +119,25 @@ public class AddNewMyQuoteDialogFragment extends DialogFragment{
 
                         })
                 .create();
+
+
+
+
+        //Set colors of negative and positive buttons
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+            }
+        });
+
+
+
+        return alertDialog;
+
+
+
     }
 
 
