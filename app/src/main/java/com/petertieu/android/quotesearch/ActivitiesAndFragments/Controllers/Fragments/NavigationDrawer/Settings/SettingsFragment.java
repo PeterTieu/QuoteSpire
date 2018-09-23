@@ -252,24 +252,42 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                TextView dialogTitle = new TextView(getActivity());
-                dialogTitle.setText("Clear Recent Search Queries");
-                dialogTitle.setTextSize(22);
-                dialogTitle.setGravity(Gravity.CENTER);
-                dialogTitle.setTypeface(null, Typeface.BOLD);
-                dialogTitle.setTextColor(getResources().getColor(R.color.orange));
-                dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey));
+//                TextView dialogTitle = new TextView(getActivity());
+//                dialogTitle.setText("Clear Recent Search Queries");
+//                dialogTitle.setTextSize(22);
+//                dialogTitle.setGravity(Gravity.CENTER);
+//                dialogTitle.setTypeface(null, Typeface.BOLD);
+//                dialogTitle.setTextColor(getResources().getColor(R.color.orange));
+//                dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey));
+
+                TextView dialogTitle = new TextView(getActivity()); //Create TextView object
+                dialogTitle.setText("\nClear Recent Search Queries\n"); //Set curentDescriptionEditTextString on TextView
+                dialogTitle.setTextSize(22); //Set size of curentDescriptionEditTextString
+                dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
+                dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
+                dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
+                dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
+
+
+
+
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_clear_queries_preference, null);
+
+                TextView alertDialogMessage = (TextView) view.findViewById(R.id.dialog_fragment_clear_queries_preference_message);
+
+
+
 
                 String dialogMessage = "Do you wish to clear all recent search queries?";
 
 
-                View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_remove_all_favorite_quotes, null);
+                View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_clear_queries_preference, null);
 
-                AlertDialog alertDialog = new AlertDialog
+                final AlertDialog alertDialog = new AlertDialog
                         .Builder(getActivity())
                         .setView(dialogFragmentView)
                         .setCustomTitle(dialogTitle)
-                        .setMessage(dialogMessage)
+//                        .setMessage(dialogMessage)
                         .setNegativeButton(android.R.string.no, null)
                         .setPositiveButton(android.R.string.yes,
                                 new DialogInterface.OnClickListener() {
@@ -286,6 +304,30 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                     }
                                 })
                         .create();
+
+
+
+
+
+
+
+                //Set colors of negative and positive buttons
+                alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface arg0) {
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+                    }
+                });
+
+
+
+
+
+
+
+
+
 
                 alertDialog.show();
 
