@@ -205,7 +205,7 @@ public class QuoteOfTheDayIntentService extends IntentService{
 
         Notification notification = new NotificationCompat.Builder(sContext, "notify_001")
                 .setTicker(resources.getString(R.string.new_quote_of_the_day_title))
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_push_notification)
                 .setContentTitle("Quote from " + latestQuoteOfTheDay.getAuthor())
                 .setContentText("\"" + latestQuoteOfTheDay.getQuote() + "\"")
                 .setContentIntent(pendingIntent)
