@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--Navigation header-->
+    <color name="introActivityBackground">#887b4e</color>
+
     <!--Top pull-down menu AND IntroActivity-->
     <color name="colorPrimaryDark">#735227</color>
 
@@ -28,7 +31,7 @@
     <color name="quoteTitle">#6e2fab</color>
 
     <!--Quote AUTHOR-->
-    <color name="quoteAuthor">#e8b351</color>
+    <color name="quoteAuthor">#f6be57</color>
 
     <!--Quote CATEGORY-->
     <color name="quoteCategory">#91176e</color>
@@ -41,9 +44,44 @@
 
 
 
+
+
+    <!--TabsLayout in SearchQuotesFragment, SearchQuotePicturesFragment and FavoritesFragment-->
+    <color name="dialogFragmentTitleText">#644f7b</color>
+
+    <!--DialogFragment-->
+    <color name="dialogFragmentTitleBackground">#9b8c59</color>
+    <color name="dialogFragmentMessageText">#FFFFFF</color>
+    <color name="dialogFragmentButton">#e8b351</color>
+
+
+    <!--Dropdown Menu Item-->
+    <color name="dropdownMenuItem">#baaac3</color>
+
+
+
+    <color name="FavoriteQuotesAndMyQuotesListItems">#9b9797</color>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="grey">#888585</color>
+
     <color name="dark_grey">#3a3838</color>
 
     <color name="teal">#093c53</color>
@@ -59,7 +97,6 @@
         <!--Header-->
     <color name="dark_gold">#7a5729</color>
     <color name="gold">#9a6d33</color>
-    <color name="purple">#91239d</color>
 
 
 </resources>
