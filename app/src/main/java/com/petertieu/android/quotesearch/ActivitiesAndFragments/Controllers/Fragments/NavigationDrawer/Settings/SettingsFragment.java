@@ -272,13 +272,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_clear_queries_preference, null);
-
                 TextView alertDialogMessage = (TextView) view.findViewById(R.id.dialog_fragment_clear_queries_preference_message);
-
-
-
-
                 String dialogMessage = "Do you wish to clear all recent search queries?";
+
+
 
 
                 View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_clear_queries_preference, null);

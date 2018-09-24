@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -75,14 +76,29 @@ public class TimePickerDialogFragment extends DialogFragment{
 
 
 
-        TextView dialogTitle = new TextView(getActivity());
-        dialogTitle.setText(R.string.check_time_preference_title);
-        dialogTitle.setTextColor(getResources().getColor(R.color.orange));
-        dialogTitle.setTextSize(25);
-        dialogTitle.setTypeface(null, Typeface.BOLD);
+//        TextView dialogTitle = new TextView(getActivity());
+//        dialogTitle.setText(R.string.check_time_preference_title);
+//        dialogTitle.setTextColor(getResources().getColor(R.color.orange));
+//        dialogTitle.setTextSize(25);
+//        dialogTitle.setTypeface(null, Typeface.BOLD);
+//        dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
+//        dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
+
+
+
+        //Set-up custom title to display in the dialog
+        TextView dialogTitle = new TextView(getActivity()); //Create TextView object
+        dialogTitle.setText("\n" + getResources().getString(R.string.check_time_preference_title) + "\n"); //Set curentDescriptionEditTextString on TextView
+        dialogTitle.setTextSize(22); //Set size of curentDescriptionEditTextString
+        dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
+        dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
+        dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
+
+
 
         //Return AlertDialog (subclass of Dialog), which sets the dialog properties
-        return new AlertDialog
+        final AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity()) //Create Builder
                 .setView(view) //Set View of dialog
                 .setCustomTitle(dialogTitle) //Set TITLE of dialog
@@ -111,6 +127,23 @@ public class TimePickerDialogFragment extends DialogFragment{
                             }
                         })
                 .create();
+
+
+
+
+        //Set colors of negative and positive buttons
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+            }
+        });
+
+
+
+
+        return alertDialog;
 
     }
 
