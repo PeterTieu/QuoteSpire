@@ -136,9 +136,9 @@
     <string name="share_app_preference_key">share_app_preference_key</string>
     <string name="share_app_preference_title">Share App</string>
     <string name="share_app_preference_summary">Tell your friends about this app</string>
-    <string name="share_app_implicit_intent_subject">Share this App</string>
-    <string name="share_quote_implicit_intent_text">Try Quote Studio app and stay inspired everyday. https://play.google.com/store/apps/details?id=com.tieutech.android.quotestudio</string>
-    <string name="share_app_implicit_intent_chooser_text">Share this App via</string>
+    <string name="share_app_implicit_intent_subject">Share QuoteSpire app</string>
+    <string name="share_quote_implicit_intent_text">Try Quote Studio app and stay inspired everyday. https://play.google.com/store/apps/details?id=com.tieutech.android.QuoteSpire</string>
+    <string name="share_app_implicit_intent_chooser_text">Share QuotesSpire via</string>
 
     <string name="about_app_preference_key">about_app_preference_key</string>
     <string name="about_app_preference_title">About App</string>
@@ -149,8 +149,8 @@
     <string name="toggle_favorites">Toggle Favorites</string>
     <string name="share">Share</string>
     <string name="download">Download</string>
-    <string name="previous">Previous</string>
-    <string name="next">Next</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="next">NEXT</string>
 
 
 
