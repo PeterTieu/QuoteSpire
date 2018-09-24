@@ -2,6 +2,7 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,6 +54,8 @@ public class QuotePictureDetailActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Log.i(TAG, "onCreate(..) called"); //Log to Logcat
 

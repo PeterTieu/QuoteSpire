@@ -3,6 +3,7 @@ package com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Fra
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -76,6 +77,8 @@ public class FavoriteQuotePictureViewPagerActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         Log.i(TAG, "onCreate(..) called");
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
         setContentView(R.layout.activity_quote_picture_view_pager); //Set the activity content from the ViewPager layout resource
