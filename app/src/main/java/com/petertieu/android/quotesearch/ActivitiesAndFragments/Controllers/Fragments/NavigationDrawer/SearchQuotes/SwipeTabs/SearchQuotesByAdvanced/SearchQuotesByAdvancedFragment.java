@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -419,7 +418,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
         dialogTitle.setGravity(Gravity.CENTER);
         dialogTitle.setTypeface(null, Typeface.BOLD);
         dialogTitle.setTextColor(getResources().getColor(R.color.orange));
-        dialogTitle.setBackgroundColor(getResources().getColor(R.color.grey));
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.FavoriteQuotesAndMyQuotesListItems));
 
         String dialogMessage = "Please enter search queries for Keyword and/or Author and/or Category";
 

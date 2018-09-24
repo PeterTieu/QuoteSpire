@@ -39,6 +39,7 @@ import java.util.Collections;
 import java.util.List;
 
 
+
 @SuppressWarnings({"RedundantCast", "FieldCanBeLocal", "deprecation", "ConstantConditions"})
 
 //Fragment for searching Quotes by author
