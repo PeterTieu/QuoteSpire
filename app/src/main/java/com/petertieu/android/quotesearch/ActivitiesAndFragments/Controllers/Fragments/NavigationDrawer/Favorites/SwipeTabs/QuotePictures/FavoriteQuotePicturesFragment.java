@@ -401,36 +401,60 @@ public class FavoriteQuotePicturesFragment extends Fragment{
     private void removeAllFavoriteQuotesConfirmationDialog(){
 
 
-        TextView dialogTitle = new TextView(getActivity());
-        dialogTitle.setText("Remove all");
-        dialogTitle.setTextSize(22);
-        dialogTitle.setGravity(Gravity.CENTER);
-        dialogTitle.setTypeface(null, Typeface.BOLD);
-        dialogTitle.setTextColor(getResources().getColor(R.color.orange));
-        dialogTitle.setBackgroundColor(getResources().getColor(R.color.FavoriteQuotesAndMyQuotesListItems));
+        //Set-up custom title to display in the dialog
+        TextView dialogTitle = new TextView(getActivity()); //Create TextView object
+        dialogTitle.setText("\nRemove All\n"); //Set curentDescriptionEditTextString on TextView
+        dialogTitle.setTextSize(22); //Set size of curentDescriptionEditTextString
+        dialogTitle.setGravity(Gravity.CENTER); //Set  position of curentDescriptionEditTextString in the title box of the dialog
+        dialogTitle.setTypeface(null, Typeface.BOLD); //Set the curentDescriptionEditTextString to be bold
+        dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
+        dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
+
+
+
+        View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_remove_all_favorite_quote_pictures_confirmation, null);
+
+        TextView removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage = (TextView) dialogFragmentView.findViewById(R.id.dialog_fragment_remove_all_favorite_quote_pictures_confirmation_message);
+
+
+
 
         int favoriteQuotePicturesDatabaseSize = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size();
 
 
-        String dialogMessage = null;
+//        String dialogMessage = null;
+//        if (favoriteQuotePicturesDatabaseSize == 1){
+//            dialogMessage = "Are you sure you want to remove this Quote Picture from Favorites?";
+//        }
+//        else if (favoriteQuotePicturesDatabaseSize == 2){
+//            dialogMessage = "Are you sure you want to remove these 2 Quote Pictures from Favorites?";
+//        }
+//        else if (favoriteQuotePicturesDatabaseSize > 1){
+//            dialogMessage = "Are you sure you want to remove all " + favoriteQuotePicturesDatabaseSize + " Quote Pictures from Favorites?";
+//        }
+
+
+
+
         if (favoriteQuotePicturesDatabaseSize == 1){
-            dialogMessage = "Are you sure you want to remove this Quote Picture from Favorites?";
+            removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove this Quote Picture from Favorites?");
         }
         else if (favoriteQuotePicturesDatabaseSize == 2){
-            dialogMessage = "Are you sure you want to remove these 2 Quote Pictures from Favorites?";
+            removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove these 2 Quote Pictures from Favorites?");
         }
         else if (favoriteQuotePicturesDatabaseSize > 1){
-            dialogMessage = "Are you sure you want to remove all " + favoriteQuotePicturesDatabaseSize + " Quote Pictures from Favorites?";
+            removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove all " + favoriteQuotePicturesDatabaseSize + " Quote Pictures from Favorites?");
         }
+
 
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_remove_all_favorite_quote_pictures, null);
 
-        AlertDialog alertDialog = new AlertDialog
+        final AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity())
-                .setView(view)
+                .setView(dialogFragmentView)
                 .setCustomTitle(dialogTitle)
-                .setMessage(dialogMessage)
+//                .setMessage(dialogMessage)
                 .setNegativeButton(android.R.string.cancel, null)
 
                 .setPositiveButton(android.R.string.yes,
@@ -442,6 +466,18 @@ public class FavoriteQuotePicturesFragment extends Fragment{
                         })
                 .create();
 
+
+
+
+
+        //Set colors of negative and positive buttons
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+                alertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.dialogFragmentButton));
+            }
+        });
 
         alertDialog.show();
 
