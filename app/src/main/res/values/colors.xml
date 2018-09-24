@@ -65,8 +65,12 @@
 
 
 
+    <color name="searchSuggestionsButtonText">#644f7b</color>
+    <color name="searchSuggestionsButtonBackground">#887b4e</color>
 
 
+    <color name="detailedQuotePictureButtonText">#6e2fab</color>
+    <color name="detailedQuotePictureButtonBackground">#a9854b</color>
 
 
 
@@ -89,7 +93,7 @@
 
 
     <color name="orange">#e8b351</color>
-    <color name="favorite_on">#dd7d46</color>
+    <color name="favorite_on">#db8554</color>
 
 
 
