@@ -81,7 +81,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
 
             <!--Spacer-->
             <View
@@ -96,7 +98,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
         </LinearLayout>
 
 
@@ -115,7 +119,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
 
             <!--Spacer-->
             <View
@@ -130,7 +136,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
         </LinearLayout>
 
 
@@ -149,7 +157,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
 
             <!--Spacer-->
             <View
@@ -164,7 +174,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
         </LinearLayout>
 
 
@@ -183,7 +195,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
 
             <!--Spacer-->
             <View
@@ -198,7 +212,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
         </LinearLayout>
 
 
@@ -218,7 +234,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
 
             <!--Spacer-->
             <View
@@ -233,7 +251,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
-                tools:ignore="SpUsage"/>
+                tools:ignore="SpUsage"
+                android:textColor="@color/searchSuggestionsButtonText"
+                android:background="@color/searchSuggestionsButtonBackground"/>
 
         </LinearLayout>
 

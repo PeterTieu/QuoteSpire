@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/introActivityBackground"
-    tools:context="com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.IntroActivity">
+    tools:context="com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Activities.IntroActivity">
 
     <!--App logo-->
     <LinearLayout

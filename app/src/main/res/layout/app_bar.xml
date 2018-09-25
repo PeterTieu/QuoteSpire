@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.petertieu.android.quotesearch.ActivitiesAndFragments.Controllers.Activities.MainActivity">
+    tools:context="com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Activities.MainActivity">
 
 
 

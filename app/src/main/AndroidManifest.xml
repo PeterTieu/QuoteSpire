@@ -3,12 +3,12 @@
 <!--MANIFEST-->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.petertieu.android.quotesearch">
+          package="com.tieutech.android.quotespire">
 
 
 
 
-    <permission android:name="com.petertieu.android.quotesearch.PRIVATE"
+    <permission android:name="com.tieutech.android.quotespire.PRIVATE"
                 android:protectionLevel="signature"/>
 
 
@@ -98,7 +98,7 @@
         <activity
             android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureDetailActivity"
             android:label="@string/quote_picture"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:theme="@style/AppThemeLight"
             android:parentActivityName=".ActivitiesAndFragments.Controllers.Activities.IntroActivity"
             android:largeHeap="true">
         </activity>
@@ -109,7 +109,7 @@
         <activity
             android:name=".ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.SwipeTabs.QuotePictures.FavoriteQuotePictureViewPagerActivity"
             android:label="@string/quote_picture"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:theme="@style/AppThemeLight"
             android:parentActivityName=".ActivitiesAndFragments.Controllers.Activities.IntroActivity"
             android:largeHeap="true">
         </activity>
@@ -125,7 +125,7 @@
         <!--FileProvider for saving a Quote Picture from QuotePictureFragment as a cache, before sharing it (via implicit intent)-->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.petertieu.android.quotesearch.fileprovider"
+            android:authorities="com.tieutech.android.quotespire.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

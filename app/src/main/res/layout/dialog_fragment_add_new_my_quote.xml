@@ -52,10 +52,10 @@
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/add_new_quote_quote_edit_text"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="100dp"
                 android:gravity="top"
                 android:maxLength="1000"
-                android:maxLines="4"
+                android:maxLines="3"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="18dp"
                 android:hint="@string/quote"/>
