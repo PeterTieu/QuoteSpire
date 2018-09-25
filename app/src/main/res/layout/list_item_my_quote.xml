@@ -94,7 +94,7 @@
                 android:id="@+id/my_quote_delete_icon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="@drawable/ic_button_delete"
+                android:background="@drawable/ic_button_remove"
                 android:gravity="left"/>
 
 
