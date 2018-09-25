@@ -102,6 +102,7 @@ public class AboutAppDialogFragment extends DialogFragment{
 
 
 
+
         //Set colors of negative and positive buttons
         alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
             @Override
@@ -116,12 +117,13 @@ public class AboutAppDialogFragment extends DialogFragment{
 
         //If the screen orientation is PORTRAIT
         if (getActivity().getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT){
-            alertDialog.getWindow().setLayout(900,1400); //Set the size of the AlertDialog as per PORTRAIT orientation
+            alertDialog.getWindow().setLayout(900,1700); //Set the size of the AlertDialog as per PORTRAIT orientation
         }
         //If the screen orientation is LANDSCAPE
         else{
             alertDialog.getWindow().setLayout(1450, 900); //Set the size of the AlertDialog as per LANDSCAPE orientation
         }
+
 
 
         //Return the AlertDialog

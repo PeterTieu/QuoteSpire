@@ -288,9 +288,9 @@ public class SearchQPByCategoryFragment extends Fragment implements View.OnClick
         //List of all possible Search Suggestions
         List<String> mSearchSuggestionsFullList = Arrays.asList("Inspire", "Experience", "Life", "Self", "Right Way",
                 "Failure", "Fortune", "Dream", "Vision", "Curiosity", "Greed", "Insight", "Simplicity", "Understanding", "Business", "Economics", "Finance",
-                "Self-Expression", "Books", "Reading", "Diversity", "Equality", "Philosophy", "Wisdom", "Positive-Thinking", "Conservation", "Nature", "Success",
+                "Self-Expression", "Books", "Reading", "Diversity", "Equality", "Philosophy", "Wisdom", "Positive-Thinking", "Nature", "Success",
                 "Motivation", "Opportunities", "Government", "Truth", "People", "Universe", "Culture", "Education", "Soul", "Mind", "Work", "Mind-Body-Spirit",
-                "Cosmic", "Self-Improvement", "Money", "Wealth", "Inspirational", "Beliefs", "Self-Help", "Time", "Politics", "Teaching", "Futurism",
+                "Cosmic", "Self-Improvement", "Money", "Wealth", "Inspirational", "Beliefs", "Self-Help", "Time", "Teaching", "Futurism",
                 "Poetry", "Confidence", "Trust", "Hope", "Humanity", "Future", "War", "Peace", "Society", "Psychology", "Greatness", "Progress", "Meaning", "Knowledge", "Zen",
                 "Meditation", "Reality", "Mindfulness", "Imagination", "Technology", "Science", "Funny", "Nature");
 
