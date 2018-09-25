@@ -3,6 +3,7 @@ package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragm
 import android.util.Log;
 
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
+import com.tieutech.android.quotespire.ActivitiesAndFragments.Others.APIKey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +26,7 @@ public class GetQuoteOfTheDayCategoryQuote {
 
         Quote quoteOfTheDayCategoryQuote = new Quote();
 
-        String urlString = "http://quotes.rest/quote/search.json?category=" + quoteOfTheDayCategory + "&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
+        String urlString = "http://quotes.rest/quote/search.json?category=" + quoteOfTheDayCategory + "&api_key=" + APIKey.API_KEY;
 //        String urlString = "http://quotes.rest/quote/search.json?category=empowering&api_key=eQMFnO84Di1ojF0riK_HfgeF";
 //        String urlString = "http://quotes.rest/quote/search.json?author=albert+einstein&api_key=eQMFnO84Di1ojF0riK_HfgeF";
 

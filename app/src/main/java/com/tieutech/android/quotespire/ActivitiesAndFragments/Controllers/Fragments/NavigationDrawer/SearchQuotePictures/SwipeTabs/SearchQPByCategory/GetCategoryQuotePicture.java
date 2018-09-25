@@ -3,6 +3,7 @@ package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragm
 import android.util.Log;
 
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.QuotePicture;
+import com.tieutech.android.quotespire.ActivitiesAndFragments.Others.APIKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +30,7 @@ public class GetCategoryQuotePicture {
 
         QuotePicture categoryQuotePicture = new QuotePicture(); //Instantiate a QuotePicture
 
-        String urlString = "http://quotes.rest/quote/image/search.json?" + "category=" + searchQuery + "&api_key=1FGGcyK9BwzYfAi8IyYZ8geF"; //Define URI endpoint for networking
+        String urlString = "http://quotes.rest/quote/image/search.json?" + "category=" + searchQuery + "&api_key=" + APIKey.API_KEY; //Define URI endpoint for networking
         //Fetches JSON text of a Category Quote Picture containing:
         //1: ID
         //2: Picture download URI

@@ -3,6 +3,7 @@ package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragm
 import android.util.Log;
 
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
+import com.tieutech.android.quotespire.ActivitiesAndFragments.Others.APIKey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +26,7 @@ public class GetRandomQuote {
 
         Quote randomQuote = new Quote();
 
-        String urlString = "http://quotes.rest/quote/random.json?api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
+        String urlString = "http://quotes.rest/quote/random.json?api_key=" + APIKey.API_KEY;
 
         try {
             String jsonString = getJsonString(urlString);

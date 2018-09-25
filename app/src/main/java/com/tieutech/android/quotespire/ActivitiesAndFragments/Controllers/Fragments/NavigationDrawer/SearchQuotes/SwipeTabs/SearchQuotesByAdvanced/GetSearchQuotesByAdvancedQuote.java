@@ -3,6 +3,7 @@ package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragm
 import android.util.Log;
 
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
+import com.tieutech.android.quotespire.ActivitiesAndFragments.Others.APIKey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,34 +34,32 @@ public class GetSearchQuotesByAdvancedQuote {
 
         Quote quote = new Quote(); //Create Quote object
 
-        String APIKey = "&private=false&api_key=1FGGcyK9BwzYfAi8IyYZ8geF"; //API key from TheySaidSo.com
-
         if (keywordSearchQuery != null){
-            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + APIKey; //Get URL string containing the keyword search query
+            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the keyword search query
         }
 
         if (authorSearchQuery != null){
-            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&author=" + authorSearchQuery + APIKey; //Get URL string containing the author search query
+            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&author=" + authorSearchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the author search query
         }
 
         if (categorySearchQuery != null){
-            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&category=" + categorySearchQuery + APIKey; //Get URL string containing the category search query
+            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&category=" + categorySearchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the category search query
         }
 
         if (keywordSearchQuery!= null && authorSearchQuery != null){
-            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + "&author=" + authorSearchQuery + APIKey; //Get URL string containing the keyword search query
+            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + "&author=" + authorSearchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the keyword search query
         }
 
         if (keywordSearchQuery!= null && categorySearchQuery != null){
-            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + "&category=" + categorySearchQuery + APIKey; //Get URL string containing the keyword search query
+            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + "&category=" + categorySearchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the keyword search query
         }
 
         if (authorSearchQuery!= null && categorySearchQuery != null){
-            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&author=" + authorSearchQuery + "&category=" + categorySearchQuery + APIKey; //Get URL string containing the keyword search query
+            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&author=" + authorSearchQuery + "&category=" + categorySearchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the keyword search query
         }
 
         if (keywordSearchQuery!= null && authorSearchQuery != null && categorySearchQuery != null){
-            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + "&author=" + authorSearchQuery + "&category" + categorySearchQuery + APIKey; //Get URL string containing the keyword search query
+            mURLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + keywordSearchQuery + "&author=" + authorSearchQuery + "&category" + categorySearchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the keyword search query
         }
 
 

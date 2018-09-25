@@ -3,6 +3,7 @@ package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragm
 import android.util.Log;
 
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
+import com.tieutech.android.quotespire.ActivitiesAndFragments.Others.APIKey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,8 +32,7 @@ public class GetSearchQuotesByKeywordQuote {
 
         Quote quote = new Quote(); //Create Quote object
 
-        String APIKey = "&private=false&api_key=1FGGcyK9BwzYfAi8IyYZ8geF"; //API key from TheySaidSo.com
-        String URLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + searchQuery + APIKey; //Get URL string containing the search query
+        String URLString = "http://quotes.rest/quote/search.json?minlength=0&maxlength=1000&query=" + searchQuery + "&private=false&api_key=" + APIKey.API_KEY; //Get URL string containing the search query
 
 
         //Try risky task:

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Activities.MainActivity;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
+import com.tieutech.android.quotespire.ActivitiesAndFragments.Others.APIKey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,7 @@ public class GetQuoteOfTheDay {
 
 
 //        String urlString = "http://quotes.rest/qod.json";
-        String urlString = "http://quotes.rest/qod.json?api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
+        String urlString = "http://quotes.rest/qod.json?api_key=" + APIKey.API_KEY;
 //        String urlString = "http://quotes.rest/quote/search.json?category=strong&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
 
         try {
