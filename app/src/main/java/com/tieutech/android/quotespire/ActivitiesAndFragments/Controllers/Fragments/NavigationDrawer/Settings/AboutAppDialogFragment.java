@@ -95,9 +95,9 @@ public class AboutAppDialogFragment extends DialogFragment{
                                 "<br>" + "</br>" + //New Line
                                 "<br>" + "</br>" + //New Line
                                 "<br>" + "</br>" + //New Line
-                                "<div style=\"text-align:center\">" + "Brought to you by TieuTech" + "</div>"))
+                                "<div style=\"text-align:center\">" + "Created by TieuTech" + "</div>"))
                 .setPositiveButton(android.R.string.ok, null)
-                .show();
+                .create();
 
 
 
@@ -124,6 +124,9 @@ public class AboutAppDialogFragment extends DialogFragment{
             alertDialog.getWindow().setLayout(1450, 900); //Set the size of the AlertDialog as per LANDSCAPE orientation
         }
 
+
+
+        alertDialog.show();
 
 
         //Return the AlertDialog
