@@ -31,10 +31,10 @@
     <color name="quoteTitle">#6e2fab</color>
 
     <!--Quote AUTHOR-->
-    <color name="quoteAuthor">#f6be57</color>
+    <color name="quoteAuthor">#ebc455</color>
 
     <!--Quote CATEGORY-->
-    <color name="quoteCategory">#91176e</color>
+    <color name="quoteCategory">#1b867a</color>
 
     <color name="navigationHeaderText">#4c3c5e</color>
 
@@ -65,7 +65,7 @@
 
 
 
-    <color name="searchSuggestionsButtonText">#644f7b</color>
+    <color name="searchSuggestionsButtonText">#643691</color>
     <color name="searchSuggestionsButtonBackground">#887b4e</color>
 
 
@@ -90,6 +90,7 @@
 
     <color name="teal">#093c53</color>
     <color name="light_teal">#0f5a7c</color>
+    <color name="snackBarUndoAction">#e8c551</color>
 
 
     <color name="orange">#e8b351</color>
