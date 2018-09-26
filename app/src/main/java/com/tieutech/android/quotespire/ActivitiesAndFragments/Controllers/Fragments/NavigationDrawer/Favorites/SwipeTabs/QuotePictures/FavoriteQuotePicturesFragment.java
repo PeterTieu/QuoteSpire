@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -536,9 +537,8 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
-
         Snackbar snackbar = Snackbar
-                .make(mFavoriteQuotePicturesRecyclerView, "All Quote Pictures removed from Favorites", Snackbar.LENGTH_LONG);
+                .make(mFavoriteQuotePicturesRecyclerView, Html.fromHtml("<font color=\"#ffffff\">All Quote Pictures removed from Favorites\"</font>"), Snackbar.LENGTH_LONG);
 
 
         View snackBarView = snackbar.getView();
