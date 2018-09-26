@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -370,13 +371,13 @@ public class FavoriteQuotesFragment extends Fragment {
                                 public void run() {
                                     updateUI();
                                     snackbar = Snackbar
-                                            .make(mFavoriteQuotesRecyclerView, "Quote has been removed from Favorites", Snackbar.LENGTH_LONG)
+                                            .make(mFavoriteQuotesRecyclerView, Html.fromHtml("<font color=\"#ffffff\">Quote has been removed from Favorites</font>"), Snackbar.LENGTH_LONG)
 
 
                                             .setAction("UNDO", new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
-                                                    snackbar1 = Snackbar.make(view, "Quote has been re-added to Favorites!", Snackbar.LENGTH_LONG);
+                                                    snackbar1 = Snackbar.make(view, Html.fromHtml("<font color=\"#ffffff\">Quote has been re-added to Favorites!</font>"), Snackbar.LENGTH_LONG);
 
 
                                                     View snackBarActionView = snackbar1.getView();
@@ -405,6 +406,9 @@ public class FavoriteQuotesFragment extends Fragment {
                                     View snackBarView = snackbar.getView();
                                     snackBarView.setMinimumHeight(150);
                                     snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
+
+                                    snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarUndoAction));
+
                                     snackbar.show();
                                 }
                             }, 100);
@@ -715,7 +719,7 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-        Snackbar snackbar = Snackbar.make(mFavoriteQuotesRecyclerView, "All Quotes removed from Favorites", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(mFavoriteQuotesRecyclerView, Html.fromHtml("<font color=\"#ffffff\">All Quotes removed from Favorites!</font>"), Snackbar.LENGTH_LONG);
 
 //                .setAction("UNDO", new View.OnClickListener() {
 //                    @Override
@@ -755,6 +759,7 @@ public class FavoriteQuotesFragment extends Fragment {
         View snackBarView = snackbar.getView();
         snackBarView.setMinimumHeight(150);
         snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
+
 
         snackbar.show();
 
