@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Dialog fragment layout - for confirmation to remove ALL Favorite Quotes-->
+<android.support.v7.widget.AlertDialogLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_pix_delete"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/dialog_fragment_remove_all_favorite_quotes_confirmation_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_gravity="center"
+        android:text="Do you wish to clear all recent search queries?"
+        android:textSize="16dp"
+        android:textColor="@color/dialogFragmentMessageText"/>
+
+
+</android.support.v7.widget.AlertDialogLayout>
