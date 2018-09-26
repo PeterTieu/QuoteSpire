@@ -315,7 +315,7 @@ public class QuotePictureDetailFragment extends Fragment{
             quotePictureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream); //Compress the FileOutputStream
             fileOutputStream.flush(); //Flush the FileOutputStream
             fileOutputStream.close(); //Close the FileOutputStream
-            savedBitmapURI = FileProvider.getUriForFile(getContext(), "com.petertieu.android.quotesearch.fileprovider", file); //Get the Bitmap URI
+            savedBitmapURI = FileProvider.getUriForFile(getContext(), "com.tieutech.android.quotespire.fileprovider", file); //Get the Bitmap URI
             Log.i(TAG, savedBitmapURI.toString()); //Log to Logcat
         }
         catch (IOException IOException) {
