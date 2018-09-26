@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -346,20 +348,19 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         //What to do AFTER the 300ms delay
                         @Override
                         public void run() {
                             snackbar = Snackbar
-                                    .make(mQuotePictureImageView, "Quote Picture has been removed from Favorites", Snackbar.LENGTH_LONG)
+                                    .make(mQuotePictureImageView, Html.fromHtml("<font color=\"#ffffff\">Quote Picture has been removed from Favorites</font>"), Snackbar.LENGTH_LONG)
 
 
                                     .setAction("UNDO", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            snackbar1 = Snackbar.make(view, "Quote Picture has been re-added to Favorites!", Snackbar.LENGTH_LONG);
+                                            snackbar1 = Snackbar.make(view, Html.fromHtml("<font color=\"#ffffff\">Quote Picture has been re-added to Favorites!</font>"), Snackbar.LENGTH_LONG);
 
 
                                             View snackBarActionView = snackbar1.getView();
@@ -388,6 +389,9 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
                             View snackBarView = snackbar.getView();
                             snackBarView.setMinimumHeight(150);
                             snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
+
+                            snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarUndoAction));
+
                             snackbar.show();
                         }
                     }, 100);
@@ -601,7 +605,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
             quotePictureBitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
-            savedBitmapURI = FileProvider.getUriForFile(getContext(), "com.petertieu.android.quotesearch.fileprovider", file);
+            savedBitmapURI = FileProvider.getUriForFile(getContext(), "com.tieutech.android.quotespire.fileprovider", file);
 
             Log.i(TAG, savedBitmapURI.toString());
 
