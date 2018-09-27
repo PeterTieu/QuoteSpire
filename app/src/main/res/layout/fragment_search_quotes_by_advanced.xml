@@ -178,7 +178,9 @@
             android:gravity="center"
             android:layout_marginTop="45dp"
             android:text="SEARCH"
-            android:textSize="20dp"/>
+            android:textSize="20dp"
+            android:textColor="@color/searchSuggestionsButtonText"
+            android:background="@color/searchSuggestionsButtonBackground"/>
 
 
 
