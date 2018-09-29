@@ -10,8 +10,6 @@
     android:fitsSystemWindows="true"
     tools:context="com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Activities.MainActivity">
 
-
-
     <!--Toolbar-->
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,7 +25,6 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
 
 
     <!--Main Content (reference)-->
