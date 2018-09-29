@@ -12,14 +12,14 @@
     android:background="@color/introActivityBackground"
     tools:context="com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Activities.IntroActivity">
 
-    <!--App logo-->
+    <!--App logo parent element-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp">
 
-        <!--TODO: Change the ImageView of the intro layout to match that of the logo of the app-->
+        <!--App logo-->
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
