@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--Layout for the List Items of the Navigation Drawer-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-
-
+    <!--Dashboard (list item) (belongs to no groups)-->
     <group
         android:id="@+id/list_group_dashboard"
         android:checkableBehavior="single">
@@ -15,7 +15,7 @@
 
 
 
-
+    <!--Random (group)-->
         <item
             android:title="@string/random">
 
@@ -23,12 +23,13 @@
 
                 <group android:checkableBehavior="single">
 
+                    <!--Random Quotes (list item)-->
                     <item
                         android:id="@+id/random_quotes"
                         android:icon="@drawable/ic_menu_random_quotes"
                         android:title="@string/random_quotes"/>
 
-
+                    <!--Random Quote Pictures (list item)-->
                     <item
                         android:id="@+id/random_quote_pictures"
                         android:icon="@drawable/ic_menu_random_quote_pictures"
@@ -41,20 +42,21 @@
 
 
 
-
+    <!--Search (group)-->
         <item
             android:title="@string/search">
             <menu>
                 <group android:checkableBehavior="single">
 
+                    <!--Search Quotes (list item)-->
                 <item
-                    android:id="@+id/search_quote"
+                    android:id="@+id/search_quotes"
                     android:icon="@drawable/ic_menu_search_quotes"
                     android:title="@string/search_quotes"/>
 
-
+                    <!--Search Quote Pictures (list item)-->
                 <item
-                    android:id="@+id/search_pictures_of_quotes"
+                    android:id="@+id/search_quote_pictures"
                     android:icon="@drawable/ic_menu_search_quote_pictures"
                     android:title="@string/search_quote_pictures"/>
 
@@ -64,18 +66,19 @@
 
 
 
-
+    <!--Personal (group)-->
         <item
             android:title="@string/personal">
             <menu>
                 <group android:checkableBehavior="single">
 
+                    <!--My Quote (list item)-->
                     <item
                         android:id="@+id/my_quotes"
                         android:icon="@drawable/ic_menu_my_quotes"
                         android:title="@string/my_quotes"/>
 
-
+                    <!--Favorites (list item)-->
                     <item
                         android:id="@+id/favorites"
                         android:icon="@drawable/ic_menu_favorites"
@@ -87,7 +90,7 @@
 
 
 
-
+    <!--Settings (list item) (belongs to no groups)-->
     <group
         android:id="@+id/list_group_settings"
         android:checkableBehavior="single">
@@ -95,7 +98,6 @@
                 android:id="@+id/settings"
                 android:icon="@drawable/ic_menu_settings"
                 android:title="@string/settings"/>
-
     </group>
 
 
