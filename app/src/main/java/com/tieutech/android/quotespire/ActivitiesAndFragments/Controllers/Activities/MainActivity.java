@@ -1,6 +1,5 @@
 package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Activities;
 
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Favorites.FavoritesFragment;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.MyQuotes.MyQuotesFragment;
@@ -29,12 +26,12 @@ import com.tieutech.android.quotespire.R;
 
 
 //Main activity - contains the CORE fragments of the app (i.e.
+@SuppressWarnings({"WeakerAccess", "RedundantCast"})
 public class MainActivity extends AppCompatActivity {
 
 
     //================= Declare INSTANCE VARIABLES ==============================================================
-    public static String PACKAGE_NAME;
-
+    public static String PACKAGE_NAME; //Package name
 
     //Layout reference variables
     private DrawerLayout mDrawerLayout;         //Layout of the MainActivity
@@ -44,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mFragment;                  //Fragment to be active on screen (only one is active at a time)
 
     //Navigation drawer fragment reference variables
-    QuoteOfTheDayFragment mQuoteOfTheDayFragment = new QuoteOfTheDayFragment();
-    SearchQuotesFragment mSearchQuotesFragment = new SearchQuotesFragment();
-    RandomQuotesFragment mRandomQuotesFragment = new RandomQuotesFragment();
-    RandomQuotePicturesFragment mRandomQuotePicturesFragment = new RandomQuotePicturesFragment();
-    SearchQuotePicturesFragment mSearchQuotePicturesFragment = new SearchQuotePicturesFragment();
-    MyQuotesFragment mMyQuotesFragment = new MyQuotesFragment();
-    FavoritesFragment mFavoritesFragment = new FavoritesFragment();
-    SettingsFragment mSettingsFragment = new SettingsFragment();
+    final QuoteOfTheDayFragment mQuoteOfTheDayFragment = new QuoteOfTheDayFragment();
+    final SearchQuotesFragment mSearchQuotesFragment = new SearchQuotesFragment();
+    final RandomQuotesFragment mRandomQuotesFragment = new RandomQuotesFragment();
+    final RandomQuotePicturesFragment mRandomQuotePicturesFragment = new RandomQuotePicturesFragment();
+    final SearchQuotePicturesFragment mSearchQuotePicturesFragment = new SearchQuotePicturesFragment();
+    final MyQuotesFragment mMyQuotesFragment = new MyQuotesFragment();
+    final FavoritesFragment mFavoritesFragment = new FavoritesFragment();
+    final SettingsFragment mSettingsFragment = new SettingsFragment();
 
 
 
@@ -63,52 +60,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PACKAGE_NAME = getApplicationContext().getPackageName();
+        PACKAGE_NAME = getApplicationContext().getPackageName(); //Get package name
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Set orientation configuration to vertical
 
-        //Set layout for the MainActivity
-        setContentView(R.layout.activity_main);
-
-        //Define reference variable for the DrawerLayout root element of the activity_main layout resource file
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+        setContentView(R.layout.activity_main); //Set layout for the MainActivity
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout); //Define reference variable for the DrawerLayout root element of the activity_main layout resource file
 
 
         //================= CONFIGURE TOOLBAR ====================================================================
-
-        //Define reference ariable for the Toolbarm widget element of the activity_main layout resource file
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
-        //Set the Action Bar to the toolbar layout reference variable
-        setSupportActionBar(toolbar);
-
-        //Get the Action Bar from the activity
-        ActionBar actionbar = getSupportActionBar();
-
-        //Enable the app's "home" button on the toolbar
-        actionbar.setDisplayHomeAsUpEnabled(true);
-
-        //Change the "home" button to the navigation drawer drawable (i.e. ic_menu)
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-
+        Toolbar toolbar = findViewById(R.id.toolbar); //Define reference variable for the Toolbar widget element of the activity_main layout resource file
+        setSupportActionBar(toolbar); //Set the Action Bar to the toolbar layout reference variable
+        ActionBar actionbar = getSupportActionBar(); //Get the Action Bar from the activity
+        actionbar.setDisplayHomeAsUpEnabled(true); //Enable the app's "home" button on the toolbar
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu); //Change the "home" button to the navigation drawer drawable (i.e. ic_menu)
 
 
         //================= CONFIGURE FRAGMENTS ====================================================================
-        //Create the FragmentManager for interacting with fragments associated with MainActivity
-        mFragmentManager = getSupportFragmentManager();
-
-        //Create (first) mFragment to be opened
-        mFragment = new QuoteOfTheDayFragment();
-
-        //Add QuoteOfTheDayFragment mFragment to the activity's view
-        mFragmentManager.beginTransaction().add(R.id.content_frame, mFragment).commit();
-
+        mFragmentManager = getSupportFragmentManager(); //Create the FragmentManager for interacting with fragments associated with MainActivity
+        mFragment = new QuoteOfTheDayFragment(); //Create (first) mFragment to be opened
+        mFragmentManager.beginTransaction().add(R.id.content_frame, mFragment).commit(); //Add QuoteOfTheDayFragment mFragment to the activity's view
 
 
         //================= CONFIGURE NAVIGATION DRAWER ====================================================================
-        //Get the reference variable to the the NavigationView (i.e. the layout of the navigation drawer)
-        NavigationView navigationView = findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view); //Get the reference variable to the the NavigationView (i.e. the layout of the navigation drawer)
 
         //Set listener for the items of the navigation drawer
         navigationView.setNavigationItemSelectedListener(
@@ -119,11 +94,10 @@ public class MainActivity extends AppCompatActivity {
                     //Override the listener interface method to define what happens when a navigation drawer item is clicked on
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        //Set the selected item to be highlighted
-                        menuItem.setChecked(true);
 
-                        //Close the navigation drawer when the item is tapped
-                        mDrawerLayout.closeDrawers();
+                        menuItem.setChecked(true); //Set the selected item to be highlighted
+
+                        mDrawerLayout.closeDrawers(); //Close the navigation drawer when the item is tapped
 
                         //Scan through the navigation drawer's MenuItem IDs. Perform operations to open the fragments of the selected items
                         switch (menuItem.getItemId()){
@@ -136,15 +110,16 @@ public class MainActivity extends AppCompatActivity {
                                 openFragment(mRandomQuotesFragment);
                                 return true;
 
-                            case R.id.search_quote:
-                                openFragment(mSearchQuotesFragment);
-                                return true;
-
                             case R.id.random_quote_pictures:
                                 openFragment(mRandomQuotePicturesFragment);
                                 return true;
 
-                            case R.id.search_pictures_of_quotes:
+                            case R.id.search_quotes:
+                                openFragment(mSearchQuotesFragment);
+                                return true;
+
+
+                            case R.id.search_quote_pictures:
                                 openFragment(mSearchQuotePicturesFragment);
                                 return true;
 
@@ -163,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
                         return false;
                     }
-
                 });
     }
 
@@ -181,16 +155,12 @@ public class MainActivity extends AppCompatActivity {
 
         //If a fragment already exists (i.e a fragment is in view)
         if (mFragment != null){
-            //Remove the current fragment from the R.id.content_frame RelativeLayout
-            mFragmentManager.beginTransaction().remove(mFragment).commit();
-
+            mFragmentManager.beginTransaction().remove(mFragment).commit(); //Remove the current fragment from the R.id.content_frame RelativeLayout
         }
 
-        //Re-assign the mFragment reference variable to the Fragment to open
-        mFragment = fragmentToOpen;
+        mFragment = fragmentToOpen; //Re-assign the mFragment reference variable to the Fragment to open
 
-        //Call mFragmentManager to add the new fragment to the RelativeLayout
-        mFragmentManager.beginTransaction().add(R.id.content_frame, mFragment).commit();
+        mFragmentManager.beginTransaction().add(R.id.content_frame, mFragment).commit(); //Call mFragmentManager to add the new fragment to the RelativeLayout
     }
 
 
@@ -202,8 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         //If the navigation drawer is opened
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            //Close the navigation drawer
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+            mDrawerLayout.closeDrawer(GravityCompat.START); //Close the navigation drawer
         }
         else{
             super.onBackPressed();
@@ -216,8 +185,6 @@ public class MainActivity extends AppCompatActivity {
     //Create the options menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //Inflate the options menu
-//        getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
 
@@ -234,10 +201,6 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-
-//            //The Settings toolbar button
-//            case R.id.action_settings:
-//                return true;
         }
 
         return super.onOptionsItemSelected(item);
