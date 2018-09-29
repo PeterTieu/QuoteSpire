@@ -19,6 +19,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Class for obtaining the Quote Of The Day AUTHOR - via networking
 public class GetQuoteOfTheDayAuthorQuote {
 
     private static final String TAG = "GetQODAuthorQuote";
