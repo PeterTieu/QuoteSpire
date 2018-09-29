@@ -3,8 +3,6 @@ package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragm
 
 import android.util.Log;
 
-import com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Activities.MainActivity;
-import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.FavoriteQuotesManager;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Others.APIKey;
 
@@ -21,32 +19,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+//Class for obtaining the Quote Of The Day - via networking
 public class GetQuoteOfTheDay {
 
 
-    private static final String TAG = "GetQuoteOfTheDay";
+    private static final String TAG = "GetQuoteOfTheDay"; //Log for Logcat
 
 
+    //Get the Quote of the Day - called by AsyncTask in QuoteOfTheDayFragment
     public Quote getQuoteOfTheDay() {
 
-        Quote quoteOfTheDay = new Quote();
+        Quote quoteOfTheDay = new Quote(); //Create Quote object
+
+        String urlString = "http://quotes.rest/qod.json?api_key=" + APIKey.API_KEY; //URL for obtain JSON of Quote Of The Day
 
 
-//        String urlString = "http://quotes.rest/qod.json";
-        String urlString = "http://quotes.rest/qod.json?api_key=" + APIKey.API_KEY;
-//        String urlString = "http://quotes.rest/quote/search.json?category=strong&api_key=1FGGcyK9BwzYfAi8IyYZ8geF";
-
+        //Try risky task - JSONObject(..) may throw IOException, and parseJSONObjectToQuoteOfTheDay(..) may throw JSONException
         try {
-            String jsonString = getJsonString(urlString);
+            String jsonString = getJSONString(urlString); //Obtain JSON String from URL
+            Log.i(TAG, "Received JSON: " + jsonString); //Log JSON String to Logcat
 
-            Log.i(TAG, "Received JSON: " + jsonString);
-
-            JSONObject jsonObject = new JSONObject(jsonString);
-
-
-            parseJsonObjectToQuoteOfTheDay(quoteOfTheDay, jsonObject);
-
-
+            JSONObject jsonObject = new JSONObject(jsonString); //Obtain JSONObject from JSON String
+            parseJSONObjectToQuoteOfTheDay(quoteOfTheDay, jsonObject); //Stash data obtained from JSONObject to the Quote object for Quote Of The Day
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to obtain JSON String", ioe);
         } catch (JSONException je) {
@@ -54,8 +48,7 @@ public class GetQuoteOfTheDay {
         }
 
 
-
-
+        //Log data to Logcat
         Log.i(TAG, "Quote of the day - Quote: " + quoteOfTheDay.getQuote());
         Log.i(TAG, "Quote of the day - Category: " + quoteOfTheDay.getCategory());
         Log.i(TAG, "Quote of the day - Author: " + quoteOfTheDay.getAuthor());
@@ -66,92 +59,82 @@ public class GetQuoteOfTheDay {
 
 
 
+    //Helper method - obtain the JSON String from the URL String
+    public String getJSONString(String urlString) throws IOException {
 
+        URL url = new URL(urlString); //Convert URL String to URL object
 
-
-    public String getJsonString(String urlString) throws IOException {
-
-        URL url = new URL(urlString);
-
-        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection(); //Establish network connection to the URL
 
         try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); //Create stream to get from
 
+            InputStream inputStream = httpURLConnection.getInputStream(); //Create InputStream to receive data from the HttpURLConnection
 
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-            InputStream inputStream = httpURLConnection.getInputStream();
-
+            //Check if network connection is available
             if (httpURLConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new IOException(httpURLConnection.getResponseMessage() + " with " + urlString);
             }
 
-            int bytesRead = 0;
+            int bytesRead = 0; //Flag for whileloop
 
+            byte[] buffer = new byte[1024]; //Buffer to store the bytes transferred from the InputStream to the ByteArrayOutputStream
 
-            byte[] buffer = new byte[1024];
-
+            //Transfer data from the InputStream to the ByteArrayOutputStream via the buffer
+            //i.e. Read data from inputStream to buffer, then return...
+                // # greater than zero: Number of bytes (data) read from inputStream to buffer
+                // -1: No (more) bytes (data) read from inputStream to buffer
             while ((bytesRead = inputStream.read(buffer)) > 0) {
-
-
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
-
+                byteArrayOutputStream.write(buffer, 0, bytesRead); //Write data FROM the buffer TO the byteArrayOutputStream
             }
 
-            byteArrayOutputStream.close();
+            byteArrayOutputStream.close(); //Close the byteArrayOutputStream
 
 
-            String JsonString = new String(byteArrayOutputStream.toByteArray());
+            String JSONString = new String(byteArrayOutputStream.toByteArray()); //Obtain JSONString from the byteArrayOutputStream
 
-            return JsonString;
-
+            return JSONString; //Return the JSONString
         }
         finally {
-            httpURLConnection.disconnect();
+            httpURLConnection.disconnect(); //Disconnect the HttpURLConnection
         }
-
-
     }
 
 
-    public void parseJsonObjectToQuoteOfTheDay(Quote quote, JSONObject jsonObject) throws IOException, JSONException {
-        JSONObject contentsJSONObject = jsonObject.getJSONObject("contents");
 
-        JSONArray quotesJsonArray = contentsJSONObject.getJSONArray("quotes");
 
+    //Helper method - convert the obtained JSON Object to the QOD Quote object
+    public void parseJSONObjectToQuoteOfTheDay(Quote quote, JSONObject jsonObject) throws IOException, JSONException {
+
+        JSONObject contentsJSONObject = jsonObject.getJSONObject("contents"); //Identify the "contents" JSON object
+
+        JSONArray quotesJsonArray = contentsJSONObject.getJSONArray("quotes"); //Identify the "quotes" JSON Array nested under the "contents" JSON Object
+
+
+        //Obtain the JSON Objects nested under the "quotes" JSON Array
         for (int i=0; i<quotesJsonArray.length(); i++){
+
             JSONObject quoteJsonObject = quotesJsonArray.getJSONObject(i);
 
+            quote.setQuote(quoteJsonObject.getString("quote")); //Get "quote" JSON Object and stash it to the Quote object
+            quote.setCategory(quoteJsonObject.getString("category")); //Get "category" JSON Object and stash it to the Quote object
+            quote.setAuthor(quoteJsonObject.getString("author")); //Get "author" JSON Object and stash it to the Quote object
+            quote.setId(quoteJsonObject.getString("id")); //Get "id" JSON Object and stash it to the Quote object
 
-            quote.setQuote(quoteJsonObject.getString("quote"));
-            quote.setCategory(quoteJsonObject.getString("category"));
-
-
-
-
-
-            quote.setAuthor(quoteJsonObject.getString("author"));
-            quote.setId(quoteJsonObject.getString("id"));
-
-
+            //Log to Logcat
             Log.i(TAG, "Quote of the day - method - Quote String: " + quote.getQuote());
             Log.i(TAG, "Quote of the day - method  - Category: " + quote.getCategory());
             Log.i(TAG, "Quote of the day - method  - Author: " + quote.getAuthor());
             Log.i(TAG, "Qutoe of the day - method - ID: " + quote.getId());
 
 
-
-
-
-            String category = quoteJsonObject.getString("category");
-            List<String> categories = new ArrayList<String>();
-            categories.add(category);
-            quote.setCategories(categories);
-            Log.i(TAG, "\"Qutoe of the day Author Quote - method - Categories: \" " + quote.getCategories());
-
+            //Set the categories for the Quote
+            String category = quoteJsonObject.getString("category"); //Get "category" JSON Object
+            List<String> categories = new ArrayList<String>(); //Create categories ArrayList
+            categories.add(category); //Add category to the the categories ArrayList
+            quote.setCategories(categories); //Stash the categories ArrayList to the Quote
+            Log.i(TAG, "\"Qutoe of the day Author Quote - method - Categories: \" " + quote.getCategories()); //Log to Logcat
         }
     }
-
 
 }
