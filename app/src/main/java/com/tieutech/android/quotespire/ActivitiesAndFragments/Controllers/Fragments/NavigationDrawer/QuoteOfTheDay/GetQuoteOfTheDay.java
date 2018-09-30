@@ -104,9 +104,9 @@ public class GetQuoteOfTheDay {
 
 
     //Helper method - convert the obtained JSON Object to the QOD Quote object
-    public void parseJSONObjectToQuoteOfTheDay(Quote quote, JSONObject jsonObject) throws IOException, JSONException {
+    public void parseJSONObjectToQuoteOfTheDay(Quote quote, JSONObject JSONObject) throws IOException, JSONException {
 
-        JSONObject contentsJSONObject = jsonObject.getJSONObject("contents"); //Identify the "contents" JSON object
+        JSONObject contentsJSONObject = JSONObject.getJSONObject("contents"); //Identify the "contents" JSON object
 
         JSONArray quotesJsonArray = contentsJSONObject.getJSONArray("quotes"); //Identify the "quotes" JSON Array nested under the "contents" JSON Object
 
