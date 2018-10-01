@@ -4,183 +4,147 @@ import android.graphics.Bitmap;
 
 import java.util.List;
 
+
+//MODEL for Quotes - Blueprint of all Quotes
+    //Appplicable to the following fragments:
+        //1: RandomQuotesFragment
+        //2: SearchQuotesByKeywordFragment
+        //3: SearchQuotesByCategoryFragment
+        //4: SearchQuotesByAuthorFragment
+        //5: SearchQuotesByAdvancedFragment
+        //6: FavoriteQuotesFragment
 public class Quote {
-    //States (i.e. instance variables):
-        //isFavorite (boolean)
-        //Quote URL (String)
-        //Picture URL - if exists (String)
-        //QuoteText (String)
-        //Category (String)
-        //Author (String)
+
+    //================= Declare INSTANCE VARIABLES ==============================================================
+
+    //CORE instance variables
+    String mId;                 //Unique identifier
+    String mQuote;              //Quote Text
+    String mAuthor;             //Author
+    String mCategory;           //Category
+    List<String> mCategories;   //List of Categories
+    boolean mIsFavorite;        //Favorited or not
 
 
-
-    String mId;
-    String mQuote;
-    String mAuthor;
-    String mCategory;
-    List<String> mCategories;
-    boolean mIsFavorite;
-
-
-    //Only used for RandomQuotesFragment
-    int mRandomQuotePosition;
-
-    //Only used for SearchQuotesByKeywordFragment
-    int mSearchQuotesByKeywordQuotePosition;
-
-    //Only used for SearchQuotesByCategoryFragment
-    int mSearchQuotesByCategoryQuotePosition;
-
-    //Only used for SearchQuotesByAuthorFragment
-    int mSearchQuotesByAuthorQuotePosition;
-
-    //Only used for SearchQuotesByAdvancedFragment
-    int mSearchQuotesByAdvancedQuotePosition;
-
-    //Only used for RandomQuotePictureFragment, SearchQuotePictureByAuthorFragment, and SearchQuotePictureByCatgoryFragment
-    String mPictureDownloadURI;
-
-    //Only used for RandomQuotePicturesFragment
-    int mRandomQuotePicturePosition;
-
-    //Only used for RandomQuotePictureFragment, SearchQuotePictureByAuthorFragment, and SearchQuotePictureByCatgoryFragment
-    Bitmap mQuotePicture;
+    //Conditional instance variables
+    int mRandomQuotePosition;                   //Only used for RandomQuotesFragment
+    int mSearchQuotesByKeywordQuotePosition;    //Only used for SearchQuotesByKeywordFragment
+    int mSearchQuotesByCategoryQuotePosition;   //Only used for SearchQuotesByCategoryFragment
+    int mSearchQuotesByAuthorQuotePosition;     //Only used for SearchQuotesByAuthorFragment
+    int mSearchQuotesByAdvancedQuotePosition;   //Only used for SearchQuotesByAdvancedFragment
 
 
+    //================= Define METHODS ==========================================================================
 
+    //Constructor #1
     public Quote(){
     }
 
+    //Constructor #2
     public Quote(String id){
         mId = id;
     }
 
-
+    //Getter for mQuote
     public String getQuote(){
         return mQuote;
     }
 
+    //-------------- Getters and Setters ----------------------------------------
+
+    //mQuote
     public void setQuote(String quote){
         mQuote = quote;
     }
 
 
+    //mCatetgory
     public String getCategory(){
         return mCategory;
     }
-
     public void setCategory(String category){
         mCategory = category;
     }
 
 
+    //mCategories
     public List<String> getCategories(){
         return mCategories;
     }
-
     public void setCategories(List<String> categories){
         mCategories = categories;
     }
 
+
+    //mAuthor
     public String getAuthor(){
         return mAuthor;
     }
-
     public void setAuthor(String author){
         mAuthor = author;
     }
 
+
+    //mId
     public String getId(){
         return mId;
     }
-
     public void setId(String id){
         mId = id;
     }
 
+
+    //mFavorite
     public void setFavorite(boolean isFavorite){
         mIsFavorite = isFavorite;
     }
-
     public boolean isFavorite(){
         return mIsFavorite;
     }
 
 
+    //mRandomQuotePosition
     public int getRandomQuotePosition() {
         return mRandomQuotePosition;
     }
-
     public void setRandomQuotePosition(int randomQuotePosition){
         mRandomQuotePosition = randomQuotePosition;
     }
 
+
+    //mSearchQuotesByKeywordQuotePosition
     public int getSearchQuotesByKeywordQuotePosition(){
         return mSearchQuotesByKeywordQuotePosition;
     }
-
     public void setSearchQuotesByKeywordQuotePosition(int searchQuotesByKeywordQuotePosition){
         mSearchQuotesByKeywordQuotePosition = searchQuotesByKeywordQuotePosition;
     }
 
+
+    //mSearchQuotesByCategoryQuotePosition
     public int getSearchQuotesByCategoryQuotePosition(){
         return mSearchQuotesByCategoryQuotePosition;
     }
-
     public void setSearchQuotesByCategoryQuotePosition(int searchQuotesByCategoryQuotePosition){
         mSearchQuotesByCategoryQuotePosition = searchQuotesByCategoryQuotePosition;
     }
 
 
+    //mSearchQuotesByAuthorQuotePosition
     public int getSearchQuotesByAuthorQuotePosition(){
         return mSearchQuotesByAuthorQuotePosition;
     }
-
     public void setSearchQuotesByAuthorQuotePosition(int searchQuotesByAuthorQuotePosition){
         mSearchQuotesByAuthorQuotePosition = searchQuotesByAuthorQuotePosition;
     }
 
 
-
+    //mSearchQuotesByAdvancedQuotePosition
     public int getSearchQuotesByAdvancedQuotePosition(){
         return mSearchQuotesByAdvancedQuotePosition;
     }
-
     public void setSearchQuotesByAdvancedQuotePosition(int searchQuotesByAdvancedQuotePosition){
         mSearchQuotesByAdvancedQuotePosition = searchQuotesByAdvancedQuotePosition;
     }
-
-
-    public String getPictureDownloadURI(){
-        return mPictureDownloadURI;
-    }
-
-
-    public void setPictureDownloadURI(String pictureDownloadURI){
-        mPictureDownloadURI = pictureDownloadURI;
-    }
-
-
-    public int getRandomQuotePicturePosition(){
-        return mRandomQuotePicturePosition;
-    }
-
-
-    public void setRandomQuotePicturePosition(int randomQuotePicturePosition){
-        mRandomQuotePicturePosition = randomQuotePicturePosition;
-    }
-
-
-    public Bitmap getQuotePicture(){
-        return mQuotePicture;
-    }
-
-
-    public void setQuotePicture(Bitmap quotePicture){
-        mQuotePicture = quotePicture;
-    }
-
-
 
 }
