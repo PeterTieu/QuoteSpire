@@ -362,7 +362,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(getContext(), true);
 
                     //Start Service
-                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+                    String ACTION_START_SERVICE = "com.tieutech.android.quotespire.ACTION_START_SERVICE";
                     Intent startIntent = new Intent(getContext(), MyService.class);
                     startIntent.setAction(ACTION_START_SERVICE);
                     getActivity().startService(startIntent);
@@ -377,7 +377,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
 
                     //Stop Service
-                    String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+                    String ACTION_START_SERVICE = "com.tieutech.android.quotespire.ACTION_START_SERVICE";
                     Intent startIntent = new Intent(getContext(), MyService.class);
                     startIntent.setAction(ACTION_START_SERVICE);
                     getActivity().stopService(startIntent);
@@ -595,7 +595,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             QuoteOfTheDaySharedPreferences.setPushNotificationSwitchPressed(getContext(), true);
 
             //RESET the Service (i.e. start and stop it) so that changes in the update time in QuoteOfTheDayIntentService would be applied
-            String ACTION_START_SERVICE = "com.petertieu.android.quotesearch.ACTION_START_SERVICE";
+            String ACTION_START_SERVICE = "com.tieutech.android.quotespire.ACTION_START_SERVICE";
             Intent startIntent = new Intent(getContext(), MyService.class);
             startIntent.setAction(ACTION_START_SERVICE);
             getActivity().stopService(startIntent); //Stop Service
