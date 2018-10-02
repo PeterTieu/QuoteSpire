@@ -103,6 +103,9 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
         Log.i(TAG, "onCreateView(..) called"); //Log in Logcat
 
+
+        //--------- Assign View reference variables to associated views -------------
+            //Quote of The Day
         View view = layoutInflater.inflate(R.layout.fragment_quote_of_the_day, viewGroup, false);
         sQuoteOfTheDayQuoteBubbleLayout = (LinearLayout) view.findViewById(R.id.quote_of_the_day_quote_bubble_layout);
         sQuoteOfTheDayQuoteTitle = (TextView) view.findViewById(R.id.quote_of_the_day_quote_title);
@@ -113,7 +116,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
         sQuoteOfTheDayQuoteAuthor = (TextView) view.findViewById(R.id.quote_of_the_day_quote_author);
         sQuoteOfTheDayQuoteUnavailable = (TextView) view.findViewById(R.id.quote_of_the_day_quote_unavailable);
 
-
+            //Quote of The Day AUTHOR
         sQuoteOfTheDayAuthorBubbleLayout = (LinearLayout) view.findViewById(R.id.quote_of_the_day_author_bubble_layout);
         sQuoteOfTheDayAuthorQuoteTitle = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_title);
         sQuoteOfTheDayAuthorQuoteTitleAuthorName = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_title_author_name);
@@ -124,8 +127,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
         sQuoteOfTheDayAuthorQuoteCategory = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_category);
         sQuoteOfTheDayAuthorQuoteQuoteUnavailable = (TextView) view.findViewById(R.id.quote_of_the_day_author_quote_quote_unavailable);
 
-
-
+        //Quote of The Day CATEGORY (i.e. "inspire")
         sQuoteOfTheDayCategoryBubbleLayout = (LinearLayout) view.findViewById(R.id.quote_of_the_day_category_bubble_layout);
         sQuoteOfTheDayCategoryQuoteTitle = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_title);
         sQuoteOfTheDayCategoryQuoteTitleCategoryName = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_title_category_name);
@@ -136,46 +138,39 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
         sQuoteOfTheDayCategoryQuoteCategory = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_category);
         sQuoteOfTheDayCategoryQuoteQuoteUnavailable = (TextView) view.findViewById(R.id.quote_of_the_day_category_quote_quote_unavailable);
 
-
+            //Progress bars
         mProgressBarQuoteOfTheDayQuoteQuote = (ProgressBar) view.findViewById(R.id.progress_bar_quote_of_the_day_quote_quote);
         mProgressBarQuoteOfTheDayAuthorQuote = (ProgressBar) view.findViewById(R.id.progress_bar_quote_of_the_day_author_quote);
         mProgressBarQuoteOfTheDayCategoryQuote = (ProgressBar) view.findViewById(R.id.progress_bar_quote_of_the_day_category_quote);
 
 
-
-
-
+        //--------- Set drawables to the Bubble Layout Views -------------
         sQuoteOfTheDayQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
         sQuoteOfTheDayAuthorBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
         sQuoteOfTheDayCategoryBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
 
 
-
+        //--------- Initialise visibility of certain Views -------------
+            //Quote of The Day
         sQuoteOfTheDayQuoteTitle.setVisibility(View.GONE);
         sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.GONE);
         sQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.GONE);
         sQuoteOfTheDayQuoteUnavailable.setVisibility(View.GONE);
 
+        //Quote of The Day AUTHOR
         sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.GONE);
         sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.GONE);
         sQuoteOfTheDayCategoryQuoteFavoriteIcon.setVisibility(View.GONE);
         sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.GONE);
 
+        //Quote of The Day CATEGORY (i.e. "inspire")
         sQuoteOfTheDayQuoteShareIcon.setVisibility(View.GONE);
         sQuoteOfTheDayAuthorQuoteShareIcon.setVisibility(View.GONE);
         sQuoteOfTheDayCategoryQuoteShareIcon.setVisibility(View.GONE);
         sQuoteOfTheDayCategoryQuoteQuoteUnavailable.setVisibility(View.GONE);
 
 
-
-
-
-
-
-
-
-
-
+        //--------- Set drawables to Favorite buttons of each Bubble -------------
         sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(sQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
         sQuoteOfTheDayAuthorQuoteFavoriteIcon.setButtonDrawable(sQuoteOfTheDayAuthorQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
         sQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(sQuoteOfTheDayCategoryQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
@@ -184,131 +179,57 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        //SHARE BUTTONS
+        //--------- Set listeners to Share buttons of each Bubble -------------
+            //Quote of The Day
         sQuoteOfTheDayQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view){
-
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
                 shareIntent.setType("text/plain");
-
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
-
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getQuoteOfTheDayQuoteShareString());
-
                 shareIntent = Intent.createChooser(shareIntent, "Share Quote of the Day via");
-
                 startActivity(shareIntent);
             }
         });
 
-
+            //Quote of The Day AUTHOR
         sQuoteOfTheDayAuthorQuoteShareIcon.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
                 shareIntent.setType("text/plain");
-
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
-
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getQuoteOfTheDayAuthorQuoteShareString());
-
                 shareIntent = Intent.createChooser(shareIntent, "Share" + " " + sQuoteOfTheDayAuthorQuote.getAuthor() + "'s" + " " + "quote via");
-
                 startActivity(shareIntent);
             }
         });
 
-
-
-
-
-
-
+            //Quote of The Day CATEGORY
         sQuoteOfTheDayCategoryQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view){
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
                 shareIntent.setType("text/plain");
-
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote of the Day");
-
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getQuoteOfTheDayCategoryQuoteShareString());
-
                 shareIntent = Intent.createChooser(shareIntent, "Share" + " " + sQuoteOfTheDayCategoryQuote.getAuthor() + "'s" + " " + "quote via");
-
                 startActivity(shareIntent);
             }
         });
-
-
-
-        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
-            Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS IN2 DATABASE");
-        }
-        else{
-            Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS NOTT2 IN DATABASE");
-        }
-
-
-
-
-
 
 
 
         displayQuoteOfTheDay();
 
 
-//        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
+        setHasOptionsMenu(true); //Let the FragmentManager know that it will receive a menu item callback
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
-            Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS IN3 DATABASE");
-        }
-        else{
-            Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS NOTT3 IN DATABASE");
-        }
-
-
-        //Let the FragmentManager know that it will receive a menu item callback
-        setHasOptionsMenu(true);
-
-        getActivity().setTitle(R.string.dashboard);
-
-
-
+        getActivity().setTitle(R.string.dashboard); //Set title to the Fragment
 
         return view;
     }
@@ -316,124 +237,84 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    //TODO: After releasing the app and upon releasing the next revision, add the URL string to the app on the Google Play store
-    //TODO: ...at the bottom of the Share string!
+    //Helper method - get the SHARE STRING of: Quote of The Day
     private String getQuoteOfTheDayQuoteShareString(){
-        String quoteOfTheDayQuoteQuoteString = "\"" + sQuoteOfTheDay.getQuote() + "\"";
-
-        String quoteOfTheDayQuoteAuthorString = " - " + sQuoteOfTheDay.getAuthor();
-
-        return quoteOfTheDayQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
+        String quoteOfTheDayQuoteQuoteString = "\"" + sQuoteOfTheDay.getQuote() + "\""; //Quote
+        String quoteOfTheDayQuoteAuthorString = " - " + sQuoteOfTheDay.getAuthor(); //Author
+        return quoteOfTheDayQuoteQuoteString + quoteOfTheDayQuoteAuthorString; //Complete String
     }
 
 
 
+
+    //Helper method - get the SHARE STRING of: Quote of The Day AUTHOR
     private String getQuoteOfTheDayAuthorQuoteShareString(){
-        String quoteOfTheDayAuthorQuoteString = "\"" + sQuoteOfTheDayAuthorQuote.getQuote() + "\"";
-
-        String quoteOfTheDayQuoteAuthorQuoteAuthorString = " - " + sQuoteOfTheDayAuthorQuote.getAuthor();
-
-        return quoteOfTheDayAuthorQuoteString + quoteOfTheDayQuoteAuthorQuoteAuthorString;
+        String quoteOfTheDayAuthorQuoteString = "\"" + sQuoteOfTheDayAuthorQuote.getQuote() + "\""; //Quote
+        String quoteOfTheDayQuoteAuthorQuoteAuthorString = " - " + sQuoteOfTheDayAuthorQuote.getAuthor(); //Author
+        return quoteOfTheDayAuthorQuoteString + quoteOfTheDayQuoteAuthorQuoteAuthorString; //Complete String
     }
 
 
 
+
+    //Helper method - get the SHARE STRING of: Quote of The Day CATEGORY
     private String getQuoteOfTheDayCategoryQuoteShareString(){
-        String quoteOfTheDayCategoryQuoteString = "\"" + sQuoteOfTheDayCategoryQuote.getQuote() + "\"";
-
-        String quoteOfTheDayQuoteCategoryQuoteAuthorString = " - " + sQuoteOfTheDayCategoryQuote.getAuthor();
-
-        return quoteOfTheDayCategoryQuoteString + quoteOfTheDayQuoteCategoryQuoteAuthorString;
+        String quoteOfTheDayCategoryQuoteString = "\"" + sQuoteOfTheDayCategoryQuote.getQuote() + "\""; //Quote
+        String quoteOfTheDayQuoteCategoryQuoteAuthorString = " - " + sQuoteOfTheDayCategoryQuote.getAuthor(); //Author
+        return quoteOfTheDayCategoryQuoteString + quoteOfTheDayQuoteCategoryQuoteAuthorString; //Complete String
     }
 
 
 
 
-
-
-
-
-
-
-
-
+    //CONFIGURE each of the Views (QOD, QOD AUTHOR, QOC CATEGORY)
     private void displayQuoteOfTheDay(){
 
+        //If the fragment is added to the activity
         if (isAdded()) {
 
+            Log.i(TAG, "displayQuoteOfTheDay() called"); //Log to Logcat
 
-            Log.i(TAG, "displayQuoteOfTheDay() called");
 
 
+            //If QOD variable EXISTS
             if (sQuoteOfTheDay.getQuote() != null) {
 
+                //Set visibilities of each QOD View
                 mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
-
-
                 sQuoteOfTheDayQuoteTitle.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayQuoteShareIcon.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayQuoteCategory.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayQuoteAuthor.setVisibility(View.VISIBLE);
-
                 sQuoteOfTheDayQuoteQuote.setText("\" " + sQuoteOfTheDay.getQuote() + " \"");
                 sQuoteOfTheDayQuoteAuthor.setText("- " + sQuoteOfTheDay.getAuthor());
                 sQuoteOfTheDayQuoteCategory.setText("Category: " + sQuoteOfTheDay.getCategory());
                 sQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", sQuoteOfTheDay.getCategories()));
 
-
-
-
                 //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) != null) {
-
                     sQuoteOfTheDay.setFavorite(true);
                     sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-
                 }
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) == null){
-
                     sQuoteOfTheDay.setFavorite(false);
                     sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-
                 }
-
-
             }
 
 
 
-
-
-
-
-
-
-
+            //If QOD AUTHOR variable EXISTS
             if (sQuoteOfTheDayAuthorQuote.getQuote() != null) {
 
-
-
+                //If the QOD AUTHOR is DIFFERENT to the QOD
                 if (! sQuoteOfTheDayAuthorQuote.getQuote().equals(sQuoteOfTheDay.getQuote())) {
 
-
+                    //Set visibilities of each QOD AUTHOR View - display the QOD AUTHOR
                     mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
                     sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.GONE);
-
-
                     sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
                     sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
                     sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.VISIBLE);
@@ -441,39 +322,31 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     sQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.VISIBLE);
                     sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.VISIBLE);
                     sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.VISIBLE);
-
-
                     sQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(sQuoteOfTheDay.getAuthor());
                     sQuoteOfTheDayAuthorQuoteQuote.setText("\" " + sQuoteOfTheDayAuthorQuote.getQuote() + " \"");
                     sQuoteOfTheDayAuthorQuoteAuthor.setText("- " + sQuoteOfTheDayAuthorQuote.getAuthor());
                     sQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + sQuoteOfTheDayAuthorQuote.getCategory());
                     sQuoteOfTheDayAuthorQuoteCategory.setText("Categories: " + TextUtils.join(", ", sQuoteOfTheDayAuthorQuote.getCategories()));
 
-
                     //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayAuthorQuote.getId()) != null) {
-
                         sQuoteOfTheDayAuthorQuote.setFavorite(true);
                         sQuoteOfTheDayAuthorQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
                     } else {
                         sQuoteOfTheDayAuthorQuote.setFavorite(false);
                         sQuoteOfTheDayAuthorQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
                     }
-
                 }
 
-
+                //If the QOD AUTHOR is the SAME as the QOD
                 if (sQuoteOfTheDayAuthorQuote.getQuote().equals(sQuoteOfTheDay.getQuote())) {
 
+                    //Set visibilities of each QOD AUTHOR View - DO NOT display the QOD AUTHOR
                     sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.VISIBLE);
                     sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setText(R.string.no_quotes_from_author);
-
-
                     sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
                     sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
                     sQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(sQuoteOfTheDay.getAuthor());
-
-
                     mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
                     sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.GONE);
                     sQuoteOfTheDayAuthorQuoteShareIcon.setVisibility(View.GONE);
@@ -481,42 +354,15 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.GONE);
                     sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.GONE);
                 }
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+            //If QOD CATEGORY variable EXISTS
             if (sQuoteOfTheDayCategoryQuote.getQuote() != null) {
 
-
-
+                //Set visibilities of each QOD CATEGORY View - display the QOD CATEGORY
                 mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.GONE);
-
-
                 sQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayCategoryQuoteTitleCategoryName.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayCategoryQuoteFavoriteIcon.setVisibility(View.VISIBLE);
@@ -524,8 +370,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 sQuoteOfTheDayCategoryQuoteQuote.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayCategoryQuoteAuthor.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayCategoryQuoteCategory.setVisibility(View.VISIBLE);
-
-
                 sQuoteOfTheDayCategoryQuoteTitleCategoryName.setText(sQuoteOfTheDay.getCategory());
                 sQuoteOfTheDayCategoryQuoteQuote.setText("\" " + sQuoteOfTheDayCategoryQuote.getQuote() + " \"");
                 sQuoteOfTheDayCategoryQuoteAuthor.setText("- " + sQuoteOfTheDayCategoryQuote.getAuthor());
@@ -533,67 +377,32 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 sQuoteOfTheDayCategoryQuoteCategory.setText("Categories: " + TextUtils.join(", ", sQuoteOfTheDayCategoryQuote.getCategories()));
 
 
-
                 //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayCategoryQuote.getId()) != null) {
-
                     sQuoteOfTheDayCategoryQuote.setFavorite(true);
                     sQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-
                 }
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayCategoryQuote.getId()) == null){
-
                     sQuoteOfTheDayCategoryQuote.setFavorite(false);
                     sQuoteOfTheDayCategoryQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-
                 }
             }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            //If QOD or QOD AUTHOR or QOD CATEGORY - DO NOT exist
             if (sQuoteOfTheDay.getQuote() == null || sQuoteOfTheDayAuthorQuote.getQuote() == null || sQuoteOfTheDayCategoryQuote.getQuote() == null) {
 
 
-
-
-
+                //Set listner for QOD Favorites Button
                 sQuoteOfTheDayQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-
 
                     //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-                        sQuoteOfTheDay.setFavorite(isChecked);
-
-
-                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+                        sQuoteOfTheDay.setFavorite(isChecked); //Set Favorite for QOD based on whether the Favorite is checked or not
+                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off); //Set Favorite button drawable
 
 
                         //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
@@ -602,100 +411,62 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                         // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
                         if ( isChecked == true && isGetQuoteOfTheDayAsyncTaskCompleted == true){
 
+                            //If the QOD does NOT exist in the Favorite Quotes SQLiteDatabase
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) == null){
-
-
-
-                                sQuoteOfTheDay.setFavorite(true);
-
-                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDay);
-
-                                //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay);
+                                sQuoteOfTheDay.setFavorite(true); //Set Favorite for QOD to true
+                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDay); //Add QOD to the Favorite Quotes SQLiteDatabase
+                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                             }
                             else{
                                 //Do nothing
                             }
-
                         }
                         if (isChecked == false){
-
-                            sQuoteOfTheDay.setFavorite(false);
-
-                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDay);
-
-                            //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay);
+                            sQuoteOfTheDay.setFavorite(false); //Set Favorite for QOD to false
+                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDay); //Remove QOD to the Favorite Quotes SQLiteDatabase
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                         }
-
-
                     }
                 });
 
 
 
-
-
-
-
-
-
+                //Set listner for QOD AUTHOR Favorites Button
                 sQuoteOfTheDayAuthorQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-
 
                     //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-                        sQuoteOfTheDayAuthorQuote.setFavorite(isChecked);
-
-
-                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+                        sQuoteOfTheDayAuthorQuote.setFavorite(isChecked); //Set Favorite for QOD AUTHOR based on whether the Favorite is checked or not
+                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off); //Set Favorite button drawable
 
 
                         //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
                         //This is added because for some weird & mysterious reason, sQuoteOfTheDayQuoteFavoriteIcon.setChecked(true) is called everytime after
                         // GetQuoteOfTheDay().getQuoteOfTheDay() is completed in doInBackground() of the isGetQuoteOfTheDayAsyncTask class.
-                        // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
+                        // Putting isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted in the conditional statement blocks this from happening
                         if ( isChecked == true && isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted == true){
 
+                            //If the QOD AUTHOR does NOT exist in the Favorite Quotes SQLiteDatabase
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayAuthorQuote.getId()) == null){
-
-
-
                                 sQuoteOfTheDayAuthorQuote.setFavorite(true);
-
                                 FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayAuthorQuote);
-
-                                //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote);
+                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                             }
                             else{
                                 //Do nothing
                             }
-
                         }
                         if (isChecked == false){
-
                             sQuoteOfTheDayAuthorQuote.setFavorite(false);
-
                             FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayAuthorQuote);
-
-                            //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote);
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                         }
 
 
                     }
                 });
-
-
-
-
-
-
-
 
 
 
@@ -707,8 +478,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
-
                         sQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
 
 
@@ -750,50 +519,10 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 new GetQuoteOfTheDayAsyncTask().execute();
-//                }
-//                catch (NullPointerException npe){
-//                    Log.e(TAG, "No Internet Connection!");
-//                }
+
 
             }
-
-//            else {
-//
-//
-//                try {
-//
-//                    new GetQuoteOfTheDayAsyncTask().execute();
-//                } catch (NullPointerException npe) {
-//                    Log.e(TAG, "No Internet Connection!");
-//                }
-//
-//
-//            }
-
-
-
-
 
 
 
@@ -802,23 +531,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
