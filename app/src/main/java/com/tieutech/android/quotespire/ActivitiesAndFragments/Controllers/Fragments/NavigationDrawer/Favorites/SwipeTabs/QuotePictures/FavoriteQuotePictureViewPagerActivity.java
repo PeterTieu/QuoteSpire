@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 
-import com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.RandomQuotePictures.QuotePictureDetailFragment;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.FavoriteQuotePicturesManager;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.QuotePicture;
 import com.tieutech.android.quotespire.R;
@@ -81,7 +80,7 @@ public class FavoriteQuotePictureViewPagerActivity extends AppCompatActivity{
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-        setContentView(R.layout.activity_quote_picture_view_pager); //Set the activity content from the ViewPager layout resource
+        setContentView(R.layout.activity_favorite_quote_picture_view_pager); //Set the activity content from the ViewPager layout resource
         sViewPager = (ViewPager) findViewById(R.id.quote_picture_view_pager); //Assign the ViewPager to its associated resource ID
         sViewPager.setOffscreenPageLimit(OFF_SCREEN_PAGE_LIMIT); //Set total number of detail fragments to pre-load outside of the current fragment on screen
 
