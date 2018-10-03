@@ -78,9 +78,15 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
     private ProgressBar mProgressBarQuoteOfTheDayCategoryQuote;
 
 
-    //========= Flags for Enabling/Disabling the "Refresh" toolbar nenu button
+    //========= Flags for Enabling/Disabling the "Refresh" toolbar nenu button ==============
     private boolean shouldEnebleRefreshButtonCheckpointOne = false; //Condition #1/2 to be met - when the AsyncTask to fetch the Author Quote is completed
     private boolean shouldEnableRefreshButtonCheckpointTwo = false; //Conidition #2/2 to be met - when the AsyncTask to fetch the Category Quote is completed
+
+
+    //========= Flags for whether the AsyncTasks are completed =============
+    public boolean isGetQuoteOfTheDayAsyncTaskCompleted = true;
+    public boolean isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted = true;
+    public boolean isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted = true;
 
 
 
@@ -450,8 +456,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
                             //If the QOD AUTHOR does NOT exist in the Favorite Quotes SQLiteDatabase
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayAuthorQuote.getId()) == null){
-                                sQuoteOfTheDayAuthorQuote.setFavorite(true);
-                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayAuthorQuote);
+                                sQuoteOfTheDayAuthorQuote.setFavorite(true); //Set Favorite for QOD AUTHOR to true
+                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayAuthorQuote); //Add QOD AUTHOR to the Favorite Quotes SQLiteDatabase
                                 FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                             }
                             else{
@@ -459,8 +465,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                             }
                         }
                         if (isChecked == false){
-                            sQuoteOfTheDayAuthorQuote.setFavorite(false);
-                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayAuthorQuote);
+                            sQuoteOfTheDayAuthorQuote.setFavorite(false);  //Set Favorite for QOD AUTHOR to false
+                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayAuthorQuote); //Remove QOD AUTHOR to the Favorite Quotes SQLiteDatabase
                             FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                         }
 
@@ -470,63 +476,46 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
+                //Set listner for QOD CATEGORY Favorites Button
                 sQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                     //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                        sQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
 
-
-                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+                        sQuoteOfTheDayCategoryQuote.setFavorite(isChecked); //Set Favorite for QOD AUTHOR based on whether the Favorite is checked or not
+                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off); //Set Favorite button drawable
 
 
                         //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
                         //This is added because for some weird & mysterious reason, sQuoteOfTheDayQuoteFavoriteIcon.setChecked(true) is called everytime after
                         // GetQuoteOfTheDay().getQuoteOfTheDay() is completed in doInBackground() of the isGetQuoteOfTheDayAsyncTask class.
-                        // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
+                        // Putting isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted in the conditional statement blocks this from happening
                         if ( isChecked == true && isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted == true){
-//                    if ( isChecked == true){
+
+                            //If the QOD CATEGORY does NOT exist in the Favorite Quotes SQLiteDatabase
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayCategoryQuote.getId()) == null){
-
-                                sQuoteOfTheDayCategoryQuote.setFavorite(true);
-
-                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayCategoryQuote);
-
-                                //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote);
+                                sQuoteOfTheDayCategoryQuote.setFavorite(true); //Set Favorite for QOD AUTHOR to true
+                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayCategoryQuote); //Add QOD CATEGORY to the Favorite Quotes SQLiteDatabase
+                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                             }
                             else{
                                 //Do nothing
                             }
-
                         }
                         if (isChecked == false){
-
-                            sQuoteOfTheDayCategoryQuote.setFavorite(false);
-
-                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayCategoryQuote);
-
-                            //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote);
+                            sQuoteOfTheDayCategoryQuote.setFavorite(false); //Set Favorite for QOD CATEGORY to false
+                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayCategoryQuote); //Add QOD CATEGORY to the Favorite Quotes SQLiteDatabase
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                         }
                     }
                 });
 
 
 
-
+                //Start AsyncTask to fetch the QOD (which would in turn call the AsyncTasks to fetch the QOD AUTHOR and QOD CATEGORY
                 new GetQuoteOfTheDayAsyncTask().execute();
-
-
             }
-
-
-
-
 
         }
 
@@ -535,31 +524,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public boolean stepFive = false;
-    public boolean stepSix = false;
-
-    public boolean isGetQuoteOfTheDayAsyncTaskCompleted = true;
-
-
-
-
+    //AsyncTask - Fetches the QOD Quote, Author and Categories via JSON networking, then stashes them to the sQuoteOfTheDay static instance variable
     private class GetQuoteOfTheDayAsyncTask extends AsyncTask<Void, Void, Quote> {
-
-
 
 
         //Build constructor
@@ -567,134 +533,64 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
         }
 
 
-
+        //Perform main AsyncTask operation
         @Override
         protected Quote doInBackground(Void... params){
-
-
-            isGetQuoteOfTheDayAsyncTaskCompleted = false;
-
-
-
-            Log.i(TAG, "Reached here");
-
-
-            Quote quoteOfTheDay = new GetQuoteOfTheDay().getQuoteOfTheDay();
-
-
-
-
+            isGetQuoteOfTheDayAsyncTaskCompleted = false; //Flag to indicate AsyncTask is incomplete
+            Quote quoteOfTheDay = new GetQuoteOfTheDay().getQuoteOfTheDay(); //Obtain QOD Quote object via networking
             return quoteOfTheDay;
-
         }
 
 
-
+        //When main AsyncTask operation is completed
         @Override
         protected void onPostExecute(Quote quoteOfTheDay){
+            isGetQuoteOfTheDayAsyncTaskCompleted = true; //Flag to indicate AsyncTask is completed
+            sQuoteOfTheDay = quoteOfTheDay; //Refer sQuoteOfTheDay to the Quote object referred to by quoteOfTheDay
+
+            //If sQuoteOfTheDay EXISTS
+            if (sQuoteOfTheDay != null) {
+
+                mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
+                sQuoteOfTheDayQuoteTitle.setVisibility(View.VISIBLE);
+                sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.VISIBLE);
+                sQuoteOfTheDayQuoteShareIcon.setVisibility(View.VISIBLE);
+                sQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
+                sQuoteOfTheDayQuoteCategory.setVisibility(View.VISIBLE);
+                sQuoteOfTheDayQuoteAuthor.setVisibility(View.VISIBLE);
 
 
-            isGetQuoteOfTheDayAsyncTaskCompleted = true;
+                //Try risky task - sQuoteOfTheDay.getAuthor()/getQuote()/isFavorite(), etc. would throw NullPointerException IF there is no internet connection.
+                // REMEMBER: sQuoteOfTheDay still exists even if there is no Internet, as it is created from the GetQuoteOfTheDayAuthorQuote class.
+                // No internet connection just means that its member/isntance variables would be undeclared and therefore NULL
+                try {
+
+                    sQuoteOfTheDayQuoteQuote.setText("\" " + sQuoteOfTheDay.getQuote() + " \"");
+                    sQuoteOfTheDayQuoteAuthor.setText("- " + sQuoteOfTheDay.getAuthor());
+                    sQuoteOfTheDayQuoteCategory.setText("Category: " + sQuoteOfTheDay.getCategory());
+                    sQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", sQuoteOfTheDay.getCategories()));
 
 
-
-
-            sQuoteOfTheDay = quoteOfTheDay;
-
-
-
-
-
-
-
-                if (sQuoteOfTheDay != null) {
-
-
-                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
-                        Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS IN9 DATABASE");
-                    } else {
-                        Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS NOTT9 IN DATABASE");
-                    }
-
-
-                    mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
-
-
-                    sQuoteOfTheDayQuoteTitle.setVisibility(View.VISIBLE);
-                    sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.VISIBLE);
-                    sQuoteOfTheDayQuoteShareIcon.setVisibility(View.VISIBLE);
-                    sQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
-                    sQuoteOfTheDayQuoteCategory.setVisibility(View.VISIBLE);
-                    sQuoteOfTheDayQuoteAuthor.setVisibility(View.VISIBLE);
-
-
-//                boolean quoteOfTheDayIsInFavoriteQuotesDatabase;
-//
-//                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) != null){
-//                    quoteOfTheDayIsInFavoriteQuotesDatabase = true;
-//                }
-//                else{
-//                    quoteOfTheDayIsInFavoriteQuotesDatabase = false;
-//                }
-//
-//                sQuoteOfTheDayQuoteFavoriteIcon.setChecked(quoteOfTheDayIsInFavoriteQuotesDatabase);
-
-
-                    //Try risky task - sQuoteOfTheDay.getAuthor()/getQuote()/isFavorite(), etc. would throw NullPointerException IF there is no internet connection.
-                    // REMEMBER: sQuoteOfTheDay still exists even if there is no Internet, as it is created from the GetQuoteOfTheDayAuthorQuote class.
-                    // No internet connection just means that its member/isntance variables would be undeclared and therefore NULL
-                    try {
-
-                        sQuoteOfTheDayQuoteQuote.setText("\" " + sQuoteOfTheDay.getQuote() + " \"");
-                        sQuoteOfTheDayQuoteAuthor.setText("- " + sQuoteOfTheDay.getAuthor());
-                        sQuoteOfTheDayQuoteCategory.setText("Category: " + sQuoteOfTheDay.getCategory());
-                        sQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", sQuoteOfTheDay.getCategories()));
-
-
-                        //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
-                        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) != null) {
-//                    Log.i(TAG, "sQuoteOfTheDayFavoriteIcon.isChecked() - 4idFuc8pVqrSmebcJSlRzQeF is INNN DATABASE");
-//                    Log.i(TAG, "sQuoteOfTheDayFavoriteIcon.isChecked() - Set checked - TRUE");
-//                    Log.i(TAG, "sQuoteOfTheDayFavoriteIcon.isChecked() = : " + Boolean.toString(sQuoteOfTheDayQuoteFavoriteIcon.isChecked()));
-//                    Log.i(TAG, "sQuoteOfTheDayFavoriteIcon.isChecked() QUOTE: " + FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()).getQuote());
-//                    Log.i(TAG, "sQuoteOfTheDayFavoriteIcon.isChecked() QUOTEs: " + FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()).getId());
-//                    sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-//                    sQuoteOfTheDay.setFavorite(true);
-                            sQuoteOfTheDayQuoteFavoriteIcon.setChecked(true);
-
-                        } else {
-//                    Log.i(TAG, "sQuoteOfTheDayFavoriteIcon.isChecked() - 4idFuc8pVqrSmebcJSlRzQeF is NOTTT in DATABASE");
-//                    Log.i(TAG, "QOD - Set checked - FALSE");
-//                    Log.i(TAG, "sQuoteOfTheDayFavoriteIcon.isChecked() = : " + Boolean.toString(sQuoteOfTheDayQuoteFavoriteIcon.isChecked()));
-//                    sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-//                    sQuoteOfTheDay.setFavorite(false);
-                            sQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
-                        }
-
-
-//                if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote("4idFuc8pVqrSmebcJSlRzQeF") != null) {
-//                    Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS IN10 DATABASE");
-//                }
-//                else{
-//                    Log.i(TAG, "QUOTE OF THE DAY - 4idFuc8pVqrSmebcJSlRzQeF IS NOTT10 IN DATABASE");
-//                }
-
-
-                    } catch (NullPointerException npe) {
-                        Log.e(TAG, "NO INTERNET CONNECTION - Caught in GetQuoteOfTheDayAsyncTask");
-
-                        sQuoteOfTheDayQuoteUnavailable.setVisibility(View.VISIBLE);
-
-                        sQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
-                        sQuoteOfTheDayQuoteAuthor.setVisibility(View.GONE);
-                        sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.GONE);
-                        sQuoteOfTheDayQuoteShareIcon.setVisibility(View.GONE);
-                        sQuoteOfTheDayQuoteCategory.setVisibility(View.GONE);
-                        sQuoteOfTheDayQuoteCategory.setVisibility(View.GONE);
-
+                    //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
+                    if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) != null) {
+                        sQuoteOfTheDayQuoteFavoriteIcon.setChecked(true);
+                    } else{
+                        sQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
                     }
                 }
+                catch (NullPointerException npe) {
+                    Log.e(TAG, "NO INTERNET CONNECTION - Caught in GetQuoteOfTheDayAsyncTask");
 
+                    sQuoteOfTheDayQuoteUnavailable.setVisibility(View.VISIBLE);
+
+                    sQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
+                    sQuoteOfTheDayQuoteAuthor.setVisibility(View.GONE);
+                    sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.GONE);
+                    sQuoteOfTheDayQuoteShareIcon.setVisibility(View.GONE);
+                    sQuoteOfTheDayQuoteCategory.setVisibility(View.GONE);
+                    sQuoteOfTheDayQuoteCategory.setVisibility(View.GONE);
+                    }
+                }
 
 
 
@@ -708,17 +604,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
-
-
-
-
-
-
-
-    public boolean isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted = true;
 
 
 
@@ -787,30 +672,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
             // No internet connection just means that its member/isntance variables would be undeclared and therefore NULL
             try {
 
-
-//                Log.i(TAG, "Quote of the day Author Quote - Quote String: " + sQuoteOfTheDayAuthorQuote.getQuote());
-//                Log.i(TAG, "Quote of the day Author Quote - Category: " + sQuoteOfTheDayAuthorQuote.getCategory());
-//                Log.i(TAG, "Quote of the day Author Quote - Author: " + sQuoteOfTheDayAuthorQuote.getAuthor());
-//                Log.i(TAG, "Quote of the day Author Quote - ID: " + sQuoteOfTheDayAuthorQuote.getId());
-
-
-//                if (sQuoteOfTheDay.getQuote() != null && sQuoteOfTheDayAuthorQuote.getQuote() == null) {
-//
-//                    sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.VISIBLE);
-//                    sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setText(R.string.no_internet_connection);
-//
-//
-//                    sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.GONE);
-//                    sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.GONE);
-//                    mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
-//                    sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.GONE);
-//                    sQuoteOfTheDayAuthorQuoteShareIcon.setVisibility(View.GONE);
-//                    sQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.GONE);
-//                    sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.GONE);
-//                    sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.GONE);
-//
-//
-//                }
                 if (sQuoteOfTheDayAuthorQuote != null) {
 
 
@@ -916,8 +777,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-    public boolean isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted = true;
-
 
 
     private class GetQuoteOfTheDayCategoryQuoteAsyncTask extends AsyncTask<Void, Void, Quote>{
@@ -935,10 +794,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
             isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted = false;
 
-
-
-
-//            mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.VISIBLE);
 
             return new GetQuoteOfTheDayCategoryQuote().getQuoteOfTheDayCategoryQuote(quoteOfTheDayCategory);
         }
@@ -1206,16 +1061,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 menuItem.getIcon().setAlpha(130); //Set the "Refresh" menu item button to 'disabled' color (i.e. grey)
 
 
-//                if (shouldEnableRefreshButton == true){
-//                    menuItem.setEnabled(true);
-//                    menuItem.getIcon().setAlpha(255);
-//                }
-//                else{
-//                    menuItem.setEnabled(false);
-//                    menuItem.getIcon().setAlpha(130);
-//                }
-
-
 
 
 
@@ -1223,12 +1068,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
                 if (sQuoteOfTheDay.getQuote() != null){
 
-//                    sQuoteOfTheDayQuoteTitle.setVisibility(View.INVISIBLE);
-//                sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.INVISIBLE);
-//                sQuoteOfTheDayQuoteShareIcon.setVisibility(View.INVISIBLE);
-//                sQuoteOfTheDayQuoteQuote.setVisibility(View.INVISIBLE);
-//                sQuoteOfTheDayQuoteCategory.setVisibility(View.INVISIBLE);
-//                sQuoteOfTheDayQuoteAuthor.setVisibility(View.INVISIBLE);
+
 
 
                     sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.INVISIBLE);
