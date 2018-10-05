@@ -550,7 +550,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
             //If sQuoteOfTheDay EXISTS
             if (sQuoteOfTheDay != null) {
-
+                //Congfigure view visibilities
                 mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
                 sQuoteOfTheDayQuoteTitle.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.VISIBLE);
@@ -559,30 +559,28 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 sQuoteOfTheDayQuoteCategory.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayQuoteAuthor.setVisibility(View.VISIBLE);
 
-
                 //Try risky task - sQuoteOfTheDay.getAuthor()/getQuote()/isFavorite(), etc. would throw NullPointerException IF there is no internet connection.
                 // REMEMBER: sQuoteOfTheDay still exists even if there is no Internet, as it is created from the GetQuoteOfTheDayAuthorQuote class.
                 // No internet connection just means that its member/isntance variables would be undeclared and therefore NULL
                 try {
-
+                    //Configure view visibilities
                     sQuoteOfTheDayQuoteQuote.setText("\" " + sQuoteOfTheDay.getQuote() + " \"");
                     sQuoteOfTheDayQuoteAuthor.setText("- " + sQuoteOfTheDay.getAuthor());
                     sQuoteOfTheDayQuoteCategory.setText("Category: " + sQuoteOfTheDay.getCategory());
                     sQuoteOfTheDayQuoteCategory.setText("Category: " + TextUtils.join(", ", sQuoteOfTheDay.getCategories()));
 
-
                     //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) != null) {
-                        sQuoteOfTheDayQuoteFavoriteIcon.setChecked(true);
+                        sQuoteOfTheDayQuoteFavoriteIcon.setChecked(true); //
                     } else{
                         sQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
                     }
                 }
                 catch (NullPointerException npe) {
-                    Log.e(TAG, "NO INTERNET CONNECTION - Caught in GetQuoteOfTheDayAsyncTask");
+                    Log.e(TAG, "NO INTERNET CONNECTION - Caught in GetQuoteOfTheDayAsyncTask"); //Log to Logcat
 
+                    //Configure view visibilities
                     sQuoteOfTheDayQuoteUnavailable.setVisibility(View.VISIBLE);
-
                     sQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
                     sQuoteOfTheDayQuoteAuthor.setVisibility(View.GONE);
                     sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.GONE);
@@ -592,9 +590,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     }
                 }
 
-
-
-
+            //Once the QOD is loaded... begin AsyncTasks to obtain QOD AUTHOR and QOD CATEGORY
             new GetQuoteOfTheDayAuthorQuoteAsyncTask().execute();
             new GetQuoteOfTheDayCategoryQuoteAsyncTask().execute();
 
@@ -605,13 +601,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
-
-
-
-
+    //
     private class GetQuoteOfTheDayAuthorQuoteAsyncTask extends AsyncTask<Void, Void, Quote>{
 
 
@@ -680,8 +670,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
                         mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
                         sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.GONE);
-
-
                         sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
                         sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
                         sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.VISIBLE);
