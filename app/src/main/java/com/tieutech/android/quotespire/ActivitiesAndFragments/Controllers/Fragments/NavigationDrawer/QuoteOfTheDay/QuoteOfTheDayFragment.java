@@ -907,51 +907,41 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-    //
+    //Override onCreateOptionsMenu(..) fragment lifcycle callback method
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
-
         super.onCreateOptionsMenu(menu, menuInflater);
 
-        menuInflater.inflate(R.menu.fragment_quote_of_the_day, menu);
+        menuInflater.inflate(R.menu.fragment_quote_of_the_day, menu); //Inflate the options menu view
 
-        MenuItem refreshItem = menu.findItem(R.id.menu_item_refresh_quote_of_the_day_fragment);
+        MenuItem refreshItem = menu.findItem(R.id.menu_item_refresh_quote_of_the_day_fragment); //Obtain "Referesh" menu item reference variable
 
-
-
-//        refreshItem.setEnabled(true); //Enable the "Refresh" menu item button
         refreshItem.getIcon().setAlpha(255); //Set the "Refresh" menu item button to 'full color' (i.e. white)
-
-
-
     }
 
 
+
+    //Override onOptionsItemSelected(..) fragment lifcycle callback method
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
         Log.i(TAG, "onOptionsItemsSelected(..) called"); //Log lifecycle callback
 
+        //Scan over menu items
         switch (menuItem.getItemId()){
-            case (R.id.menu_item_refresh_quote_of_the_day_fragment):
 
+            //If "Refresh" menu item is pressed
+            case (R.id.menu_item_refresh_quote_of_the_day_fragment):
 
                 shouldEnebleRefreshButtonCheckpointOne = false; //Reset the Condition #1/2 that is used for enabling the "Refresh" menu item button
                 shouldEnableRefreshButtonCheckpointTwo = false; //Reset the Condition #2/3 that is used for enabling the "Refresh" menu item button
                 menuItem.setEnabled(false); //Disable the "Refresh" menu item button
                 menuItem.getIcon().setAlpha(130); //Set the "Refresh" menu item button to 'disabled' color (i.e. grey)
 
-
-
-
-
-
-
+                //If sQuoteOfTheDay Quote EXISTS
                 if (sQuoteOfTheDay.getQuote() != null){
 
-
-
-
+                    //Configure view visibilities - display the QOD
                     sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.INVISIBLE);
@@ -960,7 +950,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.GONE);
-
 
                     sQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayCategoryQuoteTitleCategoryName.setVisibility(View.INVISIBLE);
@@ -971,41 +960,24 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     sQuoteOfTheDayCategoryQuoteCategory.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayCategoryQuoteQuoteUnavailable.setVisibility(View.GONE);
 
-
-
-
-
-
-//                mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
+                        //Display progress bars for QOD AUTHOR and QOD CATEGORY
                     mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.VISIBLE);
                     mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.VISIBLE);
 
-
-
-
-
-//                new GetQuoteOfTheDayAsyncTask().execute();
-
+                    //Begin AsyncTask for QOD AUTHOR and QOD CATEGORY to fetch these Quote objects
                     new GetQuoteOfTheDayAuthorQuoteAsyncTask().execute();
                     new GetQuoteOfTheDayCategoryQuoteAsyncTask().execute();
-
                 }
 
-
-
-
+                //If sQuoteOfTheDay Quote DOES NOT exist
                 else{
 
-
+                    //Configure view visiblities
+                        //Do not display the QOD, QOD AUTHOR, and QOD CATEGORY
                     sQuoteOfTheDayQuoteUnavailable.setVisibility(View.GONE);
                     sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.GONE);
                     sQuoteOfTheDayCategoryQuoteQuoteUnavailable.setVisibility(View.GONE);
 
-
-
-//                    sQuoteOfTheDayQuoteTitle.setVisibility(View.VISIBLE);
-
-
                     sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.INVISIBLE);
@@ -1013,7 +985,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     sQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.INVISIBLE);
-
 
                     sQuoteOfTheDayCategoryQuoteTitle.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayCategoryQuoteTitleCategoryName.setVisibility(View.INVISIBLE);
@@ -1023,32 +994,20 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                     sQuoteOfTheDayCategoryQuoteAuthor.setVisibility(View.INVISIBLE);
                     sQuoteOfTheDayCategoryQuoteCategory.setVisibility(View.INVISIBLE);
 
-
-
-
-
+                        //Display progress bars for QOD, QOD AUTHOR, and QOD CATEGORY
                     mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.VISIBLE);
                     mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.VISIBLE);
                     mProgressBarQuoteOfTheDayCategoryQuote.setVisibility(View.VISIBLE);
 
-
-
+                    //Fetcg the QOD, QOD AUTHOR, and QOD CATEGORY
                     new GetQuoteOfTheDayAsyncTask().execute();
                 }
 
-//
-
-
                 return true;
-
 
             default:
                 return super.onOptionsItemSelected(menuItem);
-
         }
-
-
-
 
     }
 
