@@ -33,50 +33,46 @@ import com.tieutech.android.quotespire.R;
 import java.util.Arrays;
 import java.util.List;
 
+//Fragment for displaying list of Random Quotes
 public class RandomQuotesFragment extends Fragment {
 
+    //================= Declare INSTANCE VARIABLES ==============================================================
 
-    private static final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 12;
+    private static final int NUMBER_OF_RANDOM_QUOTES_TO_LOAD = 12; //Number of random Quotes to display
 
-    //Log for Logcat
-    private final String TAG = "RandomQuotesFragment";
+    private final String TAG = "RandomQuotesFragment"; //Log for Logcat
 
+    //RecyclerView variables
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mRandomQuotesRecyclerView;
     private RandomQuotesAdaper mRandomQuotesAdaper;
     private RandomQuotesViewHolder mRandomQuotesViewHolder;
 
-//    private List<Quote> mRandomQuotes = new ArrayList<>();
+    private static List<Quote> mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]); //Declare and INITIALISE the List of Quote objects to size 12
 
-    //Declare and INITIALISE the List of Quote objects to size 7
-    private static List<Quote> mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]);
-
-    //Flag to decide whether the "Randomise" menut item button should be enabled or disabled
-    boolean shouldEnableRandomiseMenuItem = false;
+    boolean shouldEnableRandomiseMenuItem = false; //Flag to decide whether the "Randomise" menut item button should be enabled or disabled
 
 
 
-
-
-
+    //Override onAttach(..) fragment lifecycle callback method
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-
-        Log.i(TAG, "onAttached(..) called");
-
+        Log.i(TAG, "onAttached(..) called"); //Log to Logcat
     }
 
 
+
+
+    //Override onCreate(..) fragment lifecycle callback method
     @Override
     public void onCreate(Bundle onSavedInstanceState){
         super.onCreate(onSavedInstanceState);
+        Log.i(TAG, "onCreate(..) caled"); //Log to Logcat
 
-        Log.i(TAG, "onCreate(..) caled");
-
-        setHasOptionsMenu(true);
-
+        setHasOptionsMenu(true); //Declaqre that this fragment has an options menu
     }
+
 
 
 
@@ -85,75 +81,42 @@ public class RandomQuotesFragment extends Fragment {
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
 
-        //Log in Logcat
-        Log.i(TAG, "onCreateView(..) called");
+        Log.i(TAG, "onCreateView(..) called"); //Log in Logcat
 
+        View view = layoutInflater.inflate(R.layout.fragment_random_quotes, viewGroup, false); //Inflate the layout view for RandomQuotesFragment
 
-
-        View view = layoutInflater.inflate(R.layout.fragment_random_quotes, viewGroup, false);
-
-
+        //Configure view for RecyclerView
+            //---- Set up RecyclerView ------------
         mRandomQuotesRecyclerView = (RecyclerView) view.findViewById(R.id.random_quotes_recycler_view);
-
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
-
         mRandomQuotesRecyclerView.setLayoutManager(mLinearLayoutManager);
-
-
-
-
+            //---- Set RecyclerView Adapter and link it to the RecyclerView --------
         mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes);
-
         mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes);
-
         mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper);
 
+        getActivity().invalidateOptionsMenu(); //Update options menu
+
+        getActivity().setTitle("Random Quotes"); //Set title for Fragment
 
 
-        getActivity().invalidateOptionsMenu();
-
-
-
-        getActivity().setTitle("Random Quotes");
-
-
-
-
+        //Run the following operations for as many times as there are random Quotes
         for (int i = 0; i < NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++) {
 
-
-            //If each of the Quote objects in the mRandomQuotes ArrayList are EMPTY
+            //If EACH of the Quote objects in the mRandomQuotes ArrayList are EMPTY
             if (mRandomQuotes.get(i) == null){
-
-
-                Integer randomQuotePosition = i;
-
-                new GetRandomQuoteAsyncTask().execute(randomQuotePosition);
+                Integer randomQuotePosition = i; //Position of random Quote
+                new GetRandomQuoteAsyncTask().execute(randomQuotePosition); //Obtain the random Quote
             }
-
         }
 
-
-
-
-
-
-
-        return view;
+        return view; //Return the view
     }
 
 
 
 
-
-
-
-
-
-
-
-
-
+    //
     private class GetRandomQuoteAsyncTask extends AsyncTask<Integer, Void, Quote>{
 
 
