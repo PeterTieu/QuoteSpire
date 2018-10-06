@@ -495,7 +495,7 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
                             //If the QOD CATEGORY does NOT exist in the Favorite Quotes SQLiteDatabase
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayCategoryQuote.getId()) == null){
-                                sQuoteOfTheDayCategoryQuote.setFavorite(true); //Set Favorite for QOD AUTHOR to true
+                                sQuoteOfTheDayCategoryQuote.setFavorite(true); //Set Favorite for QOD CATEGORY to true
                                 FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayCategoryQuote); //Add QOD CATEGORY to the Favorite Quotes SQLiteDatabase
                                 FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                             }
@@ -1014,45 +1014,33 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
+    //Override onStart() fragment lifecycle callback method
     @Override
     public void onStart(){
         super.onStart();
-
-
-
-        Log.i(TAG, "onStart() called");
+        Log.i(TAG, "onStart() called"); //Log to Logcat
     }
 
 
 
 
+    //Override onStart() fragment lifecycle callback method
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "onResume() called");
+        Log.i(TAG, "onResume() called"); //Log to Logcat
 
 
 
-
-
-
-
-//        sQuoteOfTheDayQuoteFavoriteIcon.setChecked(false);
-
+        //Set listner for QOD Favorites Button
         sQuoteOfTheDayQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-
-                sQuoteOfTheDay.setFavorite(isChecked);
-
-
-                compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+                sQuoteOfTheDay.setFavorite(isChecked); //Set Favorite for QOD based on whether the Favorite is checked or not
+                compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off); //Set Favorite button drawable
 
 
                 //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
@@ -1060,43 +1048,29 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 // GetQuoteOfTheDay().getQuoteOfTheDay() is completed in doInBackground() of the isGetQuoteOfTheDayAsyncTask class.
                 // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
                 if ( isChecked == true && isGetQuoteOfTheDayAsyncTaskCompleted == true){
-//                    if ( isChecked == true){
+
+                    //If the QOD does NOT exist in the Favorite Quotes SQLiteDatabase
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) == null){
-
-                        sQuoteOfTheDay.setFavorite(true);
-
-                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDay);
-
-                        //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay);
+                        sQuoteOfTheDay.setFavorite(true); //Set Favorite for QOD to true
+                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDay); //Add QOD to the Favorite Quotes SQLiteDatabase
+                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                     }
                     else{
                         //Do nothing
                     }
-
                 }
+
                 if (isChecked == false){
-
-                    sQuoteOfTheDay.setFavorite(false);
-
-                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDay);
-
-                    //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay);
+                    sQuoteOfTheDay.setFavorite(false); //Set Favorite for QOD to false
+                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDay); //Remove QOD to the Favorite Quotes SQLiteDatabase
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDay); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                 }
             }
         });
 
 
 
-
-
-
-
-
-
-//        sQuoteOfTheDayAuthorQuoteFavoriteIcon.setChecked(false);
-
+        //Set listner for QOD AUTHOR Favorites Button
         sQuoteOfTheDayAuthorQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 
@@ -1105,10 +1079,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-                sQuoteOfTheDayAuthorQuote.setFavorite(isChecked);
-
-
-                compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+                sQuoteOfTheDayAuthorQuote.setFavorite(isChecked); //Set Favorite for QOD AUTHOR based on whether the Favorite is checked or not
+                compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off); //Set Favorite button drawable
 
 
                 //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
@@ -1117,61 +1089,35 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
                 if ( isChecked == true && isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted == true){
 
+                    //If the QOD AUTHOR does NOT exist in the Favorite Quotes SQLiteDatabase
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayAuthorQuote.getId()) == null){
-
-
-
-                        sQuoteOfTheDayAuthorQuote.setFavorite(true);
-
-                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayAuthorQuote);
-
-                        //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote);
+                        sQuoteOfTheDayAuthorQuote.setFavorite(true); //Set Favorite for QOD AUTHOR to true
+                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayAuthorQuote); //Add QOD AUTHOR to the Favorite Quotes SQLiteDatabase
+                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                     }
                     else{
                         //Do nothing
                     }
-
                 }
                 if (isChecked == false){
-
-                    sQuoteOfTheDayAuthorQuote.setFavorite(false);
-
-                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayAuthorQuote);
-
-                    //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote);
+                    sQuoteOfTheDayAuthorQuote.setFavorite(false); //Set Favorite for QOD AUTHOR to false
+                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayAuthorQuote); //Remove QOD AUTHOR to the Favorite Quotes SQLiteDatabase
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayAuthorQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                 }
-
-
             }
         });
 
 
 
-
-
-
-
-
-
-
-
-
-
-//        sQuoteOfTheDayCategoryQuoteFavoriteIcon.setChecked(false);
-
+        //Set listner for QOD CATEGORY Favorites Button
         sQuoteOfTheDayCategoryQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             //Override onCheckedChanged(..) from CompoundButton.OnCheckedChangedListener
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-
-                sQuoteOfTheDayCategoryQuote.setFavorite(isChecked);
-
-
-                compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off);
+                sQuoteOfTheDayCategoryQuote.setFavorite(isChecked); //Set Favorite for QOD AUTHOR based on whether the Favorite is checked or not
+                compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on : R.drawable.ic_imageview_favorite_off); //Set Favorite button drawable
 
 
                 //isGetQuoteOfTheDayAsyncTaskCompleted is a boolean marker to identify whether the GetQuoteOfTheDayAsyncTask's doInBackground() method is completed.
@@ -1179,94 +1125,82 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 // GetQuoteOfTheDay().getQuoteOfTheDay() is completed in doInBackground() of the isGetQuoteOfTheDayAsyncTask class.
                 // Putting isGetQuoteOfTheDayAsyncTaskCompleted in the conditional statement blocks this from happening
                 if ( isChecked == true && isGetQuoteOfTheDayCategoryQuoteAsyncTaskCompleted == true){
-//                    if ( isChecked == true){
+//
+                    //If the QOD CATEGORY does NOT exist in the Favorite Quotes SQLiteDatabase
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDayCategoryQuote.getId()) == null){
-
-                        sQuoteOfTheDayCategoryQuote.setFavorite(true);
-
-                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayCategoryQuote);
-
-                        //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote);
+                        sQuoteOfTheDayCategoryQuote.setFavorite(true); //Set Favorite for QOD CATEGORY to true
+                        FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(sQuoteOfTheDayCategoryQuote); //Add QOD CATEGORY to the Favorite Quotes SQLiteDatabase
+                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                     }
                     else{
                         //Do nothing
                     }
-
                 }
                 if (isChecked == false){
-
-                    sQuoteOfTheDayCategoryQuote.setFavorite(false);
-
-                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayCategoryQuote);
-
-                    //NOTE: Even if the below line is omitted, the favorites implementation still wouldn't be affected
-                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote);
+                    sQuoteOfTheDayCategoryQuote.setFavorite(false); //Set Favorite for QOD CATEGORY to false
+                    FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(sQuoteOfTheDayCategoryQuote); //Add QOD CATEGORY to the Favorite Quotes SQLiteDatabase
+                    FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(sQuoteOfTheDayCategoryQuote); //NOTE: Even if this line is omitted, the favorites implementation still wouldn't be affected
                 }
             }
         });
 
 
 
-
-
-
-
-        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute();
-
-
-
-
-
-
-
-
+        new GetLatestQuoteOfTheDayQuoteAsyncTask().execute(); //Start AsyncTask to fetch the LATEST QOD
     }
 
 
+
+
+    //Override onPause() fragment lifecycle callback method
     @Override
     public void onPause(){
         super.onPause();
-
-        Log.i(TAG, "onPause() called");
+        Log.i(TAG, "onPause() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onStop() fragment lifecycle callback method
     @Override
     public void onStop(){
         super.onStop();
 
-        Log.i(TAG, "onStop() called");
+        Log.i(TAG, "onStop() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onDestroy() fragment lifecycle callback method
     @Override
     public void onDestroy(){
         super.onDestroy();
 
-        Log.i(TAG, "onDestoroy() called");
+        Log.i(TAG, "onDestoroy() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onDestroyView() fragment lifecycle callback method
     @Override
     public void onDestroyView(){
         super.onDestroyView();
 
-        Log.i(TAG, "onDestroyView() called");
+        Log.i(TAG, "onDestroyView() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onDetach() fragment lifecycle callback method
     @Override
     public void onDetach(){
         super.onDetach();
 
-        Log.i(TAG, "onDetach() called");
+        Log.i(TAG, "onDetach() called"); //Log to Logcat
     }
-
-
-
-
-
-
 
 }
