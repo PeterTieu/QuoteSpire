@@ -601,50 +601,39 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-    //
+
+    //AsyncTask - Fetches the QOD AUTHOR Quote, Author and Categories via JSON networking, then stashes them to the sQuoteOfTheDayAuthorQuote static instance variable
     private class GetQuoteOfTheDayAuthorQuoteAsyncTask extends AsyncTask<Void, Void, Quote>{
 
+        String quoteOfTheDayAuthor = sQuoteOfTheDay.getAuthor(); //Instance variable referringt to the QOD AUTHOR
 
-        String quoteOfTheDayAuthor = sQuoteOfTheDay.getAuthor();
 
         //Build constructor
         public GetQuoteOfTheDayAuthorQuoteAsyncTask(){
-
         }
 
 
+        //Perform main AsyncTask operation
         @Override
         protected Quote doInBackground(Void... params){
-
-
-
-            isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted = false;
-
-
-//            mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.VISIBLE);
-
-            return new GetQuoteOfTheDayAuthorQuote().getQuoteOfTheDayAuthorQuote(quoteOfTheDayAuthor);
+            isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted = false; //Flag to indicate AsyncTask is incomplete
+            return new GetQuoteOfTheDayAuthorQuote().getQuoteOfTheDayAuthorQuote(quoteOfTheDayAuthor); //Obtain QOD AUTHOR Quote object via networking, and return it as a parameter in onPostExecute(..)
         }
 
 
+        //When main AsyncTask operation is completed
         @Override
         protected void onPostExecute(Quote quoteOfTheDayAuthorQuote){
-
-
-            isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted = true;
-
-
-            sQuoteOfTheDayAuthorQuote = quoteOfTheDayAuthorQuote;
-
-
+            isGetQuoteOfTheDayAuthorQuoteAsyncTaskCompleted = true; //Flag to indicate AsyncTask is completed
+            sQuoteOfTheDayAuthorQuote = quoteOfTheDayAuthorQuote; //Refer sQuoteOfTheDayAuthorQuote to the Quote object referred to by quoteOfTheDayAuthorQuote
 
             shouldEnebleRefreshButtonCheckpointOne = true; //Condition #1/2 to enable the "Refresh" menu button has been met - as the AsyncTask to fetch the Author Quote has been completed
-            //Try risky task - as getActivity().invalidateOptionsMenu() throws a NullPointerException if another navigation drawer is opened
+
+            //Try risky task - as getActivity().invalidateOptionsMenu() throws a NullPointerException if another navigation drawer list item is opened
             try{
                 //If both conditions to enable the "Refresh" menu button is passed
                 if (shouldEnebleRefreshButtonCheckpointOne == true && shouldEnableRefreshButtonCheckpointTwo == true){
                     getActivity().invalidateOptionsMenu(); //Refresh the options menu (i.e. call onCreateOptionsMenu(..))
-
                 }
             }
             catch (NullPointerException npe) {
@@ -653,21 +642,17 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
-
-
-
-
             //Try risky task - sQuoteOfTheDayAuthorQuote.getAuthor()/getQuote()/isFavorite(), etc. would throw NullPointerException IF there is no internet connection.
             // REMEMBER: sQuoteOfTheDayAuthorQuote still exists even if there is no Internet, as it is created from the GetQuoteOfTheDayAuthorQuote class.
             // No internet connection just means that its member/isntance variables would be undeclared and therefore NULL
             try {
-
+                //If sQuoteOfTheDayAuthorQuote aexists
                 if (sQuoteOfTheDayAuthorQuote != null) {
 
-
+                    //If the Quotes of sQuoteOfTheDayAuthorQuote AND sQuoteOfTheDayare DIFFERENT
                     if (! sQuoteOfTheDayAuthorQuote.getQuote().equals(sQuoteOfTheDay.getQuote())) {
 
-
+                        //Configure view visibilities
                         mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
                         sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.GONE);
                         sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
@@ -677,7 +662,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                         sQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.VISIBLE);
                         sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.VISIBLE);
                         sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.VISIBLE);
-
 
                         sQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(sQuoteOfTheDay.getAuthor());
                         sQuoteOfTheDayAuthorQuoteQuote.setText("\" " + sQuoteOfTheDayAuthorQuote.getQuote() + " \"");
@@ -692,20 +676,18 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                         } else {
                             sQuoteOfTheDayAuthorQuoteFavoriteIcon.setChecked(false);
                         }
-
                     }
 
 
+                    //If the Quotes of sQuoteOfTheDayAuthorQuote AND sQuoteOfTheDayare the SAME
                     if (sQuoteOfTheDayAuthorQuote.getQuote().equals(sQuoteOfTheDay.getQuote())) {
 
+                        //Configure view visibilities
                         sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.VISIBLE);
                         sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setText(R.string.no_quotes_from_author);
-
-
                         sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.VISIBLE);
                         sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.VISIBLE);
                         sQuoteOfTheDayAuthorQuoteTitleAuthorName.setText(sQuoteOfTheDay.getAuthor());
-
 
                         mProgressBarQuoteOfTheDayAuthorQuote.setVisibility(View.GONE);
                         sQuoteOfTheDayAuthorQuoteFavoriteIcon.setVisibility(View.GONE);
@@ -714,20 +696,15 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                         sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.GONE);
                         sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.GONE);
                     }
-
-
                 }
-
-
-
-
-
             }
+            //Catch NullPointerException thrown by sQuoteOfTheDayAuthorQuote.getAuthor()/getQuote()/isFavorite() when there is no internet connection to obtain these values
             catch (NullPointerException npe){
+
+                //Configure view visibilities
                 Log.e(TAG, "NO INTERNET CONNECTION - Caught in GetQuoteOfTheDayAuthorQuoteAsyncTask");
                 sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setVisibility(View.VISIBLE);
                 sQuoteOfTheDayAuthorQuoteQuoteUnavailable.setText(R.string.no_internet_connection);
-
 
                 sQuoteOfTheDayAuthorQuoteTitle.setVisibility(View.GONE);
                 sQuoteOfTheDayAuthorQuoteTitleAuthorName.setVisibility(View.GONE);
@@ -737,22 +714,9 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 sQuoteOfTheDayAuthorQuoteQuote.setVisibility(View.GONE);
                 sQuoteOfTheDayAuthorQuoteAuthor.setVisibility(View.GONE);
                 sQuoteOfTheDayAuthorQuoteCategory.setVisibility(View.GONE);
-
-
-
-
             }
 
-
-
-
-
-
-
-
-
         }
-
     }
 
 
