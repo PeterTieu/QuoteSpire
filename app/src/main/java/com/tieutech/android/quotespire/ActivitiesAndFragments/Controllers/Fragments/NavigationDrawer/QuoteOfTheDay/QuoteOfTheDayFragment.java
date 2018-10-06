@@ -759,8 +759,6 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
             }
 
 
-
-
             //Try risky task - sQuoteOfTheDayCategoryQuote.getAuthor()/getQuote()/isFavorite(), etc. would throw NullPointerException IF there is no internet connection.
             // REMEMBER: sQuoteOfTheDayAuthorQuote still exists even if there is no Internet, as it is created from the sQuoteOfTheDayCategoryQuote class.
             // No internet connection just means that its member/isntance variables would be undeclared and therefore NULL
@@ -819,6 +817,8 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
 
 
+    //AsyncTask - Fetches the LATEST QOD Quote, Author and Categories via JSON networking, then stashes them to the sQuoteOfTheDay static instance variable.
+    //NOTE: This class is called in onResume(..), i.e. whenever the "Dashboard/QOD" navigation drawer is opened
     private class GetLatestQuoteOfTheDayQuoteAsyncTask extends AsyncTask<Void, Void, Quote>{
 
 
@@ -827,21 +827,19 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
         }
 
 
+        //Perform main AsyncTask operation
         @Override
         protected Quote doInBackground(Void... params){
-
-
-            return new GetQuoteOfTheDay().getQuoteOfTheDay();
+            return new GetQuoteOfTheDay().getQuoteOfTheDay(); //Obtain LATEST QOD Quote object via networking
         }
 
 
+        //When main AsyncTask operation is completed
         @Override
         protected void onPostExecute(Quote latestQuoteOfTheDay) {
 
-
-
+            //Configure view visibilities
             mProgressBarQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
-
             sQuoteOfTheDayQuoteTitle.setVisibility(View.VISIBLE);
             sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.VISIBLE);
             sQuoteOfTheDayQuoteShareIcon.setVisibility(View.VISIBLE);
@@ -850,31 +848,27 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
             sQuoteOfTheDayQuoteAuthor.setVisibility(View.VISIBLE);
 
 
+            //Try risky task - sQuoteOfTheDay.getAuthor()/getQuote()/isFavorite(), etc. would throw NullPointerException IF there is no internet connection.
+            // REMEMBER: sQuoteOfTheDay still exists even if there is no Internet, as it is created from the GetQuoteOfTheDayAuthorQuote class.
+            // No internet connection just means that its member/isntance variables would be undeclared and therefore NULL
             try{
 
-
-
+                //If the sQuoteOfTheDay Quote EXISTS
                 if (sQuoteOfTheDay.getQuote() != null){
 
-
+                    //If the Quote of the LATEST QOD and QOD are DIFFERENT (i.e. this means QOD needs to be updated to be the same as the LATEST QOD)
                     if (! latestQuoteOfTheDay.getQuote().equals(sQuoteOfTheDay.getQuote())){
-                        sQuoteOfTheDay = latestQuoteOfTheDay;
+                        sQuoteOfTheDay = latestQuoteOfTheDay; //Update sQuoteOfTheDay
+                        sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(sQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off); //Show whether the LATEST QOD is favorited or not
+                        Toast.makeText(getActivity(), "Quote Of The Day updated", Toast.LENGTH_LONG).show(); //Notify the user via Toast that the QOD Quote has been changed
 
-                        sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(sQuoteOfTheDay.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-                        Toast.makeText(getActivity(), "Quote Of The Day updated", Toast.LENGTH_LONG).show();
-
-                        new GetQuoteOfTheDayAuthorQuoteAsyncTask().execute();
-                        new GetQuoteOfTheDayCategoryQuoteAsyncTask().execute();
-
+                        new GetQuoteOfTheDayAuthorQuoteAsyncTask().execute(); //Call GetQuoteOfTheDayAuthorQuoteAsyncTask
+                        new GetQuoteOfTheDayCategoryQuoteAsyncTask().execute(); //Call GetQuoteOfTheDayCategoryQuoteAsyncTask
                     }
 
                 }
 
-
-
-
-
+                //Update the views based on the new/updated QOD
                 sQuoteOfTheDayQuoteQuote.setText("\" " + sQuoteOfTheDay.getQuote() + " \"");
                 sQuoteOfTheDayQuoteAuthor.setText("- " + sQuoteOfTheDay.getAuthor());
                 sQuoteOfTheDayQuoteCategory.setText("Category: " + sQuoteOfTheDay.getCategory());
@@ -883,26 +877,21 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
 
                 //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) != null) {
-
                     sQuoteOfTheDay.setFavorite(true);
                     sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
 
                 }
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(sQuoteOfTheDay.getId()) == null){
-
                     sQuoteOfTheDay.setFavorite(false);
                     sQuoteOfTheDayQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-
                 }
-
-
-
             }
+            //Catch NullPointerException thrown by sQuoteOfTheDay.getAuthor()/getQuote()/isFavorite() if there is no internet connection
             catch (NullPointerException npe){
-                Log.e(TAG, "NO INTERNET CONNECTION - Caught in GetQuoteOfTheDayAsyncTask");
+                Log.e(TAG, "NO INTERNET CONNECTION - Caught in GetQuoteOfTheDayAsyncTask"); //Log to Logcat
 
+                //Configure view visibilties
                 sQuoteOfTheDayQuoteUnavailable.setVisibility(View.VISIBLE);
-
                 sQuoteOfTheDayQuoteQuote.setVisibility(View.GONE);
                 sQuoteOfTheDayQuoteAuthor.setVisibility(View.GONE);
                 sQuoteOfTheDayQuoteFavoriteIcon.setVisibility(View.GONE);
@@ -911,26 +900,14 @@ public class QuoteOfTheDayFragment extends DynamicBroadcastReceiver {
                 sQuoteOfTheDayQuoteCategory.setVisibility(View.GONE);
             }
 
-
-
         }
-
-
 
     }
 
 
 
 
-
-
-
-
-
-
-
-
-
+    //
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
 
