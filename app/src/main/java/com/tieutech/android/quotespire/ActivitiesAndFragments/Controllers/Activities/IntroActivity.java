@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragments.NavigationDrawer.Settings.PushNotification.MyService;
@@ -18,6 +19,7 @@ import com.tieutech.android.quotespire.R;
 @SuppressWarnings({"FieldCanBeLocal", "PointlessBooleanExpression"})
 public class IntroActivity extends AppCompatActivity {
 
+    private final static String TAG = "IntroActivity";
     private final int INTRO_ACTIVITY_DISPLAY_TIME = 1200;   //Time to display the activity for (in ms)
 
 
@@ -63,9 +65,14 @@ public class IntroActivity extends AppCompatActivity {
                 INTRO_ACTIVITY_DISPLAY_TIME);
 
 
+        Log.i(TAG, "QuoteOfTheDaySharedPreferences.isPushNotificationSwitchPressed(IntroActivity.this) = " + QuoteOfTheDaySharedPreferences.isPushNotificationSwitchPressed(IntroActivity.this)); //Log to Logcat
+
+
         //Check if the CheckBox of the Push Notification in SettingsFragment has EVER been pressed.. Only act as per below if this button has NEVER been pressed
         //NOTE: This button would never have been pressed, for example, WHEN the app has (just) been installed into the device, and nothing has been done with this button
         if (QuoteOfTheDaySharedPreferences.isPushNotificationSwitchPressed(IntroActivity.this) == false){
+
+            Log.i(TAG, "QuoteOfTheDaySharedPreferences.isPushNotificationSwitchPressed(IntroActivity.this) = " + QuoteOfTheDaySharedPreferences.isPushNotificationSwitchPressed(IntroActivity.this));
 
             QuoteOfTheDayIntentService.setPushNotificationIntentServiceState(IntroActivity.this, true); //Set the Push Notification for Daily Quote Of The Day updates
 
