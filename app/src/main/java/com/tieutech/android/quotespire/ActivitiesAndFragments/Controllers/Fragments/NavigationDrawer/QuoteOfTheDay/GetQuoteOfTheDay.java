@@ -121,7 +121,7 @@ public class GetQuoteOfTheDay {
             quote.setAuthor(quoteJsonObject.getString("author")); //Get "author" JSON Object and stash it to the Quote object
             quote.setId(quoteJsonObject.getString("id")); //Get "id" JSON Object and stash it to the Quote object
 
-            //Log to Logcat
+            //Log data to Logcat
             Log.i(TAG, "Quote of the day - method - Quote String: " + quote.getQuote());
             Log.i(TAG, "Quote of the day - method  - Category: " + quote.getCategory());
             Log.i(TAG, "Quote of the day - method  - Author: " + quote.getAuthor());

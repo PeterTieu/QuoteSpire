@@ -120,7 +120,6 @@ public class GetQuoteOfTheDayAuthorQuote {
         Log.i(TAG, "Quote of the day Author Quote - method - ID: " + quote.getId());
 
 
-
         JSONArray categoriesJSONArray = contentsJSONObject.getJSONArray("categories"); //Get "categories" JSON Object
 
         List<String> categoriesArrayList = new ArrayList<String>(); //Create categories ArrayList
