@@ -116,80 +116,51 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-    //
+    //AsyncTask - Fetches the random Quote via JSON networking, then stashes them to the randomQuote static instance variable
+    //Generic return type #1 (Integer): The type passed from execute(..) to the parameter in doInBackground(..) (i.e. quoteNumber)
     private class GetRandomQuoteAsyncTask extends AsyncTask<Integer, Void, Quote>{
 
+        Integer mQuotePosition[]; //Position of the random Quote (to be displayed in the list). NOTE: mQuotePosition is an ARRAY of Integer!
 
-        //NOTE: mQuotePosition is an ARRAY of Integer!
-        Integer mQuotePosition[];
-
+        //Contructor
         public GetRandomQuoteAsyncTask(){
         }
 
+
+        //Perform main AsyncTask operation
         @Override
         protected Quote doInBackground(Integer... quoteNumber){
-
-            mQuotePosition = quoteNumber;
-
-            Quote randomQuote = new GetRandomQuote().getRandomQuote();
-
-
+            mQuotePosition = quoteNumber; //Pass the Generic return type #1 (i.e. quoteNumber) to mQuotePosition
+            Quote randomQuote = new GetRandomQuote().getRandomQuote(); //Obtain random Quote object via networking
             return randomQuote;
-
         }
 
 
+        //When main AsyncTask operation is completed
         @Override
         protected void onPostExecute(Quote randomQuote){
 
-            Log.i(TAG, "Random Quote - method - Quote String: " + randomQuote.getQuote());
-            Log.i(TAG, "Random Quote - method  - Category: " + randomQuote.getCategory());
-            Log.i(TAG, "Random Quote - method  - Author: " + randomQuote.getAuthor());
-            Log.i(TAG, "Random Quote - method - ID: " + randomQuote.getId());
+            mRandomQuotes.set(mQuotePosition[0], randomQuote); //Add the random Quote AND its position to list of Quote objects (mRandomQuotes)
+            mRandomQuotes.get(mQuotePosition[0]).setRandomQuotePosition(mQuotePosition[0] + 1); //Set the position of the random Quote
 
 
-//            mRandomQuotes.add(randomQuote);
-            mRandomQuotes.set(mQuotePosition[0], randomQuote);
-
-
-            mRandomQuotes.get(mQuotePosition[0]).setRandomQuotePosition(mQuotePosition[0] + 1);
-
-
-
-            //Decide whether to enable or disable the "Randomise" menu item button
-                //If the last Random Quote has been creted
+            //Try risky task - invalidateOptionsMenu() may throw NullPointerException IF the fragment is closed before it is run (i.e. because the AsyncTask has not finished yet)
             try{
-
-                getActivity().invalidateOptionsMenu();
-//                if (mQuotePosition[0] == NUMBER_OF_RANDOM_QUOTES_TO_LOAD-1){
-//                    shouldEnableRandomiseMenuItem = true;
-//                    getActivity().invalidateOptionsMenu();
-//                }
-//                //If the last Random Quote has NOT been created yet
-//                else{
-//                    shouldEnableRandomiseMenuItem = false;
-//                    getActivity().invalidateOptionsMenu();
-//                }
-
+                getActivity().invalidateOptionsMenu(); //Update the options menu (in case the last random Quote in the list has been obtained, meaning that the "Randomise" button should be re-enabled
             }
             catch (NullPointerException npe){
                 Log.e(TAG, "invalideOptionsMenu() method calls null object - because RandomQuotesFragment has been closed");
             }
 
 
-
-
-
-            updateUI();
+            updateUI(); //Update the RecyclerView
         }
-
-
     }
 
 
 
 
-
+    //
     public void updateUI(){
 
 //        mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes);
