@@ -153,85 +153,61 @@ public class RandomQuotesFragment extends Fragment {
             }
 
 
-            updateUI(); //Update the RecyclerView
+            updateUI(); //Update the RecyclerView Adapter and display the new list
         }
     }
 
 
 
 
-    //
+    //Helper method - Update the RecyclerView Adapter and display the new list
     public void updateUI(){
-
-//        mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes);
-
-//        mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper);
-
-        mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes);
-
-
-        mRandomQuotesAdaper.notifyDataSetChanged();
-
+        mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes); //Set the RecyclerView Adapter with the newly updated List of Quote objects (mRandomQuotes)
+        mRandomQuotesAdaper.notifyDataSetChanged(); //Update the RecyclerView Adapter
     }
 
 
 
 
-
-
-
-
-
-
-
-
+    //RecyclerView Adapter
     private class RandomQuotesAdaper extends RecyclerView.Adapter<RandomQuotesViewHolder>{
 
-
+        //Constructor
         public RandomQuotesAdaper(List<Quote> randomQuotes){
-            mRandomQuotes = randomQuotes;
-            Log.i(TAG, "ADAPTER - mRandomQuotes: " + mRandomQuotes);
+            mRandomQuotes = randomQuotes; //Stash the randomQuotes to the mRandomQuotes static instance variable of RandomQuotesFragment
+            Log.i(TAG, "ADAPTER - mRandomQuotes: " + mRandomQuotes); //Log to Logcat
         }
 
 
+        //Count of the size of the list
         @Override
         public int getItemCount(){
             return mRandomQuotes.size();
         }
 
 
-
-
+        //Create the RecyclerView ViewHolder
         @Override
         public RandomQuotesViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
-
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-
-            View view = layoutInflater.inflate(R.layout.list_item_random_quote, viewGroup, false);
-
-            mRandomQuotesViewHolder = new RandomQuotesViewHolder(view);
-
-            return mRandomQuotesViewHolder;
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Create LayoutInflater
+            View view = layoutInflater.inflate(R.layout.list_item_random_quote, viewGroup, false); //Inflate the list item layout
+            mRandomQuotesViewHolder = new RandomQuotesViewHolder(view); //Set ViewHolder to the list item layout
+            return mRandomQuotesViewHolder; //Return the ViewHolder
         }
 
 
+        //Bind data to ViewHolder
         @Override
         public void onBindViewHolder(RandomQuotesViewHolder randomQuotesViewHolder, int position){
-            Quote randomQuote = mRandomQuotes.get(position);
-
-//            int randomQuotePosition = position + 1;
-//            mRandomQuotesViewHolder.mRandomQuotePositionText.setText("Random Quote #" + randomQuotePosition);
-
-            randomQuotesViewHolder.bind(randomQuote);
-
+            Quote randomQuote = mRandomQuotes.get(position); //Get random Quote from the List of random Quote objects (mRandomQuotes)
+            randomQuotesViewHolder.bind(randomQuote); //Bind ViewHolder to the randomQuote
         }
 
 
+        //Constructor #2
         public void setRandomQuotes(List<Quote> randomQuotes){
             mRandomQuotes = randomQuotes;
         }
-
-
     }
 
 
