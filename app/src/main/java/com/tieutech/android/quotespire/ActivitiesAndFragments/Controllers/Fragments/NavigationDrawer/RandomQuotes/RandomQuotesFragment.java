@@ -213,37 +213,33 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
-
-
+    //RecyclerView ViewHolder
     private class RandomQuotesViewHolder extends RecyclerView.ViewHolder{
 
+        //=============== Instance Variables ================================
+        Quote mRandomQuote; //Quote
 
-        Quote mRandomQuote;
-
-        LinearLayout mRandomQuoteBubbleLayout;
-        TextView mRandomQuotePositionText;
-        CheckBox mRandomQuoteFavoriteIcon;
-        Button mRandomQuoteShareIcon;
-        ProgressBar mRandomQuoteProgressBar;
-        TextView mRandomQuoteUnavailable;
-        TextView mRandomQuoteQuote;
-        TextView mRandomQuoteAuthor;
-        TextView mRandomQuoteCategories;
-
+        //Views
+        LinearLayout mRandomQuoteBubbleLayout;  //Bubble layout
+        TextView mRandomQuotePositionText;      //Quote Position
+        CheckBox mRandomQuoteFavoriteIcon;      //Favorite Icon
+        Button mRandomQuoteShareIcon;           //Share Icon
+        ProgressBar mRandomQuoteProgressBar;    //Progress Bar - while random Quote list item is being fetched
+        TextView mRandomQuoteUnavailable;       //Random Quote unavailable
+        TextView mRandomQuoteQuote;             //Random Quote Quote
+        TextView mRandomQuoteAuthor;            //Random Quote Author
+        TextView mRandomQuoteCategories;        //Random Quote Categories
 
 
+
+        //=============== Methods ==============================================
+
+        //Constructor - called in RandomQuotesAdaper.onCreateViewHolder(..)
         public RandomQuotesViewHolder(View view){
             super(view);
 
-            mRandomQuoteBubbleLayout = (LinearLayout) view.findViewById(R.id.random_quote_bubble_layout);
+            //Assign View reference variables to the resource varibles
+            mRandomQuoteBubbleLayout = (LinearLayout) view.findViewById(R.id.random_quote_bubble_layout); //
             mRandomQuotePositionText = (TextView) view.findViewById(R.id.random_quote_position);
             mRandomQuoteFavoriteIcon = (CheckBox) view.findViewById(R.id.random_quote_favorite_icon);
             mRandomQuoteShareIcon = (Button) view.findViewById(R.id.random_quote_share_icon);
@@ -253,15 +249,11 @@ public class RandomQuotesFragment extends Fragment {
             mRandomQuoteCategories = (TextView) view.findViewById(R.id.random_quote_categories);
             mRandomQuoteUnavailable = (TextView) view.findViewById(R.id.random_quote_unavailable);
 
-
-
-
-
-
-
+            //Set drawable for bubble layout
             mRandomQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
-            mRandomQuoteProgressBar.setVisibility(View.VISIBLE);
 
+            //Configure view visibilities - only the Progress Bar is visible
+            mRandomQuoteProgressBar.setVisibility(View.VISIBLE);
             mRandomQuotePositionText.setVisibility(View.GONE);
             mRandomQuoteFavoriteIcon.setVisibility(View.GONE);
             mRandomQuoteShareIcon.setVisibility(View.GONE);
@@ -269,24 +261,21 @@ public class RandomQuotesFragment extends Fragment {
             mRandomQuoteQuote.setVisibility(View.GONE);
             mRandomQuoteAuthor.setVisibility(View.GONE);
             mRandomQuoteCategories.setVisibility(View.GONE);
-
         }
 
 
 
-
+        //Bind data to the ViewHolder
         public void bind(Quote randomQuote){
 
+            //If random Quote EXISTS
             if (randomQuote != null){
 
-                mRandomQuote = randomQuote;
+                mRandomQuote = randomQuote; //Stash randomQuote to mRandomeQuote reference variable
 
-//                mRandomQuotePositionText.setText("Random Quote #" + mRandomQuotesViewHolder.getLayoutPosition());
-
-
+                //Configure view visibilities - display the random Quote
                 mRandomQuoteProgressBar.setVisibility(View.GONE);
                 mRandomQuoteUnavailable.setVisibility(View.GONE);
-
                 mRandomQuotePositionText.setVisibility(View.VISIBLE);
                 mRandomQuoteFavoriteIcon.setVisibility(View.VISIBLE);
                 mRandomQuoteShareIcon.setVisibility(View.VISIBLE);
@@ -294,30 +283,24 @@ public class RandomQuotesFragment extends Fragment {
                 mRandomQuoteAuthor.setVisibility(View.VISIBLE);
                 mRandomQuoteCategories.setVisibility(View.VISIBLE);
 
+                mRandomQuotePositionText.setText("Random Quote #" + mRandomQuote.getRandomQuotePosition()); //Set the title of the random Quote
 
-
-
-
-                mRandomQuotePositionText.setText("Random Quote #" + mRandomQuote.getRandomQuotePosition());
-
-
+                //If the random Quote quote EXISTS
                 if (mRandomQuote.getQuote() != null){
-                    mRandomQuoteQuote.setText("\" " + randomQuote.getQuote() + " \"");
+                    mRandomQuoteQuote.setText("\" " + randomQuote.getQuote() + " \""); //Display the random Quote quote
                 }
+                //If the random Quote quote DOES NOT exist
                 else{
-                    mRandomQuoteQuote.setText("* No Quote to View *");
+                    mRandomQuoteQuote.setText("* No Quote to View *"); //Display message to indicate that the random Quote quote does not exist
                 }
 
-
+                //If the random Quote author EXISTS
                 if (mRandomQuote.getAuthor() != null){
-                    mRandomQuoteAuthor.setText("- " + mRandomQuote.getAuthor());
+                    mRandomQuoteAuthor.setText("- " + mRandomQuote.getAuthor()); //Display the random Quote author
                 }
                 else{
-                    mRandomQuoteAuthor.setText("* No Author *");
+                    mRandomQuoteAuthor.setText("* No Author *"); //Display message to indicate that the random Quote author does not exist
                 }
-
-
-
 
 
 
@@ -574,26 +557,6 @@ public class RandomQuotesFragment extends Fragment {
 
 
     }
-
-
-
-
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu){
-//
-//        MenuItem randomiseItem = menu.findItem(R.id.menu_item_randomise_random_quotes_fragment);
-//
-//        if (shouldEnableRandomiseMenuItem){
-//
-//            randomiseItem.setEnabled(true);
-//        }
-//
-//        return true;
-//    }
-
-
-
 
 
 
