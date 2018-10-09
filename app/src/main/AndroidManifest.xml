@@ -38,7 +38,7 @@
 
 
     <!--Ask to access the permission that is declared above (in <permission.../>)-->
-    <uses-permission android:name="com.petertieu.android.quotesearch.PRIVATE"/>
+    <uses-permission android:name="com.tieutech.android.quotespire.PRIVATE"/>
 
 
 
@@ -190,7 +190,7 @@
             <intent-filter
                 android:priority="-999">
                 <action
-                    android:name="com.petertieu.android.quotesearch.ACTION_SHOW_PUSH_NOTIFICATION"/>
+                    android:name="com.tieutech.android.quotespire.ACTION_SHOW_PUSH_NOTIFICATION"/>
 
 
             </intent-filter>
