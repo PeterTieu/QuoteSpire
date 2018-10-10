@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--Options menu for RandomQuotesFragment-->
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
+    <!--"Randomise" menu item-->
     <item
         android:id="@+id/menu_item_randomise_random_quotes_fragment"
-        android:title="@string/randomize"
+        android:title="@string/randomise"
         app:showAsAction="always" />
-
 </menu>
