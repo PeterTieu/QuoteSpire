@@ -489,82 +489,81 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-
-
-
-
-
-
-
+    //Override onActivityCreated(..) fragment lifecycle callback method
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-
-        Log.i(TAG, "onActivityCreated called");
+        Log.i(TAG, "onActivityCreated called"); //Log to Logcat
     }
 
 
 
+
+    //Override onStart(..) fragment lifecycle callback method
     @Override
     public void onStart(){
         super.onStart();
-
-        Log.i(TAG, "onStart called");
+        Log.i(TAG, "onStart called"); //Log to Logcat
     }
 
 
 
+
+    //Override onResume(..) fragment lifecycle callback method
     @Override
     public void onResume(){
         super.onResume();
-
-        Log.i(TAG, "onResume called");
+        Log.i(TAG, "onResume called"); //Log to Logcat
     }
 
 
 
 
+    //Override onPause(..) fragment lifecycle callback method
     @Override
     public void onPause(){
         super.onPause();
-
-        Log.i(TAG, "onPause() called");
+        Log.i(TAG, "onPause() called"); //Log to Logcat
     }
 
 
 
 
+    //Override onStop(..) fragment lifecycle callback method
     @Override
     public void onStop(){
         super.onStop();
-
-        Log.i(TAG, "onStop() called");
+        Log.i(TAG, "onStop() called"); //Log to Logcat
     }
 
 
 
+
+    //Override onDestroyView(..) fragment lifecycle callback method
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-
-        Log.i(TAG, "onDestroyView() called");
+        Log.i(TAG, "onDestroyView() called"); //Log to Logcat
     }
 
 
 
+
+    //Override onDestroy(..) fragment lifecycle callback method
     @Override
     public void onDestroy(){
         super.onDestroy();
-
-        Log.i(TAG, "onDestroy() called");
+        Log.i(TAG, "onDestroy() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onDetach(..) fragment lifecycle callback method
     @Override
     public void onDetach(){
         super.onDetach();
-
-        Log.i(TAG, "onDeatch() caled");
+        Log.i(TAG, "onDeatch() caled"); //Log to Logcat
     }
 
 }
