@@ -302,45 +302,36 @@ public class RandomQuotesFragment extends Fragment {
                     mRandomQuoteAuthor.setText("* No Author *"); //Display message to indicate that the random Quote author does not exist
                 }
 
-
-
+                //If the random Quote category DOES NOT exist
                 if (mRandomQuote.getCategories() == null){
-                    mRandomQuoteCategories.setText("Categories: *No categories*");
+                    mRandomQuoteCategories.setText("Categories: *No categories*"); //Display prompt to indicate random Quote category does not exist
                 }
                 else{
-                    mRandomQuoteCategories.setText("Categories: " + TextUtils.join(", ", mRandomQuote.getCategories()));
+                    mRandomQuoteCategories.setText("Categories: " + TextUtils.join(", ", mRandomQuote.getCategories())); //Display the random Quote category
                 }
 
 
+
+                //Display appropriate favorite icon based on whether the random Quote is favorited or not
                 mRandomQuoteFavoriteIcon.setButtonDrawable(mRandomQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
-
-
-
-
-
+                //Try risky task - mRandomQuote may throw NullPointerException if it does not exist
                 try {
-
-
                     //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) != null) {
-
-                        mRandomQuote.setFavorite(true);
-                        mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-
+                        mRandomQuote.setFavorite(true); //Set the random Quote's favorite member variable to true
+                        mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on); //Display the 'active' favorited icon
                     }
+                    //If the Quote is NOT in the FavoriteQuotes SQLite database, then display the favorite icon to 'inactive'
                     if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) == null) {
-
-                        mRandomQuote.setFavorite(false);
-                        mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-
+                        mRandomQuote.setFavorite(false); //Set the random Quote's favorite member variable to false
+                        mRandomQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off); //Display the 'inactive' favorited icon
                     }
-
-
                 }
+                //Catch NullPointerException if mRandomQuotes does NOT exist
                 catch (NullPointerException npe){
-
+                    //Configure view visibilities - remove all views and display the view to indicate the random Quote is unavailable
                     mRandomQuoteProgressBar.setVisibility(View.GONE);
                     mRandomQuotePositionText.setVisibility(View.GONE);
                     mRandomQuoteFavoriteIcon.setVisibility(View.GONE);
@@ -348,45 +339,36 @@ public class RandomQuotesFragment extends Fragment {
                     mRandomQuoteQuote.setVisibility(View.GONE);
                     mRandomQuoteAuthor.setVisibility(View.GONE);
                     mRandomQuoteCategories.setVisibility(View.GONE);
-
-
                     mRandomQuoteUnavailable.setVisibility(View.VISIBLE);
-
                 }
 
 
 
-
-
-
+                //Set listener for favorite icon
                 mRandomQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
+                        mRandomQuote.setFavorite(isChecked); //Set the favorite member variable of the random Quote object to the state of the icon
+                        mRandomQuoteFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off); //Set icon drawable to the state of the icon
 
-                        mRandomQuote.setFavorite(isChecked);
-
-
-                        mRandomQuoteFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-
+                        //If the CheckBox is checked (true)
                         if (isChecked == true){
-
+                            //If the random Quote does NOT exist in the SQLiteDatabase of Favorited Quote objects
                             if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mRandomQuote.getId()) == null){
-                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mRandomQuote);
-                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mRandomQuote);
+                                FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mRandomQuote); //Add the random Quote to the Favorited Quotes SQLiteDatabase
+                                FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mRandomQuote); //Update the Favorited Quotes SQLiteDatabase
                             }
+                            //If the random Quote EXISTS in the SQLiteDatabase of Favorited Quote objects
                             else{
                                 //Do nothing
                             }
-
                         }
-
+                        //If the CheckBox is not checked (false)
                         if (isChecked == false){
-                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mRandomQuote);
-                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mRandomQuote);
-
+                            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mRandomQuote); //Remove the random Quote from the Favorited Quotes SQLiteDatabase
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mRandomQuote); //Update the Favorited Quotes SQLiteDatabase
                         }
                     }
                 });
@@ -394,167 +376,113 @@ public class RandomQuotesFragment extends Fragment {
 
 
 
-
-
-
-
+            //Set listener for Share icon
             mRandomQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view){
-
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
-                    shareIntent.setType("text/plain");
-
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote by " + mRandomQuote.getAuthor());
-
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, getRandomQuoteShareString());
-
-                    shareIntent = Intent.createChooser(shareIntent, "Share this quote via");
-
-                    startActivity(shareIntent);
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND); //Create IMPLICIT intent and assign action to "send"
+                    shareIntent.setType("text/plain"); //Set intent type
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote by " + mRandomQuote.getAuthor()); //Put subject to the intent
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getRandomQuoteShareString()); //Put String to the intent (random Quote quote)
+                    shareIntent = Intent.createChooser(shareIntent, "Share this quote via"); //Add chooser String to the intent
+                    startActivity(shareIntent); //Start the implicit intent
                 }
             });
 
-
         }
 
 
-
-
+        //Helper method - Obtain Share String to Share the random Quote
         private String getRandomQuoteShareString(){
-            String randomQuoteString = "\"" + mRandomQuote.getQuote() + "\"";
-
-            String randomQuoteAuthorString = " - " + mRandomQuote.getAuthor();
-
-            return randomQuoteString + randomQuoteAuthorString;
+            String randomQuoteString = "\"" + mRandomQuote.getQuote() + "\""; //Random Quote quote
+            String randomQuoteAuthorString = " - " + mRandomQuote.getAuthor(); //Random Quote author
+            return randomQuoteString + randomQuoteAuthorString; //Random Quote share String
         }
-
-
-
 
     }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //Override onCreateOptionsMenu(..) callback method
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-
         super.onCreateOptionsMenu(menu, menuInflater);
 
-        menuInflater.inflate(R.menu.fragment_random_quotes, menu);
+        menuInflater.inflate(R.menu.fragment_random_quotes, menu); //Inflate the menu layout
+        MenuItem randomiseItem = menu.findItem(R.id.menu_item_randomise_random_quotes_fragment); //Identify the "randomise" menu item
 
-        MenuItem randomiseItem = menu.findItem(R.id.menu_item_randomise_random_quotes_fragment);
+        int actualSizeOfRandomQuotesList = 0; //Variable to indicate size of the mRandomQuotes List
 
-
-
-        int actualSizeOfRandomQuotesList = 0;
-
+        //Obtain the value of the actualSizeOfRandomQuotesList variable
         for (Quote randomQuote : mRandomQuotes){
-
+            //If a Quote does not exist in the List
             if (randomQuote == null){
             }
+            //If a Quote exists in the List
             if (randomQuote != null){
-                actualSizeOfRandomQuotesList++;
+                actualSizeOfRandomQuotesList++; //Increment the variable indicating size of the mRandomQuotes List
             }
         }
 
-
-
+        //If the actualSizeOfRandomQuotesList variable equals the actual number of random Quotes to load
         if (actualSizeOfRandomQuotesList == NUMBER_OF_RANDOM_QUOTES_TO_LOAD){
-            shouldEnableRandomiseMenuItem = true;
-            randomiseItem.setEnabled(true);
+            shouldEnableRandomiseMenuItem = true; //Set flag to enable the "randomise" menu item to true
+            randomiseItem.setEnabled(true); //Enable the "randomise" menu item
         }
         else{
-            shouldEnableRandomiseMenuItem = false;
-            randomiseItem.setEnabled(false);
+            shouldEnableRandomiseMenuItem = false; //Set flag to enable the "randomise" menu item to false
+            randomiseItem.setEnabled(false); //Disable the "randomise" menu item
         }
-
-
-
-
-
-//        //If the flag to enable the "Randomise" menu item is TRUE
-//        if (shouldEnableRandomiseMenuItem == true){
-//
-//            randomiseItem.setEnabled(true);
-//
-//        }
-//        //If the flag to enable the "Randomise" menu item is FALSE
-//        else{
-//            randomiseItem.setEnabled(false);
-//        }
     }
 
 
 
+
+    //Override onOptionsItemSelected(..) callback method
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
+        //Scan through all menu items of the fragment
         switch (menuItem.getItemId()){
+
+            //"Randomise" menu item
             case (R.id.menu_item_randomise_random_quotes_fragment):
 
-                //Disable the "Randomise" menu item button (the moment it is pressed)
-                menuItem.setEnabled(false);
+                menuItem.setEnabled(false); //Disable the "Randomise" menu item button (the moment it is pressed)
 
+                shouldEnableRandomiseMenuItem = false; //Set the flag to enable "Randomise" menu item button to FALSE (i.e. DISABLE "Randomise" menu item button)
 
-                //Set the flag to enable "Randomise" menu item button to FALSE (i.e. DISABLE "Randomise" menu item button)
-                shouldEnableRandomiseMenuItem = false;
-
-                //'Reset' the instance variables
+                //'Reset' (reassign) the List and RecyclerView instance variables
                 mRandomQuotes = Arrays.asList(new Quote[NUMBER_OF_RANDOM_QUOTES_TO_LOAD]); //Re-assign mRandomQuotes to a new object
                 mRandomQuotesAdaper = new RandomQuotesAdaper(mRandomQuotes); //Re-assign the RecyclerView Adapter
                 mRandomQuotesAdaper.setRandomQuotes(mRandomQuotes); //Set the re-assigned RecyclerView Adapter to the re-assigned mRandomQuotes reference variable
                 mRandomQuotesRecyclerView.setAdapter(mRandomQuotesAdaper); //Re-assign the RecyclerView to the re-assigned RecyclerView Adapter
 
 
-
-
-                //Perforrm fetching of new Random Quotes via the AsyncTask
+                //Perform fetching of new random Quotes via the AsyncTask
                 for (int i = 0; i < NUMBER_OF_RANDOM_QUOTES_TO_LOAD; i++) {
 
+                    //If a Quote at position i of mRandomQuotes does NOT exist
                     if (mRandomQuotes.get(i) == null){
-
-                        Integer randomQuotePosition = i;
-
-                        new GetRandomQuoteAsyncTask().execute(randomQuotePosition);
+                        Integer randomQuotePosition = i; //Obtain Integer of position i
+                        new GetRandomQuoteAsyncTask().execute(randomQuotePosition); //Obtain random Quote at position i
                     }
                 }
 
 
-
                 //If the flag to enable the "Randomise" menu item is TRUE.
                 // Called when the last Random Quote has been created in the AsyncTask
+                //NOTE: invalidateOptionsMenu() in onPostExecute() of each AsyncTask!
                 if (shouldEnableRandomiseMenuItem == true){
-                    menuItem.setEnabled(true);
+                    menuItem.setEnabled(true); //Enable the "randomise" menu item
                 }
-
-
 
                 return true;
 
-
             default:
                 return super.onOptionsItemSelected(menuItem);
-
         }
-
-
-
 
     }
 
