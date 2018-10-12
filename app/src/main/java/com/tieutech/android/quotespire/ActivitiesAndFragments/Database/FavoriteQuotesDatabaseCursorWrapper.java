@@ -5,6 +5,9 @@ import android.database.CursorWrapper;
 
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
 
+
+//Database class #3:
+    //Wrapper class for the SQLiteDatabase cursor
 public class FavoriteQuotesDatabaseCursorWrapper extends CursorWrapper{
 
     public FavoriteQuotesDatabaseCursorWrapper(Cursor cursor){
