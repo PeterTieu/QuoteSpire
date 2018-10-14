@@ -1,7 +1,7 @@
 package com.tieutech.android.quotespire.ActivitiesAndFragments.Database;
 
 //Database class #1:
-//Blueprint for the SQLite Database of MyQuotes
+    //Blueprint for the SQLite Database of MyQuotes
 public class MyQuotesDatabaseSchema {
 
     //STATIC inner class for setting the database

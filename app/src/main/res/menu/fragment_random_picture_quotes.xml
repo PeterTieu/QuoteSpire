@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/menu_item_randomise_random_picture_quotes_fragment"
-        android:title="@string/randomize"
+        android:title="@string/randomise"
         app:showAsAction="always" />
 
 </menu>
