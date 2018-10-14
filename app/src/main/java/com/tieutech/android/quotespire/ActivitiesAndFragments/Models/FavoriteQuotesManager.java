@@ -166,41 +166,39 @@ public class FavoriteQuotesManager {
 
     //============= Define HELPER METHODS ==============================================================================================
 
+    //Helper method - OBTAIN the CursorWrapper (if the Favorite Quote EXIST in the database), and point it to the column (whereClause) and row (whereArgs)
     private FavoriteQuotesDatabaseCursorWrapper queryFavoriteQuotes(String whereClause, String[] whereArgs){
 
+        //Obtain the Cursor
         Cursor favoriteQuotesDatatbaseCursor = sSQLiteDatabase.query(
-                FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.FAVORITE_QUOTES_TABLE_NAME,
-                null,
-                whereClause,
-                whereArgs,
-                null,
-                null,
-                null
+                FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.FAVORITE_QUOTES_TABLE_NAME, //Database name
+                null, //Which columns to return (String[])
+                whereClause, //Column (String)
+                whereArgs, //Row (String[])
+                null, //How to group the rows (String). null means rows are not grouped
+                null, //Which rows to group (String). null means all row groups are included
+                null //How to order rows (String). null means use default order (i.e. unsorted)
         );
 
-        return new FavoriteQuotesDatabaseCursorWrapper(favoriteQuotesDatatbaseCursor);
+        return new FavoriteQuotesDatabaseCursorWrapper(favoriteQuotesDatatbaseCursor); //Return the CursorWrapper (Cursor)
     }
 
 
 
 
-
+    //Helper method - Create a ContentValues object and store a Quote in it.
+    //NOTE: A ContentValues object is necessary for the SQLiteDatabase to access
     private static ContentValues getContentValues(Quote favoriteQuote){
 
-        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues = new ContentValues(); //Create the ContentValues object
 
-
+        //Add member variables of the Quote to the ContentValues object (using key-value pairs)
         contentValues.put(FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.ID, favoriteQuote.getId());
         contentValues.put(FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.QUOTE_STRING, favoriteQuote.getQuote());
         contentValues.put(FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.AUTHOR, favoriteQuote.getAuthor());
         contentValues.put(FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.IS_FAVORITE, favoriteQuote.isFavorite() ? 1:0);
 
-
-        return contentValues;
-
+        return contentValues; //Retrun the ContentValues object
     }
-
-
-
 
 }
