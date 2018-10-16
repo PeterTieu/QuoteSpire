@@ -70,7 +70,6 @@ public class MyQuotesManager {
 
 
 
-
     //===================== All the following methods are accessed like so: MyQuotesManager.get(context).*method* ================================
     //===================== Their purposes are to QUERY, WRITE and REMOVE (my) Quote(s) to/from the SQLiteDatabase database ===============================
 
@@ -91,7 +90,6 @@ public class MyQuotesManager {
 
             return myQuotesDatabaseCursorWrapper.getQuoteFromMyQuotesDatabase(); //Return the Quote
         }
-
         finally {
             myQuotesDatabaseCursorWrapper.close(); //Close the Cursor
         }
@@ -170,38 +168,39 @@ public class MyQuotesManager {
 
     //============= Define HELPER METHODS ==============================================================================================
 
+    //Helper method - OBTAIN the CursorWrapper (if the Favorite Quote EXIST in the database), and point it to the column (whereClause) and row (whereArgs)
     private MyQuotesDatabaseCursorWrapper queryMyQuotes(String whereClause, String[] whereArgs){
 
+        //Obtain the Cursor
         Cursor myQuotesDatatbaseCursor = sSQLiteDatabase.query(
-                MyQuotesDatabaseSchema.MyQuotesTable.MY_QUOTES_TABLE_NAME,
-                null,
-                whereClause,
-                whereArgs,
-                null,
-                null,
-                null
+                MyQuotesDatabaseSchema.MyQuotesTable.MY_QUOTES_TABLE_NAME, //Database name
+                null, //Which columns to return (String[])
+                whereClause, //Column (String)
+                whereArgs, //Row (String[])
+                null, //How to group the rows (String). null means rows are not grouped
+                null, //Which rows to group (String). null means all row groups are included
+                null //How to order rows (String). null means use default order (i.e. unsorted)
         );
 
-        return new MyQuotesDatabaseCursorWrapper(myQuotesDatatbaseCursor);
+        return new MyQuotesDatabaseCursorWrapper(myQuotesDatatbaseCursor); //Return the CursorWrapper (Cursor)
     }
 
 
 
 
-
+    //Helper method - Create a ContentValues object and store a Quote in it.
+    //NOTE: A ContentValues object is necessary for the SQLiteDatabase to access
     private static ContentValues getContentValues(Quote myQuote){
 
-        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues = new ContentValues(); //Create the ContentValues object
 
-
+        //Add member variables of the Quote to the ContentValues object (using key-value pairs)
         contentValues.put(MyQuotesDatabaseSchema.MyQuotesTable.Columns.ID, myQuote.getId());
         contentValues.put(MyQuotesDatabaseSchema.MyQuotesTable.Columns.QUOTE_STRING, myQuote.getQuote());
         contentValues.put(MyQuotesDatabaseSchema.MyQuotesTable.Columns.AUTHOR, myQuote.getAuthor());
         contentValues.put(MyQuotesDatabaseSchema.MyQuotesTable.Columns.IS_FAVORITE, myQuote.isFavorite() ? 1:0);
 
-
-        return contentValues;
-
+        return contentValues; //Retrun the ContentValues object
     }
 
 }
