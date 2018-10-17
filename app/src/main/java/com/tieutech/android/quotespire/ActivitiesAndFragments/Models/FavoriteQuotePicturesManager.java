@@ -13,49 +13,51 @@ import com.tieutech.android.quotespire.ActivitiesAndFragments.Database.FavoriteQ
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Database class #4:
+    //Class for managing the Favorite Quote Pictures SQLiteDatabase
 public class FavoriteQuotePicturesManager {
 
-    private final String TAG = "FQPicturesManager";
+    //================= Declare INSTANCE VARIABLES ==============================================================
 
+    private final String TAG = "FQPicturesManager"; //Tag for Logcat
     private static FavoriteQuotePicturesManager sFavoriteQuotePicturesManager;
-
-    private static SQLiteDatabase sSQLiteDatabase;
-
-    private Context mContext;
+    private static SQLiteDatabase sSQLiteDatabase; //SQLiteDatabase object
+    private Context mContext; //Context
 
 
 
+
+    //================= Define METHODS ==============================================================
+
+    //'Main Constructor' method - creates the FavoriteQuotePicturesManager singleton object if it doesn't exist. Otherwise, if the object exists, just returns it
     public static FavoriteQuotePicturesManager get(Context context){
 
         if (sFavoriteQuotePicturesManager == null){
             return new FavoriteQuotePicturesManager(context);
         }
 
-        return sFavoriteQuotePicturesManager;
+        return sFavoriteQuotePicturesManager; //Return the singleton FavoriteQuotesManager object IF it exists. NOTE: This object lasts the lifetime of the app, unless memory is cleared
     }
 
 
 
 
-
-
+    //Contructor - helper method for 'Main Constructor' method
     private FavoriteQuotePicturesManager(Context context){
 
         try{
-
-//            if (context.getApplicationContext() != null){
-//                Log.i(TAG, "context.getApplicationContext() exists");
-//            }
-//            else{
-//                Log.i(TAG, "context.getApplicationContext() does NOT exist");
-//            }
-
-            mContext = context.getApplicationContext();
-
+            mContext = context.getApplicationContext(); //Context that is tied to the LIFECYCLE of the ENTIRE application (instead of activity) for the purpose of retaining the SQLiteDatabase
             sSQLiteDatabase = new FavoriteQuotePicturesDatabaseHelper(mContext).getWritableDatabase();
         }
 
 
+        //Create/Retrieve the SINGLETON database (of type SQLiteDatabase)
+            //getWritableDatable will:
+                //IF: An SQLiteDatabase does NOT exist..
+                    //Call the overriden onCreate(SQLiteDatabase) from FavoriteQuotesDatabaseHelper to create the SQLiteDatabase
+                //IF: An SQLiteDatabase EXISTS...
+                    //Check the version number of the database and call the overriden onUpgrade(..) from FavoriteQuotesDatabaseHelper to upgrade if necessary
         catch (NullPointerException npe){
             Log.e(TAG, "Another fragment is loaded before QOD fragment completed AsyncTasks");
             Log.e(TAG, "NullPointException caught, since mContext refers to a null object");
@@ -63,20 +65,6 @@ public class FavoriteQuotePicturesManager {
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
