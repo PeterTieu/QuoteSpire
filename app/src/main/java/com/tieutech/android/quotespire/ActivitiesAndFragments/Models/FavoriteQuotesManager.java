@@ -13,48 +13,50 @@ import com.tieutech.android.quotespire.ActivitiesAndFragments.Database.FavoriteQ
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Database class #4:
+    //Class for managing the Favorite Quotes SQLiteDatabase
 public class FavoriteQuotesManager {
 
-    private final String TAG = "FavoriteQuotesManager";
+    //================= Declare INSTANCE VARIABLES ==============================================================
 
-    private static FavoriteQuotesManager sFavoriteQuotesManager;
-
-    private static SQLiteDatabase sSQLiteDatabase;
-
-    private Context mContext;
-
+    private final String TAG = "FavoriteQuotesManager"; //Tag for Logcat
+    private static FavoriteQuotesManager sFavoriteQuotesManager; //DB Manager object. Singleton - only created once and lasts the lifetime of the app, unless memory is cleared
+    private static SQLiteDatabase sSQLiteDatabase; //SQLiteDatabase object
+    private Context mContext; //Context
 
 
 
 
+    //================= Define METHODS ==============================================================
+
+    //'Main Constructor' method - creates the FavoriteQuotesManager singleton object if it doesn't exist. Otherwise, if the object exists, just returns it
     public static FavoriteQuotesManager get(Context context){
 
         if (sFavoriteQuotesManager == null){
             return new FavoriteQuotesManager(context);
         }
 
-        return sFavoriteQuotesManager;
+        return sFavoriteQuotesManager; //Return the singleton FavoriteQuotesManager object IF it exists. NOTE: This object lasts the lifetime of the app, unless memory is cleared
     }
 
 
 
 
+    //Contructor - helper method for 'Main Constructor' method
     private FavoriteQuotesManager(Context context){
 
         try{
+            mContext = context.getApplicationContext(); //Context that is tied to the LIFECYCLE of the ENTIRE application (instead of activity) for the purpose of retaining the SQLiteDatabase
 
-//            if (context.getApplicationContext() != null){
-//                Log.i(TAG, "context.getApplicationContext() exists");
-//            }
-//            else{
-//                Log.i(TAG, "context.getApplicationContext() does NOT exist");
-//            }
-
-            mContext = context.getApplicationContext();
-
+            //Create/Retrieve the SINGLETON database (of type SQLiteDatabase)
+                //getWritableDatable will:
+                    //IF: An SQLiteDatabase does NOT exist..
+                        //Call the overriden onCreate(SQLiteDatabase) from FavoriteQuotesDatabaseHelper to create the SQLiteDatabase
+                    //IF: An SQLiteDatabase EXISTS...
+                        //Check the version number of the database and call the overriden onUpgrade(..) from FavoriteQuotesDatabaseHelper to upgrade if necessary
             sSQLiteDatabase = new FavoriteQuotesDatabaseHelper(mContext).getWritableDatabase();
         }
-
 
         catch (NullPointerException npe){
             Log.e(TAG, "Another fragment is loaded before QOD fragment completed AsyncTasks");
@@ -63,7 +65,6 @@ public class FavoriteQuotesManager {
         }
 
     }
-
 
 
 
