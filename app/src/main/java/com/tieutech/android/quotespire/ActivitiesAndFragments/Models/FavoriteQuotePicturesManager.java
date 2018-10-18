@@ -72,95 +72,93 @@ public class FavoriteQuotePicturesManager {
     //===================== All the following methods are accessed like so: FavoriteQuotePicturesManager.get(context).*method* ================================
     //===================== Their purposes are to QUERY, WRITE and REMOVE (favorite) QuotePicture(s) to/from the SQLiteDatabase database ===============================
 
+    //Obtain the Favorite Quote Picture via its ID - this method is called to check if a Quote Picture EXISTS in the Favorite Quote Pictures database
     public QuotePicture getFavoriteQuotePicture(String id){
+
+        //OBTAIN the CursorWrapper (if the Favorite Quote Picture EXISTS in the database)
         FavoriteQuotePicturesDatabaseCursorWrapper favoriteQuotePicturesDatabaseCursorWrapper = queryFavoriteQuotePictures(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID + " = ?", new String[]{id.toString()});
 
+        //Try risky task - favoriteQuotePicturesDatabaseCursorWrapper.getCount() could return RuntimeException IF the Favorite Quote Pictures database doesn't exist
         try {
             if (favoriteQuotePicturesDatabaseCursorWrapper.getCount() == 0) {
-
                 return null;
             }
 
+            //At this point, the Quote exists in the Favorite Quote Pictures database
+            favoriteQuotePicturesDatabaseCursorWrapper.moveToFirst(); //Point the CursorWrapper to the row containing the Quote Picture (since this row contains the matching ID)
 
-            favoriteQuotePicturesDatabaseCursorWrapper.moveToFirst();
-
-
-
-            return favoriteQuotePicturesDatabaseCursorWrapper.getQuotePictureFromFavoriteQuotePicturesDatabase();
+            return favoriteQuotePicturesDatabaseCursorWrapper.getQuotePictureFromFavoriteQuotePicturesDatabase();  //Return the Quote Picture
         }
 
         finally {
-
-            favoriteQuotePicturesDatabaseCursorWrapper.close();
+            favoriteQuotePicturesDatabaseCursorWrapper.close(); //Close the Cursor
         }
     }
 
 
 
 
-
-
+    //OBTAIN List of ALL the Quote objects in the Favorite Quotes database
     public List<QuotePicture> getFavoriteQuotePictures() {
 
-        List<QuotePicture> favoriteQuotePictures = new ArrayList<>();
+        List<QuotePicture> favoriteQuotePictures = new ArrayList<>(); //Create List object
 
-        FavoriteQuotePicturesDatabaseCursorWrapper favoriteQuotePicturesDatabaseCursorWrapper = queryFavoriteQuotePictures(null, null);
+        FavoriteQuotePicturesDatabaseCursorWrapper favoriteQuotePicturesDatabaseCursorWrapper = queryFavoriteQuotePictures(null, null); //Obtain the CursorWrapper, which could to ANY column/row in the database!
 
+        //Try risky task - favoriteQuotesDatabaseCursorWrapper.moveToFirst() could return RuntimeException IF the Favorite Quoes database doesn't exist
         try {
-            favoriteQuotePicturesDatabaseCursorWrapper.moveToFirst();
+            favoriteQuotePicturesDatabaseCursorWrapper.moveToFirst(); //Point the CursorWrapper to FIRST ROW (whch contains the FIRST Quote in the database)
 
+            //While the Cursor DOES NOT point to the position after the last row (IOW, while the cursor is still pointing to an EXISTING row)
             while (!favoriteQuotePicturesDatabaseCursorWrapper.isAfterLast()) {
-                favoriteQuotePictures.add(favoriteQuotePicturesDatabaseCursorWrapper.getQuotePictureFromFavoriteQuotePicturesDatabase());
-                favoriteQuotePicturesDatabaseCursorWrapper.moveToNext();
+                favoriteQuotePictures.add(favoriteQuotePicturesDatabaseCursorWrapper.getQuotePictureFromFavoriteQuotePicturesDatabase()); //Obtain the Quote pointed to by the Cursor, then add it to the List of Quotes
+                favoriteQuotePicturesDatabaseCursorWrapper.moveToNext(); //Move the Cursor to the next row
             }
-
-//            favoriteQuotePicturesDatabaseCursorWrapper.close();
-
-        } finally {
-            favoriteQuotePicturesDatabaseCursorWrapper.close();
+        }
+        finally {
+            favoriteQuotePicturesDatabaseCursorWrapper.close(); //Close the Cursor
         }
 
-        return favoriteQuotePictures;
-
-
+        return favoriteQuotePictures; //Return the List of Favorite Quotes
     }
 
 
 
 
-
+    //ADD a Quote to the Favorite Quote Pictures database
     public void addFavoriteQuotePicture(QuotePicture favoriteQuotePicture){
 
-        ContentValues contentValues = getContentValues(favoriteQuotePicture);
-
-        sSQLiteDatabase.insert(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME, null, contentValues);
+        ContentValues contentValues = getContentValues(favoriteQuotePicture); //Create a ContentValues object, storing the Quote Picture in it
+        sSQLiteDatabase.insert(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME, null, contentValues); //Insert the ContentValues object (containing the Quote) into the database
     }
 
 
 
-
-
+    //DELETE a Quote Picture from the Favorite Quote Pictures database
     public void deleteFavoriteQuotePicture(QuotePicture favoriteQuotePicture){
-        String favoriteQuotePictureId = favoriteQuotePicture.getId();
+        String favoriteQuotePictureId = favoriteQuotePicture.getId(); //Obtain the unique ID of the Quote
 
-        sSQLiteDatabase.delete(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME,
-                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID + " = ? " ,
-                new String[]{favoriteQuotePictureId});
+        //Delete the Quote Pictures from the database
+        sSQLiteDatabase.delete(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME, //Database name
+                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID + " = ? " , //Column name (ID)
+                new String[]{favoriteQuotePictureId}); //Row value (identified by the String value of the ID)
     }
 
 
 
 
+    //UPDATE the Favorite Quote Pictures database - to accomodate the newly added Quote Picture
     public void updateFavoriteQuotePicturesDatabase(QuotePicture favoriteQuotePictures){
-        String favoriteQuotePictureId = favoriteQuotePictures.getId();
 
-        ContentValues contentValues = getContentValues(favoriteQuotePictures);
+        String favoriteQuotePictureId = favoriteQuotePictures.getId(); //Obtain the unique ID from the Quote Picture
+        ContentValues contentValues = getContentValues(favoriteQuotePictures); //Create a ContentValue, storing the Quote Picture in it
 
+        //Update the Quote (stored in the ContentValues object) from the database
         sSQLiteDatabase.update(
-                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME,
-                contentValues,
-                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID + " = ? ",
-                new String[]{favoriteQuotePictureId}
+                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME, //Database name
+                contentValues, //ContentValuea object (containing the Quote Picture)
+                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID + " = ? ", //Column name (ID)
+                new String[]{favoriteQuotePictureId} //Row value (identified by the String value of the ID)
         );
     }
 
