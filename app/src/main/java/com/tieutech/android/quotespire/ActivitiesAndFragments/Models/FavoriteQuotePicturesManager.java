@@ -167,47 +167,38 @@ public class FavoriteQuotePicturesManager {
 
     //============= Define HELPER METHODS ==============================================================================================
 
+    //Helper method - OBTAIN the CursorWrapper (if the Favorite Quote Picture EXISTS in the database), and point it to the column (whereClause) and row (whereArgs)
     private FavoriteQuotePicturesDatabaseCursorWrapper queryFavoriteQuotePictures(String whereClause, String[] whereArgs){
 
+        //Obtain the Cursor
         Cursor favoriteQuotePicturesDatatbaseCursor = sSQLiteDatabase.query(
-                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME,
-                null,
-                whereClause,
-                whereArgs,
-                null,
-                null,
-                null
+                FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.FAVORITE_QUOTE_PICTURES_TABLE_NAME, //Database name
+                null, //Which columns to return (String[])
+                whereClause, //Column (String)
+                whereArgs, //Row (String[])
+                null, //How to group the rows (String). null means rows are not grouped
+                null, //Which rows to group (String). null means all row groups are included
+                null //How to order rows (String). null means use default order (i.e. unsorted)
         );
 
-        return new FavoriteQuotePicturesDatabaseCursorWrapper(favoriteQuotePicturesDatatbaseCursor);
+        return new FavoriteQuotePicturesDatabaseCursorWrapper(favoriteQuotePicturesDatatbaseCursor); //Return the CursorWrapper (Cursor)
     }
 
 
 
 
-
+    //Helper method - Create a ContentValues object and store a Quote Picture in it.
+    //NOTE: A ContentValues object is necessary for the SQLiteDatabase to access
     private static ContentValues getContentValues(QuotePicture favoriteQuotePicture){
 
-        ContentValues contentValues = new ContentValues();
+        ContentValues contentValues = new ContentValues(); //Create the ContentValues object
 
-
+        //Add member variables of the Quote Picture to the ContentValues object (using key-value pairs)
         contentValues.put(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.ID, favoriteQuotePicture.getId());
         contentValues.put(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.IS_FAVORITE, favoriteQuotePicture.isFavorite() ? 1:0);
         contentValues.put(FavoriteQuotePicturesDatabaseSchema.FavoriteQuotePicturesTable.Columns.BITMAP_FILE_PATH, favoriteQuotePicture.getQuotePictureBitmapFilePath());
 
-
-        return contentValues;
-
+        return contentValues; //Retrun the ContentValues object
     }
-
-
-
-
-
-
-
-
-
-
 
 }
