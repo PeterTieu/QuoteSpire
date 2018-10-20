@@ -22,7 +22,6 @@ public class GetRandomQuotePictureQuote {
     private static final String TAG = "GRQPictureQuote"; //Log to Logcat
 
 
-
     //Fetch the fields mentioned above
     //NOTE: Multiple AsyncTasks would be run simultaneously in RandomQuotePicturesFragment. Thus, this method would be run multiple times simultaneously.
     public QuotePicture getRandomQuotePictureQuote(){
