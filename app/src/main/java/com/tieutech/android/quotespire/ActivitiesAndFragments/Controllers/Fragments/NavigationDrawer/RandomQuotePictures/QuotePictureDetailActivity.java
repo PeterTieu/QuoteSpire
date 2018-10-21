@@ -59,8 +59,9 @@ public class QuotePictureDetailActivity extends AppCompatActivity{
 
         Log.i(TAG, "onCreate(..) called"); //Log to Logcat
 
-        setContentView(R.layout.activity_quote_picture_detail); //et the View of the activity
+        setContentView(R.layout.activity_quote_picture_detail); //Set the View of the activity
 
+        //Retrieve the data sent from the calling fragments (RandomQuotePicturesFragment, SearchQPByCategoryFragment, or SearchQPByAuthorFragment)
         mQuotePictureID = getIntent().getStringExtra(QUOTE_PICTURE_ID_KEY); //Retrieve intent extra: QuotePicture ID
         mQuotePictureByteArray = getIntent().getByteArrayExtra(QUOTE_PICTURE_BYTE_ARRAY_KEY); //Retrieve intent extra: Bitmap Byte Array
 
