@@ -37,7 +37,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 
 //Fragment to display the QuotePicture RecyclerView list-item selected in:
-//RandomQuotePicturesFragment, SearchQPByCategoryFragment, or SearchQPByAuthorFragment.
+    //RandomQuotePicturesFragment, SearchQPByCategoryFragment, or SearchQPByAuthorFragment.
 //NOTE: This Fragment is hosted by: QuotePictureDetailActivity
 @SuppressWarnings({"FieldCanBeLocal", "ConstantConditions", "SpellCheckingInspection", "RedundantCast"})
 public class QuotePictureDetailFragment extends Fragment{
@@ -109,6 +109,7 @@ public class QuotePictureDetailFragment extends Fragment{
         //If arguments passed to CategoryChooserFragment from CategoryChooserActivity exists
         if (getArguments() != null){
 
+            //Retrieve the data sent from QuotePictureDetailActivity (fragment hosting activity)
             mQuotePictureID = getArguments().getString(QuotePictureDetailActivity.QUOTE_PICTURE_ID_KEY); //Retrieve data passed from activity: QuotePicture ID
             mQuotePictureByteArray = getArguments().getByteArray(QuotePictureDetailActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY); //Retrieve data passed from activity: Bitmap Byte Array
 
@@ -132,7 +133,6 @@ public class QuotePictureDetailFragment extends Fragment{
         Log.i(TAG, "onCreateView(..) called"); //Log to Logcat
 
         getActivity().setTitle("Quote Picture"); //Set title for the Fragment
-
 
         View view = layoutInflater.inflate(R.layout.fragment_quote_picture_detail, viewGroup, false); //Obtain View from the layout of the fragment
 
