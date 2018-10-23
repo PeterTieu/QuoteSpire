@@ -392,8 +392,10 @@ public class RandomQuotePicturesFragment extends Fragment {
         //Work out whether all the Bitmaps have been fetched
         int actualSizeOfmRandomQuotePictureBitmaps = 0;
         for (Bitmap bitmap : mRandomQuotePictureBitmaps) {
+            //If the bitmap does NOT exist - do nothing
             if (bitmap == null) {
             }
+            //If the bitmap EXISTS - obtain the actual size of the mRandomQuotePicturesBitmaps List
             if (bitmap != null) {
                 actualSizeOfmRandomQuotePictureBitmaps++;
             }
