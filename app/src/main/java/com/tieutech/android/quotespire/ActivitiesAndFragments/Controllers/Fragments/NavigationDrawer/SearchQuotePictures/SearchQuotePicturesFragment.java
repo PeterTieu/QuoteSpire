@@ -41,7 +41,6 @@ public class SearchQuotePicturesFragment extends Fragment {
 
         View view = layoutInflater.inflate(R.layout.fragment_search_quotes, viewGroup, false);
 
-
         mTabLayout = (TabLayout) view.findViewById(R.id.search_tabs);
         mViewPager = (ViewPager) view.findViewById(R.id.search_view_pager);
 
@@ -51,28 +50,7 @@ public class SearchQuotePicturesFragment extends Fragment {
 
         getActivity().setTitle("Search Quotes");
 
-
-//        setHasOptionsMenu(true);
-
         return view;
     }
-
-
-
-//    //Override onCreateOptionsMenu(..) fragment lifecycle callback method
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
-//
-//        //Log lifecycle callback
-//        Log.i(TAG, "onCreateOptionsMenu(..) called");
-//
-//        //Inflate a menu hierarchy from specified resource
-//        menuInflater.inflate(R.menu.activity_main, menu);
-//    }
-
-
-
-
-
 
 }
