@@ -22,10 +22,7 @@ import java.util.List;
 //Objective: Searches the Quote based on the author or phrase search query passed to the SearchView of SearchQuotesByAuthorFragment.
 public class GetSearchQuotesByAuthorQuote {
 
-
     private static final String TAG = "GetRandomQuote"; //Tag for Logcat
-
-
 
 
     //Get the Quote (based on the search query passed to the SearchView of SearchQuotesByAuthorFragment)
@@ -47,9 +44,11 @@ public class GetSearchQuotesByAuthorQuote {
 
             parseJSONObjectToQuote(quote, JSONObject); //Stash the JSON Object values to the member variables of the Quote
 
-        } catch (IOException ioe) {
+        }
+        catch (IOException ioe) {
             Log.e(TAG, "Failed to obtain JSON String", ioe);
-        } catch (JSONException je) {
+        }
+        catch (JSONException je) {
             Log.e(TAG, "Failed to parse JSON String to JSON Objects", je);
         }
 
@@ -60,7 +59,6 @@ public class GetSearchQuotesByAuthorQuote {
         //Return Quote (to the doInBackground(..) method of the AsyncTask)
         return quote;
     }
-
 
 
 
@@ -132,9 +130,7 @@ public class GetSearchQuotesByAuthorQuote {
             httpURLConnection.disconnect(); //Disconnect the connection to the URL
         }
 
-
     }
-
 
 
 
