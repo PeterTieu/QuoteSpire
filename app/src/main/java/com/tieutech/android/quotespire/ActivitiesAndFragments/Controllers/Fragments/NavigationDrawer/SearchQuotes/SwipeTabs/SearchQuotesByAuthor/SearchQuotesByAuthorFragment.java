@@ -135,10 +135,14 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
         //Assign View instance variables to their associated resource files
         mAuthorSearchedText = (TextView) view.findViewById(R.id.search_quotes_by_author_author_searched);
 
+
+        //Set up RecyclerView variables
         mSearchQuotesByAuthorQuoteRecyclerView = (RecyclerView) view.findViewById(R.id.search_quotes_by_author_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mSearchQuotesByAuthorQuoteRecyclerView.setLayoutManager(mLinearLayoutManager);
 
+
+        //Set up Search suggestion Button variables
         mSearchSuggestionsText = (TextView) view.findViewById(R.id.search_quotes_by_author_search_suggestions_text);
         mSearchSuggestionsRefresh = (Button) view.findViewById(R.id.search_quotes_by_author_search_suggestions_refresh);
 
@@ -366,11 +370,9 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
             //When SearchView query text is submitted
             @Override
             public boolean onQueryTextSubmit(String searchQuery){
-                Log.d(TAG, "Submitted query: " + searchQuery);
+                Log.d(TAG, "Submitted query: " + searchQuery); //Log to Logcat
 
-//                sQuotePictureCategorySearchQuery = searchQuery.replaceAll("( +)","-").trim(); //Replace all space characters (either single or multiple spaces) to a single hyphen character in the search query
-
-                sSearchQuery = searchQuery;
+                sSearchQuery = searchQuery; //Assign sSearchQuery static ref. variable to searchQuery local ref. variable
 
                 SearchQuotesByAuthorSharedPref.setSearchQuotesByAuthorStoredQuery(getActivity(), sSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
 
@@ -388,10 +390,11 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
                 mAuthorSearchedText.setText(Html.fromHtml("Author searched: " + " " + " \"" +"<i>" +  sSearchQuery.toUpperCase() + "</i>" + "\"")); //Update the "Searched Text" text
 
 
+                //Configure the RecyclerView variables
                 mSearchQuotesByAuthorQuoteRecyclerView.setVisibility(View.VISIBLE); //Show the RecyclerView
                 sSearchQuotesByAuthorQuotes = null; //Nullify the List of all Quotes if they already point to an existing set from the previous search
                 sSearchQuotesByAuthorQuotes = Arrays.asList(new Quote[NUMBER_OF_QUOTES_TO_LOAD]); //Re-initialise the size of the List of all Quotes
-                sSearchQuotesByAuthorQuoteAdapter = new SearchQuotesByAuthorFragment.SearchQuotesByAuthorAdapter(sSearchQuotesByAuthorQuotes); //Create a new RecyclerView Adapter
+                sSearchQuotesByAuthorQuoteAdapter = new SearchQuotesByAuthorFragment.SearchQuotesByAuthorAdapter(sSearchQuotesByAuthorQuotes); //Create a new RecyclerView Adapter and assign it to the same object referred to by sSearchQuotesByAuthorQuotes ref. var.
                 sSearchQuotesByAuthorQuoteAdapter.setSearchQuotesByAuthorQuotes(sSearchQuotesByAuthorQuotes);  //Link the RecyclerView adapter to the List of Quotes from the search result
                 sSearchQuotesByAuthorQuoteAdapter.notifyDataSetChanged(); //Update the RecyclerView Adapter
                 mSearchQuotesByAuthorQuoteRecyclerView.setAdapter(sSearchQuotesByAuthorQuoteAdapter); //Set the RecyclerView to the new RecyclerView Adapter
@@ -495,8 +498,10 @@ public class SearchQuotesByAuthorFragment extends Fragment implements View.OnCli
     //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the author query
     private void cancelAllCurrentAsyncTasks(){
 
+        //If List of AsyncTask is NOT empty (i.e. it contains reference variables to AsyncTask objects)
         if (!mGetSearchQuotesByAuthorAsyncTasksList.isEmpty()) {
 
+            //Loop through the entire List and cancel all AsyncTasks, whether they are currently running or not
             for (int i = 0; i < NUMBER_OF_QUOTES_TO_LOAD; i++) {
                 //Try risky task - mGetSearchQuotesByAuthorAsyncTasksList.get(i).cancel() may throw a NullPointerException if the AsyncTask is not running
                 try{
