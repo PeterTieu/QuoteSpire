@@ -19,6 +19,7 @@ public class FavoriteQuotesDatabaseCursorWrapper extends CursorWrapper{
 
     //Called by FavoriteQuotesManager to obtain the Quote that is pointed to by the CursorWrapper (FavoriteQuotesDatabaseCursorWrapper), in the Favorite Quotes database
     public Quote getQuoteFromFavoriteQuotesDatabase(){
+
         String id = getString(getColumnIndex(FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.ID)); //Obtain the ID (in the ID column)
         String quoteString = getString(getColumnIndex(FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.QUOTE_STRING)); //Obtain the Quote String (n the QUOTE_STRING column)
         String author = getString(getColumnIndex(FavoriteQuotesDatabaseSchema.FavoriteQuotesTable.Columns.AUTHOR)); //Obtain the Quote author (in the AUTHOR column)
