@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 //NOTE: Values saved into ShredPreferences is retrievable even between device restarts.
 public class SearchQuotesByAuthorSharedPref {
 
+
+    //
     private static final String SEARCH_QUOTES_BY_AUTHOR_SEARCH_QUERY_KEY = "SearchQuotesByAuthorSearchQueryKey"; //Key for saving and loading search query from the SharedPreferences
 
 
