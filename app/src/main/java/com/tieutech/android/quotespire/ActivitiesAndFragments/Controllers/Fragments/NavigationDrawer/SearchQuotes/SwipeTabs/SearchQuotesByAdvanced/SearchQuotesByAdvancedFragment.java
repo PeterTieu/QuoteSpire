@@ -119,11 +119,6 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
         Log.i(TAG, "onCreateView(..) called"); //Log to Logcat
 
-//        sKeywordSearchQuery = null;
-//        sAuthorSearchQuery = null;
-//        sCategorySearchQuery = null;
-
-
         getActivity().setTitle(getResources().getString(R.string.search_quotes_fragment_title)); //Set title for fragment
 
         View view = layoutInflater.inflate(R.layout.fragment_search_quotes_by_advanced, viewGroup, false); //Inflate fragment layout
@@ -133,6 +128,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
         mAdvancedSearchedText = (TextView) view.findViewById(R.id.search_quotes_by_advanced_advanced_searched);
 
 
+        //Assign variables to Views
         mSearchQuotesByAdvancedTitle = (TextView) view.findViewById(R.id.search_quotes_by_advanced_title);
         mSearchQuotesByKeywordText = (TextView) view.findViewById(R.id.search_quotes_by_keyword_text);
         mSearchQuotesByKeywordSearchView = (SearchView) view.findViewById(R.id.search_quotes_by_keyword_search_view);
@@ -142,14 +138,10 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
         mSearchQuotesByCategorySearchView = (SearchView) view.findViewById(R.id.search_quotes_by_category_search_view);
         mSearchQuotesByAdvancedSearchButton = (Button) view.findViewById(R.id.search_quotes_by_advanced_search_button);
 
-
-
-
-
+        //RecyclerView variables
         mSearchQuotesByAdvancedQuoteRecyclerView = (RecyclerView) view.findViewById(R.id.search_quotes_by_advanced_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mSearchQuotesByAdvancedQuoteRecyclerView.setLayoutManager(mLinearLayoutManager);
-
 
 
         Log.i(TAG, "True or false:" + shouldDisplaySearchResultsWhenFragmentIsReloaded);
@@ -175,8 +167,6 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
 
             //---------- Configure View variables ----------------------
-//            mAdvancedSearchedText.setText(Html.fromHtml("Advanced searched: " + " " + " \"" +"<i>" + sKeywordSearchQuery.toUpperCase() + "</i>" + "\"")); //Text for displaying the Advanced Searched
-
             sSearchQuotesByAdvancedQuoteAdapter = new SearchQuotesByAdvancedFragment.SearchQuotesByAdvancedAdapter(sSearchQuotesByAdvancedQuotes); //Create a new RecyclerView Adapter
             sSearchQuotesByAdvancedQuoteAdapter.setSearchQuotesByAdvancedQuotes(sSearchQuotesByAdvancedQuotes); //Link the RecyclerView adapter to the List of Quotes from the search result
             mSearchQuotesByAdvancedQuoteRecyclerView.setAdapter(sSearchQuotesByAdvancedQuoteAdapter); //Set up the RecyclerView to the RecyclerView Adapter
@@ -207,142 +197,75 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
             mSearchQuotesByKeywordSearchView.setQuery(sKeywordSearchQuery, false);
             mSearchQuotesByAuthorSearchView.setQuery(sAuthorSearchQuery, false);
             mSearchQuotesByCategorySearchView.setQuery(sCategorySearchQuery, false);
-
-
-//
-//            sKeywordSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedKeywordStoredQuery(getActivity());
-//            sAuthorSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedAuthorStoredQuery(getActivity());
-//            sCategorySearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedCategoryStoredQuery(getActivity());
-
-
         }
 
 
 
-
-
+        //Set listener for SearchView of KEYWORD
         mSearchQuotesByKeywordSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextChange(String keywordQuery) {
-
                 Log.i(TAG, keywordQuery);
-
                 sKeywordSearchQuery = keywordQuery;
-
-
-//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedKeywordStoredQuery(getActivity(), sKeywordSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-
                 return false;
             }
 
-
             @Override
             public boolean onQueryTextSubmit(String keywordQuery) {
-
-
-//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedKeywordStoredQuery(getActivity(), sKeywordSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-
-                searchQuotes();
-
-                //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
-                return true;
-
+                searchQuotes(); //Search Quotes based on the combination of entries in the SearchViews for KEYWORD, AUTHOR, or CATEGORY
+                return true; //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
             }
-
         });
 
 
 
-
-
-
-
-
-
+        //Set listener for SearchView of AUTHOR
         mSearchQuotesByAuthorSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextChange(String authorQuery) {
-
                 Log.i(TAG, authorQuery);
-
                 sAuthorSearchQuery = authorQuery;
-
-
-//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedAuthorStoredQuery(getActivity(), sAuthorSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-
                 return false;
             }
 
-
             @Override
             public boolean onQueryTextSubmit(String authorQuery) {
-
-
-//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedAuthorStoredQuery(getActivity(), sAuthorSearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-
-
-                searchQuotes();
-
-                //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
-                return true;
-
+                searchQuotes(); //Search Quotes based on the combination of entries in the SearchViews for KEYWORD, AUTHOR, or CATEGORY
+                return true; //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
             }
-
         });
 
 
 
-
-
-
-
-
-
+        //Set listener for SearchView of CATEGORY
         mSearchQuotesByCategorySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextChange(String categoryQuery) {
-
                 Log.i(TAG, categoryQuery);
-
                 sCategorySearchQuery = categoryQuery;
-
-
-//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedCategoryStoredQuery(getActivity(), sCategorySearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-
                 return false;
             }
 
-
             @Override
             public boolean onQueryTextSubmit(String categoryQuery) {
-
-//                SearchQuotesByAdvancedSharedPref.setSearchQuotesByAdvancedCategoryStoredQuery(getActivity(), sCategorySearchQuery); //Set the search query to the SharedPreferences - to be retrieved later
-
-
-                searchQuotes();
-
-                //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
-                return true;
-
+                searchQuotes(); //Search Quotes based on the combination of entries in the SearchViews for KEYWORD, AUTHOR, or CATEGORY
+                return true; //Return a boolean. TRUE if an action is handled by the listener (as is the case); FALSE if the SearchView should perform the DEFAULT action (i.e. show any suggestions if available)
             }
-
         });
 
 
 
-
+        //Set listener for Button of ADVANCED SEARCH
         mSearchQuotesByAdvancedSearchButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view){
-
-                searchQuotes();
+                searchQuotes(); //Search Quotes based on the combination of entries in the SearchViews for KEYWORD, AUTHOR, or CATEGORY
             }
         });
-
 
 
         getActivity().invalidateOptionsMenu(); //Result options menu
@@ -353,32 +276,28 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
 
 
-
+    //Helper method - Search Quotes based on the combination of entries in the SearchViews for KEYWORD, AUTHOR, or CATEGORY
     private void searchQuotes(){
 
-//        sKeywordSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedKeywordStoredQuery(getActivity());
-//        sAuthorSearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedAuthorStoredQuery(getActivity());
-//        sCategorySearchQuery = SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedCategoryStoredQuery(getActivity());
-
-
+        //If none of the SearchView views have entries
         if ( (sKeywordSearchQuery == null || sKeywordSearchQuery.isEmpty()) &&
              (sAuthorSearchQuery == null || sAuthorSearchQuery.isEmpty()) &&
              (sCategorySearchQuery == null || sCategorySearchQuery.isEmpty()) ){
 
             Log.i(TAG, "Empty");
 
-            noSearchQueriesDialogFragment();
+            noSearchQueriesDialogFragment(); //Display DialogFragment indicating no search entries entered
             return;
         }
 
 
-        Log.i(TAG, "post-Empty");
+        Log.i(TAG, "post-Empty"); //Log to Logcat
 
-
-        getActivity().invalidateOptionsMenu();
+        getActivity().invalidateOptionsMenu(); //Update options menu
 
         shouldDisplaySearchResultsWhenFragmentIsReloaded = true; //Toggle flag to display the search results to TRUE
 
+        //Configure View visibilities
         mSearchQuotesByAdvancedTitle.setVisibility(View.GONE);
         mSearchQuotesByKeywordText.setVisibility(View.GONE);
         mSearchQuotesByKeywordSearchView.setVisibility(View.GONE);
@@ -410,7 +329,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
 
 
-
+    //Helper method - Display DialogFragment indicating no search entries entered
     private void noSearchQueriesDialogFragment(){
         TextView dialogTitle = new TextView(getActivity());
         dialogTitle.setText("No Search Queries");
@@ -421,7 +340,6 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
         dialogTitle.setBackgroundColor(getResources().getColor(R.color.FavoriteQuotesAndMyQuotesListItems));
 
         String dialogMessage = "Please enter search queries for Keyword and/or Author and/or Category";
-
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_remove_all_favorite_quotes, null);
 
@@ -492,14 +410,7 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
                 mSearchQuotesByAuthorSearchView.setQuery(sAuthorSearchQuery, false);
                 mSearchQuotesByCategorySearchView.setQuery(sCategorySearchQuery, false);
 
-//                mSearchQuotesByKeywordSearchView.setQuery(SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedKeywordStoredQuery(getActivity()), false);
-//                mSearchQuotesByAuthorSearchView.setQuery(SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedAuthorStoredQuery(getActivity()), false);
-//                mSearchQuotesByCategorySearchView.setQuery(SearchQuotesByAdvancedSharedPref.getSearchQuotesByAdvancedCategoryStoredQuery(getActivity()), false);
-
-
                 cancelAllCurrentAsyncTasks(); //Cancel all AsyncTasks (either running or not running) that are fetching Quotes based on the advanced query
-
-//                Toast.makeText(getActivity(), "Cleared Search Results for: " + sKeywordSearchQuery.toUpperCase(), Toast.LENGTH_LONG).show(); //Create Toast notifying that the search results have been cleared
 
                 return true;
 
@@ -530,8 +441,6 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
         }
 
     }
-
-
 
 
 
@@ -831,33 +740,22 @@ public class SearchQuotesByAdvancedFragment extends Fragment{
 
                 @Override
                 public void onClick(View view){
-
                     Intent shareIntent = new Intent(Intent.ACTION_SEND); //Create implicit Intent with send action
-
                     shareIntent.setType("text/plain"); //Set the type of the Intent to text
-
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Quote by " + mSearchQuotesByAdvancedQuote.getAuthor()); //Set subject of Intent
-
                     shareIntent.putExtra(Intent.EXTRA_TEXT, getSearchQuotesByAdvancedQuoteShareString()); //Set text of Intent
-
                     shareIntent = Intent.createChooser(shareIntent, "Share Quote via"); //Set chooser title
-
                     startActivity(shareIntent); //Start the Intent
                 }
             });
-
-
         }
 
 
 
         //Set the Quote sharing text
         private String getSearchQuotesByAdvancedQuoteShareString(){
-
             String searchQuotesByAdvancedQuoteString = "\"" + mSearchQuotesByAdvancedQuote.getQuote() + "\""; //Quote text body
-
             String searchQuotesByAdvancedQuoteAuthorString = " - " + mSearchQuotesByAdvancedQuote.getAuthor(); //Quote author
-
             return searchQuotesByAdvancedQuoteString + searchQuotesByAdvancedQuoteAuthorString; //Concatenate Quote text body with author
         }
 
