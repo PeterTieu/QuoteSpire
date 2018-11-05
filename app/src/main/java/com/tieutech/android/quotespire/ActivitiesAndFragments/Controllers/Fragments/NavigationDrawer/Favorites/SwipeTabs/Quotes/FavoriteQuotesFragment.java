@@ -68,15 +68,6 @@ public class FavoriteQuotesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
-//        if (savedInstanceState != null){
-//
-//            recyclerViewState = savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
-//        }
-
-
-
-
         Log.i(TAG, "onCreate() called");
 
 
