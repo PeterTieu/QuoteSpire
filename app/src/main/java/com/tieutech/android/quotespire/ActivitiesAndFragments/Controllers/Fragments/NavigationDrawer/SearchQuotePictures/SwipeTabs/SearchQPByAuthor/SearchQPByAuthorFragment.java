@@ -582,11 +582,8 @@ public class SearchQPByAuthorFragment extends Fragment implements View.OnClickLi
         //NOTE: The parameters of doInBackground(..) were taken from the execute(..) method from AsyncTask
         @Override
         protected QuotePicture doInBackground(Integer... quoteNumber){
-
             mQuotePosition = quoteNumber; //Stash position of the Quote in the member variable. NOTE: quoteNumber local variable is the variable passed into execute(..)
-
             QuotePicture authorQuotePicture = new GetAuthorQuotePicture().getAuthorQuotePictureQuote(mSearchQuery); //Fetch the Quote Picture Download URI via the networking class (GetAuthorQuotePictureQuote)
-
             return authorQuotePicture; //Return the Quote class fetched from the networking class. NOTE: This class is passed to onPostExecute(..)
         }
 
@@ -597,7 +594,6 @@ public class SearchQPByAuthorFragment extends Fragment implements View.OnClickLi
         protected void onPostExecute(QuotePicture authorQuotePictureQuote){
 
             authorQuotePictureQuote.setAuthorQuotePicturePosition(mQuotePosition[0] + 1); //Set the obtained Quote's position to be the same as the position in the Author Quote Pictures list
-
             sAuthorQuotePictureQuotes.set(mQuotePosition[0], authorQuotePictureQuote); //Add the obtained Quote to the List of Quote objects
 
             //Call the worker HandlerThread - by sending a Message to its MessageQueue. This message contains:
@@ -633,11 +629,8 @@ public class SearchQPByAuthorFragment extends Fragment implements View.OnClickLi
         public AuthorQuotePictureViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType){
 
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Create LayoutInflater
-
             View view = layoutInflater.inflate(R.layout.list_item_quote_picture, viewGroup, false); //Fetch list-view View and link it to the View variable
-
-            AuthorQuotePictureViewHolder authorQuotePictureViewHolder = new AuthorQuotePictureViewHolder(view);
-
+            AuthorQuotePictureViewHolder authorQuotePictureViewHolder = new AuthorQuotePictureViewHolder(view); //Intantiate the ViewHolder, with its View as the paramater
             return authorQuotePictureViewHolder; //Return the ViewHolder
         }
 
@@ -648,7 +641,6 @@ public class SearchQPByAuthorFragment extends Fragment implements View.OnClickLi
 
             //If the element in the QuotePicture list contains/refers to ta QuotePicture object
             if (sAuthorQuotePictureQuotes.get(position) != null){
-
                 authorQuotePictureViewHolder.bindListItem(position, mAuthorQuotePictureBitmaps.get(position)); //Bind the ViewHolder to the necessary variables/data
             }
 
@@ -687,17 +679,14 @@ public class SearchQPByAuthorFragment extends Fragment implements View.OnClickLi
         //Bind method - called by Adapter's onBindViewHolder(..)
         void bindListItem(final int position, Bitmap authorQuotePictureBitmap){
 
-
             //If the Bitmap EXIST
             if (authorQuotePictureBitmap != null){
-                mQuotePictureListItemProgressBar.setVisibility(View.GONE); //Make the ProgressBar VISIBLE
-                mQuotePictureListItemImageView.setVisibility(View.VISIBLE);  //Make the ImageView GONE
+                mQuotePictureListItemProgressBar.setVisibility(View.GONE); //Make the ProgressBar GONE
+                mQuotePictureListItemImageView.setVisibility(View.VISIBLE);  //Make the ImageView VISIBILE
             }
-
 
             mAuthorQuotePictureDrawable = new BitmapDrawable(getResources(), authorQuotePictureBitmap); //Parse the Quote Picture Bitmap into a Drawable object
             mQuotePictureListItemImageView.setImageDrawable(mAuthorQuotePictureDrawable); //Display the Drawable object on the ImageView
-
 
             //If the QuotePicture's ID EXISTS
             if (sAuthorQuotePictureQuotes.get(position).getId() != null) {
@@ -707,8 +696,6 @@ public class SearchQPByAuthorFragment extends Fragment implements View.OnClickLi
 
                     mQuotePictureListItemImageView.setBackgroundColor(getResources().getColor(R.color.favorite_on)); //Set the
                     mQuotePictureListItemImageView.setPadding(20,18,20,18); //Display an "orange" border around the liar-item to show that it is 'Favorited'
-
-
                 }
             }
 
