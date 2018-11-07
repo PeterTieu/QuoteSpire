@@ -33,11 +33,8 @@ public class GetAuthorQuotePicture {
         //Try risky task - getJSONString(..) and parseJSONObjectToAuthorQuotePictureQuote(..) may throw IOException and JSONException, respectively
         try {
             String JSONString = getJSONString(urlString); //Obtain the JSON String from the URI endpoint
-
             Log.i(TAG, "Received JSON: " + JSONString); //Log the JSON String
-
             JSONObject JSONObject = new JSONObject(JSONString); //Instantiate a JSONObject, taking the JSON String of the URI endpoint
-
             parseJSONObjectToAuthorQuotePictureQuote(authorQuotePicture, JSONObject); //Parse the JSON Object to the QuotePicture
         }
         catch (java.io.IOException IOException) {
@@ -105,7 +102,6 @@ public class GetAuthorQuotePicture {
 
         authorQuotePicture.setId(qImageObject.getString("quote_id")); //Obtain the quote ID and stash it to the Author QuotePicture
         authorQuotePicture.setQuotePictureDownloadURI(qImageObject.getString("download_uri")); //Obtain the quote Picture Download URI and stash it ot the Author QuotePicture
-
 
         Log.i(TAG, "Author Quote Picture Quote - method - Quote ID: " + authorQuotePicture.getId()); //Log ID
         Log.i(TAG, "Author Quote Picture Quote - method  - Picture Download URI: " + authorQuotePicture.getQuotePictureDownloadURI()); //Log Picture Download URI
