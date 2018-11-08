@@ -3,6 +3,8 @@ package com.tieutech.android.quotespire.ActivitiesAndFragments.Controllers.Fragm
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+
+//Shared Preferences for storing/retrieving the Quote Picture search queries for AUTHOR
 public class SearchQPByAuthorSharedPref {
 
 
