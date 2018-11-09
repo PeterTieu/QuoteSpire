@@ -38,41 +38,45 @@ import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.List;
 
+
+//Fragment for displaying Favorited Quote Pictures
 public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
-    //Log for Logcat
-    private final String TAG = "FQPicturesFragment";
+    //================= INSTANCE VARIABLES ==============================================================
+    private final String TAG = "FQPicturesFragment"; //Log for Logcat
 
+    //RecyclerView variables
     private static RecyclerView mFavoriteQuotePicturesRecyclerView;
     private GridLayoutManager mGridLayoutManager;
-
     private FavoriteQuotePicturesAdapter mFavoriteQuotePicturesAdapter;
     private FavoriteQuotePictureViewHolder mFavoriteQuotePictureViewHolder;
 
-
-    private TextView mNoFavoriteQuotePicturesTextView;
-
+    private TextView mNoFavoriteQuotePicturesTextView; //TextView to indicate if no Quotes are favorited
 
 
 
+
+    //================= METHODS ===========================================================================
+
+    //Override onAttach(..) fragment lifecycle callback method
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-
-        Log.i(TAG, "onAttach() called");
+        Log.i(TAG, "onAttach() called"); //Log in Logcat
 
     }
 
 
+
+
+    //Override onCreate(..) fragment lifecycle callback method
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
         Log.i(TAG, "onCreate() called"); //Log in Logcat
-
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true); //Declare that the fragme3nt has an options menu
     }
 
 
@@ -86,129 +90,110 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
         Log.i(TAG, "onCreateView(..) called"); //Log in Logcat
 
+        View view = layoutInflater.inflate(R.layout.fragment_favorite_quote_pictures, viewGroup, false); //Assign View variable to layout resource file
 
-        View view = layoutInflater.inflate(R.layout.fragment_favorite_quote_pictures, viewGroup, false);
-
-
+        //Assign RecyclerView variables to associated Views
         mFavoriteQuotePicturesRecyclerView = (RecyclerView) view.findViewById(R.id.favorite_quote_pictures_recycler_view);
         mNoFavoriteQuotePicturesTextView = (TextView) view.findViewById(R.id.no_favorite_quote_pictures_text_view);
-
-
-
         mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         mFavoriteQuotePicturesRecyclerView.setLayoutManager(mGridLayoutManager);
 
 
-
-
-
-        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
+        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures(); //Obtain all Favorited Quote Pictures from SQLiteDatabase of Favorite Quote Pictures
         Collections.reverse(mFavoriteQuotePictures); //Reverse the order of the List of QuotePicture objects SO THAT recently favorited QuotePicture object is displayed at the top of the RecyclerView
 
 
         mFavoriteQuotePicturesAdapter = new FavoriteQuotePicturesAdapter(mFavoriteQuotePictures);
-
         mFavoriteQuotePicturesRecyclerView.setAdapter(mFavoriteQuotePicturesAdapter);
 
 
-
+        //If there ARE Quotes in the Favorite Quote Pictures SQLiteDatabase
         if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size() > 0){
-            mNoFavoriteQuotePicturesTextView.setVisibility(View.GONE);
+            mNoFavoriteQuotePicturesTextView.setVisibility(View.GONE); //Remove the TextView indicating that there are no Quote Pictures Favorited
         }
+        //If there are NO Quotes in the Favorite Quote Pictures SQLiteDatabase
         else{
-            mNoFavoriteQuotePicturesTextView.setVisibility(View.VISIBLE);
+            mNoFavoriteQuotePicturesTextView.setVisibility(View.VISIBLE); //Show the TextView indicating that there are no Quote Pictures Favorited
         }
 
 
+        getActivity().setTitle("Favorites"); //Set title of the (swipe tab) Fragment
 
-
-
-//        updateUI();
-
-
-
-
-
-        getActivity().setTitle("Favorites");
         return view;
     }
 
 
 
 
+    //Helper method - called to update the UI - called every time a Favorite icon is pressed (to remove a Quote Picture) OR when the "Remove All" options menu icon is pressed
     public void updateUI(){
 
         getActivity().invalidateOptionsMenu(); //Refresh the options menu every time a list item is added/removed, so we could re-evaluate whether the menu item "Remove all" is still appropriate
 
 
-
-        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
+        final List<QuotePicture> mFavoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures(); //Obtain all Favorited Quote Pictures from SQLiteDatabase of Favorite Quote Pictures
         Collections.reverse(mFavoriteQuotePictures); //Reverse the order of the List of QuotePicture objects SO THAT recently favorited QuotePicture object is displayed at the top of the RecyclerView
         mFavoriteQuotePicturesAdapter = new FavoriteQuotePicturesAdapter(mFavoriteQuotePictures);
         mFavoriteQuotePicturesRecyclerView.setAdapter(mFavoriteQuotePicturesAdapter);
 
 
-
+        //If there ARE Quotes in the Favorite Quote Pictures SQLiteDatabase
         if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size() > 0){
-            mNoFavoriteQuotePicturesTextView.setVisibility(View.GONE);
+            mNoFavoriteQuotePicturesTextView.setVisibility(View.GONE); //Remove the TextView indicating that there are no Quote Pictures Favorited
         }
+        //If there are NO Quotes in the Favorite Quote Pictures SQLiteDatabase
         else{
-            mNoFavoriteQuotePicturesTextView.setVisibility(View.VISIBLE);
+            mNoFavoriteQuotePicturesTextView.setVisibility(View.VISIBLE); //Show the TextView indicating that there are no Quote Pictures Favorited
         }
     }
 
 
 
 
-
+    //Adapter for RecyclerView (RecyclerView-Adapter)
     private class FavoriteQuotePicturesAdapter extends RecyclerView.Adapter<FavoriteQuotePictureViewHolder>{
 
-        private List<QuotePicture> mFavoriteQuotePictures;
+        private List<QuotePicture> mFavoriteQuotePictures; //List of Favorite Quote Pictures
 
 
-
+        //Constructor
         public FavoriteQuotePicturesAdapter(List<QuotePicture> favoriteQuotePictures){
-            mFavoriteQuotePictures = favoriteQuotePictures;
-
-            Log.i(TAG, "ADAPTER - mFavoriteQuotes: " + mFavoriteQuotePictures);
+            mFavoriteQuotePictures = favoriteQuotePictures; //Stash the Favorite Quotes parameter to the instance variable
+            Log.i(TAG, "ADAPTER - mFavoriteQuotes: " + mFavoriteQuotePictures); //Log to Logcat
 
         }
 
+
+        //Override getItemCount() method
         @Override
         public int getItemCount(){
-            return mFavoriteQuotePictures.size();
+            return mFavoriteQuotePictures.size(); //Size of the List of Favorite Quote Pictures
         }
 
 
+        //Override onCreateViewHolder(..) method
         @Override
         public FavoriteQuotePictureViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 
-            View view = layoutInflater.inflate(R.layout.list_item_favorite_quote_picture, viewGroup, false);
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Instantiate LayoutInflater
+            View view = layoutInflater.inflate(R.layout.list_item_favorite_quote_picture, viewGroup, false); //Inflate the Layout of the ViewHolder (i.e. list item)
+            mFavoriteQuotePictureViewHolder = new FavoriteQuotePictureViewHolder(view); //Instantiate the ViewHolder object with its view
 
-
-            mFavoriteQuotePictureViewHolder = new FavoriteQuotePictureViewHolder(view);
-
-
-            return mFavoriteQuotePictureViewHolder;
+            return mFavoriteQuotePictureViewHolder; //Return ViewHolder
         }
 
 
-
-
+        //Override onBindViewHolder(..) method
         @Override
         public void onBindViewHolder(FavoriteQuotePictureViewHolder favoriteQuotePictureViewHolder, int position){
-            QuotePicture favoriteQuotePicture = mFavoriteQuotePictures.get(position);
-
-            favoriteQuotePictureViewHolder.bind(favoriteQuotePicture, position);
-
-//            favoriteQuotePictureViewHolder.mFavoriteQuotePictureFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+            QuotePicture favoriteQuotePicture = mFavoriteQuotePictures.get(position); //Obtain Quote Picture to be binded to ViewHolder
+            favoriteQuotePictureViewHolder.bind(favoriteQuotePicture, position); //Bind Quote to ViewHolder
         }
 
 
-
+        //Set the List of Favorite Quote Pictures to the Adapter
         public void setFavoriteQuotePictures(List<QuotePicture> favoriteQuotePictures){
-            mFavoriteQuotePictures = favoriteQuotePictures;
+            mFavoriteQuotePictures = favoriteQuotePictures; //Stash List parameter to instance variable
         }
 
     }
@@ -216,43 +201,33 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
-
+    //Snackbar ref. variables relating to removing Quotes from the SQLiteDatabase of Favorited Quote Pictures
     private Snackbar snackbar;
     private Snackbar snackbar1;
 
 
-
-
-
-
-
-
-
+    //ViewHolder for RecyclerView (RecyclerView-ViewHolder)
     private class FavoriteQuotePictureViewHolder extends RecyclerView.ViewHolder{
 
-
-        private LinearLayout mListItemView;
-
-        public QuotePicture mFavoriteQuotePicture;
-
-        private Drawable mFavoriteQuotePictureDrawable;
-        private ImageView mFavoriteQuotePictureImageView;
-
-        private byte[] mFavoriteQuotePictureByteArray;
-        private Bitmap mFavoriteQuotePictureBitmap;
+        public QuotePicture mFavoriteQuotePicture; //Quote Picture (that is binded to the ViewHolder)
 
 
+        private LinearLayout mListItemView; //Layout of ViewHolder
 
+        //Quote Picture IMAGE PROCESSING reference variables
+        private Drawable mFavoriteQuotePictureDrawable; //Drawable of Quote Picture
+        private ImageView mFavoriteQuotePictureImageView; //ImageView of Quote Picture
+        private byte[] mFavoriteQuotePictureByteArray; //Byte Array to store
+        private Bitmap mFavoriteQuotePictureBitmap; //Bitmap display Quote Picture
+
+
+
+        //Constructor
         public FavoriteQuotePictureViewHolder(View view) {
             super(view);
 
-
             mListItemView = (LinearLayout) view.findViewById(R.id.list_item_favorite_quote_picture_view);
-
             mFavoriteQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_detail_fragment_quote_image_view);
-
-
-
         }
 
 
