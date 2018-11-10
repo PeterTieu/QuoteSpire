@@ -211,14 +211,13 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
         public QuotePicture mFavoriteQuotePicture; //Quote Picture (that is binded to the ViewHolder)
 
-
         private LinearLayout mListItemView; //Layout of ViewHolder
 
         //Quote Picture IMAGE PROCESSING reference variables
-        private Drawable mFavoriteQuotePictureDrawable; //Drawable of Quote Picture
-        private ImageView mFavoriteQuotePictureImageView; //ImageView of Quote Picture
-        private byte[] mFavoriteQuotePictureByteArray; //Byte Array to store
-        private Bitmap mFavoriteQuotePictureBitmap; //Bitmap display Quote Picture
+        private byte[] mFavoriteQuotePictureByteArray; //Byte Array to store the Bytes data of the picture - and stored in the SQLiteDatabase of Quote Pictues (raw variable)
+        private Bitmap mFavoriteQuotePictureBitmap; //Bitmap of the Quote Picture that is converted from the ByteArray (intermediate variable #1)
+        private Drawable mFavoriteQuotePictureDrawable; //Drawable of Quote Picture that is converted from the Bitmap (intermediate variable #2)
+        private ImageView mFavoriteQuotePictureImageView; //ImageView of Quote Picture (converted from Drawable) - to be displayed in the UI (final variable)
 
 
 
@@ -226,56 +225,46 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         public FavoriteQuotePictureViewHolder(View view) {
             super(view);
 
-            mListItemView = (LinearLayout) view.findViewById(R.id.list_item_favorite_quote_picture_view);
-            mFavoriteQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_detail_fragment_quote_image_view);
+            //Assign View instance reference variables to associated resource IDs
+            mListItemView = (LinearLayout) view.findViewById(R.id.list_item_favorite_quote_picture_view); //List item View - contains the ImageView (below)
+            mFavoriteQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_detail_fragment_quote_image_view); //ImageView of the Quote Picture
         }
 
 
 
-
-
+        //Bind the Qutoe Picture to the ViewHolder
         public void bind(QuotePicture favoriteQuotePicture, final int position){
 
-            mFavoriteQuotePicture = favoriteQuotePicture;
+            mFavoriteQuotePicture = favoriteQuotePicture; //Stash the parameter variable to the instance variable
 
+            mFavoriteQuotePictureByteArray = mFavoriteQuotePicture.getQuotePictureBitmapByteArray(); //Obtain ByteArray from the QuotePicture
 
-
-            mFavoriteQuotePictureByteArray = mFavoriteQuotePicture.getQuotePictureBitmapByteArray();
-
-
+            //If the ByteArray variable EXISTS
             if (mFavoriteQuotePictureByteArray != null){
 
-                Log.i(TAG, "mFavoriteQuotePictureByteArray: " + mFavoriteQuotePictureByteArray);
+                Log.i(TAG, "mFavoriteQuotePictureByteArray: " + mFavoriteQuotePictureByteArray); //Log to Logcat
 
-
-                mFavoriteQuotePictureBitmap = BitmapFactory.decodeByteArray(mFavoriteQuotePictureByteArray, 0, mFavoriteQuotePictureByteArray.length);
-//            mFavoriteQuotePictureBitmap = mFavoriteQuotePicture.getQuotePictureBitmap();
-                mFavoriteQuotePictureDrawable = new BitmapDrawable(getResources(), mFavoriteQuotePictureBitmap);
-                mFavoriteQuotePictureImageView.setImageDrawable(mFavoriteQuotePictureDrawable);
+                mFavoriteQuotePictureBitmap = BitmapFactory.decodeByteArray(mFavoriteQuotePictureByteArray, 0, mFavoriteQuotePictureByteArray.length); //Convert ByteArray to Bitmap
+                mFavoriteQuotePictureDrawable = new BitmapDrawable(getResources(), mFavoriteQuotePictureBitmap); //Convert Bitmap to Drawable
+                mFavoriteQuotePictureImageView.setImageDrawable(mFavoriteQuotePictureDrawable); //Convert Drawable to ImageView
             }
 
 
+            loadImageFromStorage(mFavoriteQuotePicture.getQuotePictureBitmapFilePath(), mFavoriteQuotePicture.getId()); //Load the File Path to the Bimap of the Quote Picture
 
 
-
-            loadImageFromStorage(mFavoriteQuotePicture.getQuotePictureBitmapFilePath(), mFavoriteQuotePicture.getId());
-
-
-
-
-
+            //Log to Logcat
             Log.i(TAG, "ID: " + mFavoriteQuotePicture.getId());
             Log.i(TAG, "Quote Picture Bitmap path: " + mFavoriteQuotePicture.getQuotePictureBitmapFilePath());
 
 
-
-
+            //Check for the IDs of each of the Quote Pictures in the Faovorited Quote Pictues SQLiteDatabase
             for(int i=0; i<FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size(); i++){
                 Log.i(TAG, "IDs: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(i).getId());
             }
 
 
-
+            //Log to Logcat
             Log.i(TAG, "CURRENT SIZE: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size());
             Log.i(TAG, "CURRENT ID: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId());
             Log.i(TAG, "CURRENT BITMAP BYTE ARRAY: " + FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getQuotePictureBitmapByteArray());
@@ -284,27 +273,28 @@ public class FavoriteQuotePicturesFragment extends Fragment{
             final int positionOfFavoriteQuotePicture = position;
 
 
+            //Set listener for List Item View
             mListItemView.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view) {
+
+                    //Start FavoriteQuotePictureViewpagerActivity activity for viewing detailed version of the Quote Picture
                     Intent favoriteQuotePictureViewPagerActivityIntent = FavoriteQuotePictureViewPagerActivity.newIntent(
                             getContext(),
-                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size(),
-                            mFavoriteQuotePicture.getQuotePictureBitmapFilePath(),
-                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId());
+                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().size(), //Size of the SQLiteDatabase of Quote Pictures (for ViewPager purposes)
+                            mFavoriteQuotePicture.getQuotePictureBitmapFilePath(), //File path to Bitmap Array (so that the Bitmap array could be unpacked and displayed in the UI as ImageView)
+                            FavoriteQuotePicturesManager.get(getContext()).getFavoriteQuotePictures().get(position).getId()); //Position of the Quote Picture in the SQLiteDatabase of Quote Pictures
 
-                    startActivity(favoriteQuotePictureViewPagerActivityIntent);
-
-
+                    startActivity(favoriteQuotePictureViewPagerActivityIntent); //Start the activity
                 }
-
             });
-
-
         }
 
 
+
+
+        //Helper method - load the File Path to the Bimap of the Quote Picture
         private void loadImageFromStorage(String path, String quotePictureID) {
 
             try {
@@ -317,12 +307,7 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
         }
 
-
     }
-
-
-
-
 
 
 
@@ -332,13 +317,11 @@ public class FavoriteQuotePicturesFragment extends Fragment{
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
         super.onCreateOptionsMenu(menu, menuInflater);
 
-        //Log lifecycle callback
-        Log.i(TAG, "onCreateOptionsMenu(..) called");
+        Log.i(TAG, "onCreateOptionsMenu(..) called"); //Log lifecycle callback
 
         //If there are one or more FavoriteQuotes in the list (i.e. one or more list items)
         if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size() > 0) {
-            //Inflate a menu hierarchy from specified resource
-            menuInflater.inflate(R.menu.fragment_favorite_quotes, menu);
+            menuInflater.inflate(R.menu.fragment_favorite_quotes, menu); //Inflate a menu hierarchy from specified resource
         }
     }
 
@@ -349,18 +332,14 @@ public class FavoriteQuotePicturesFragment extends Fragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
-        //Log lifecycle callback
-        Log.i(TAG, "onOptionsItemsSelected(..) called");
+        Log.i(TAG, "onOptionsItemsSelected(..) called"); //Log lifecycle callback
 
         //Check through all menuItems
         switch(menuItem.getItemId()){
 
             //Check the "New Pix" menu item
             case (R.id.remove_all_favorite_quotes):
-
-
-                removeAllFavoriteQuotesConfirmationDialog();
-
+                removeAllFavoriteQuotesConfirmationDialog(); //Start Confirmation AlertDialog to remove all Favorited Quote Pictures from the SQLiteDatabase of Favorited Quote Pictures
                 return true;
 
             default:
@@ -371,11 +350,8 @@ public class FavoriteQuotePicturesFragment extends Fragment{
 
 
 
-
-
-
+    //Helper method - start Confirmation AlertDialog to remove all Favorited Quote Pictures from the SQLiteDatabase of Favorited Quote Pictures
     private void removeAllFavoriteQuotesConfirmationDialog(){
-
 
         //Set-up custom title to display in the dialog
         TextView dialogTitle = new TextView(getActivity()); //Create TextView object
@@ -387,62 +363,44 @@ public class FavoriteQuotePicturesFragment extends Fragment{
         dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
 
 
-
-        View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_remove_all_favorite_quote_pictures_confirmation, null);
-
-        TextView removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage = (TextView) dialogFragmentView.findViewById(R.id.dialog_fragment_remove_all_favorite_quote_pictures_confirmation_message);
+        View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_remove_all_favorite_quote_pictures_confirmation, null); //View of DialogFragment
+        TextView removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage = (TextView) dialogFragmentView.findViewById(R.id.dialog_fragment_remove_all_favorite_quote_pictures_confirmation_message); //TextView of DialogFragment
 
 
+        int favoriteQuotePicturesDatabaseSize = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size(); //Number of QuotePictures in the SQLiteDatabase of Favorited Quote Pictures
 
 
-        int favoriteQuotePicturesDatabaseSize = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size();
-
-
-//        String dialogMessage = null;
-//        if (favoriteQuotePicturesDatabaseSize == 1){
-//            dialogMessage = "Are you sure you want to remove this Quote Picture from Favorites?";
-//        }
-//        else if (favoriteQuotePicturesDatabaseSize == 2){
-//            dialogMessage = "Are you sure you want to remove these 2 Quote Pictures from Favorites?";
-//        }
-//        else if (favoriteQuotePicturesDatabaseSize > 1){
-//            dialogMessage = "Are you sure you want to remove all " + favoriteQuotePicturesDatabaseSize + " Quote Pictures from Favorites?";
-//        }
-
-
-
-
+        //If there is ONE Quote Picture in the SQLiteDatabase
         if (favoriteQuotePicturesDatabaseSize == 1){
             removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove this Quote Picture from Favorites?");
         }
+        //If there are TWO Quote Picture in the SQLiteDatabase
         else if (favoriteQuotePicturesDatabaseSize == 2){
             removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove these 2 Quote Pictures from Favorites?");
         }
+        //If there are MORE THAN ONE Quote Picture in the SQLiteDatabase
         else if (favoriteQuotePicturesDatabaseSize > 1){
             removeAllFavoriteQuotePicturesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove all " + favoriteQuotePicturesDatabaseSize + " Quote Pictures from Favorites?");
         }
 
 
-
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_remove_all_favorite_quote_pictures, null);
 
+
+        //Set up parameters AlertDialog
         final AlertDialog alertDialog = new AlertDialog
                 .Builder(getActivity())
                 .setView(dialogFragmentView)
                 .setCustomTitle(dialogTitle)
-//                .setMessage(dialogMessage)
                 .setNegativeButton(android.R.string.cancel, null)
-
                 .setPositiveButton(android.R.string.yes,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                removeAllFavoriteQuotePictures();
+                                removeAllFavoriteQuotePictures(); //Remove all of the Quote Pictures in the SQLiteDatabase of Favorited Quote Pictures
                             }
                         })
                 .create();
-
-
 
 
 
@@ -455,36 +413,25 @@ public class FavoriteQuotePicturesFragment extends Fragment{
             }
         });
 
-        alertDialog.show();
 
+        alertDialog.show(); //Show AlertDialog
     }
 
 
 
 
-
-
-
-
-
-
+    //Helper method - remove all of the Quote Pictures in the SQLiteDatabase of Favorited Quote Pictures
     private void removeAllFavoriteQuotePictures(){
 
+        int databaseIndex = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size(); //Index for database - equals to size of the database
+        Log.i(TAG, "databaseIndex: " + databaseIndex); //Log to Logcat
 
-        int databaseIndex = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures().size();
-        Log.i(TAG, "databaseIndex: " + databaseIndex);
 
-//        tempFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
-
+        //Index through the entire database
         while (databaseIndex > 0) {
 
-
-
-            List<QuotePicture> favoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures();
-
-            QuotePicture favoriteQuotePicture = favoriteQuotePictures.get(0);
-
-
+            List<QuotePicture> favoriteQuotePictures = FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePictures(); //Obtain List of all Favorited uote Pictures
+            QuotePicture favoriteQuotePicture = favoriteQuotePictures.get(0); //Obtain first Quote Picture in the list
 
 
             //Make sure that the picture files of all the Favorited Quote Pictures are also deleted. NOTE: Deleting them from the SQLiteDatabase just isn't enough.
@@ -494,102 +441,88 @@ public class FavoriteQuotePicturesFragment extends Fragment{
             Log.i(TAG, "Deleted file: " + favoriteQuotePicture.getQuotePictureBitmapFilePath() + favoriteQuotePicture.getId() + ".. State: " + deleteFile);
 
 
+            favoriteQuotePicture.setFavorite(false); //Set the Quote Picture mFaorite field to 'false'
+            FavoriteQuotePicturesManager.get(getActivity()).deleteFavoriteQuotePicture(favoriteQuotePicture); //Delete the Favorited Quote Picture form the database
 
 
-
-
-            favoriteQuotePicture.setFavorite(false);
-            FavoriteQuotePicturesManager.get(getActivity()).deleteFavoriteQuotePicture(favoriteQuotePicture);
-
-//            updateUI();
-
-
-            databaseIndex--;
+            databaseIndex--; //Decrement database index
         }
 
-        updateUI();
+        updateUI(); //Update the RecyclerView variables
 
 
 
-
+        //Display Snackbar to indicate that all Favorited Quote Pictures have been removed
         Snackbar snackbar = Snackbar
                 .make(mFavoriteQuotePicturesRecyclerView, Html.fromHtml("<font color=\"#ffffff\">All Quote Pictures removed from Favorites\"</font>"), Snackbar.LENGTH_LONG);
-
 
         View snackBarView = snackbar.getView();
         snackBarView.setMinimumHeight(150);
         snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
 
         snackbar.show();
-
-
-
     }
 
 
 
 
-
-
-
-
-
+    //Override onStart() fragment lifecycle callback method
     @Override
     public void onStart(){
         super.onStart();
-
         updateUI(); //Update the UI in case a Quote Picture has been "un-favorited" in the FavoriteqQuotePictureDetailFragment, and then the user returns to this fragment with a back button
-
-        Log.i(TAG, "onStart() called");
+        Log.i(TAG, "onStart() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onResume() fragment lifecycle callback method
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "onResume() called");
+        Log.i(TAG, "onResume() called"); //Log to Logcat
     }
 
 
 
 
-
-
-
+    //Override onPause() fragment lifecycle callback method
     @Override
     public void onPause(){
         super.onPause();
 
+        //Try risky task - SnackBar.setAction(..) could throw NullPointerException
+        //IF the Snackbar that shows up when a Faovirted Quote is 'unfavorited', AND the user toggles away from the fragment... THEN... remove this Snackbar
         try{
-
             snackbar.setAction(null, null);
         }
         catch (NullPointerException npe){
             Log.e(TAG, "Hmmm");
         }
 
-
-        Log.i(TAG, "onPause() called");
-
-
+        Log.i(TAG, "onPause() called"); //Log to Logcat
     }
 
 
+
+
+
+    //Override onStop() fragment lifecycle callback method
     @Override
     public void onStop(){
         super.onStop();
-
-        Log.i(TAG, "onStop() called");
+        Log.i(TAG, "onStop() called"); //Log to Logcat
     }
 
 
 
+
+    //Override onDestroy() fragment lifecycle callback method
     @Override
     public void onDestroy(){
         super.onDestroy();
-
-        Log.i(TAG, "onDestroy() called");
+        Log.i(TAG, "onDestroy() called"); //Log to Logcat
     }
-
 
 }
