@@ -32,112 +32,85 @@ import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.FavoriteQuo
 import com.tieutech.android.quotespire.ActivitiesAndFragments.Models.Quote;
 import com.tieutech.android.quotespire.R;
 
-
-
 import java.util.List;
 
+
+//Fragment for displaying Favorited Quotes
 public class FavoriteQuotesFragment extends Fragment {
 
 
-    //Log for Logcat
-    private final String TAG = "FavoriteQuotesFragment";
+    //================= INSTANCE VARIABLES ==============================================================
+    private final String TAG = "FavoriteQuotesFragment"; //Log for Logcat
 
+    //RecyclerView variables
     private RecyclerView mFavoriteQuotesRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-
     private FavoriteQuotesAdapter mFavoriteQuotesAdapter;
     private FavoriteQuotesViewHolder mFavoriteQuotesViewHolder;
 
-
-    private TextView mNoFavoriteQuotesText;
-
+    private TextView mNoFavoriteQuotesText; //TextView to indicate if no Quotes are favorited
 
 
 
+
+    //================= METHODS ===========================================================================
+
+    //Override onAttach(..) fragment lifecycle callback method
     @Override
     public void onAttach(Activity activity){
         super.onAttach(activity);
-
-        Log.i(TAG, "onAttach() called");
-
+        Log.i(TAG, "onAttach() called"); //Log in Logcat
     }
 
 
+
+
+    //Override onCreate(..) fragment lifecycle callback method
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-
-        Log.i(TAG, "onCreate() called");
-
-
-
-
-        setHasOptionsMenu(true);
+        Log.i(TAG, "onCreate() called"); //Log in Logcat
+        setHasOptionsMenu(true); //Declare that the fragme3nt has an options menu
     }
 
 
 
 
-    //Override the onCreateView(..) fragment lifecycle callback method
+    //Override onCreateView(..) fragment lifecycle callback method
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
 
-        //Log in Logcat
-        Log.i(TAG, "onCreateView(..) called");
+        Log.i(TAG, "onCreateView(..) called"); //Log in Logcat
 
+        View view = layoutInflater.inflate(R.layout.fragment_favorite_quotes, viewGroup, false); //Assign View variable to layout resource file
 
-        View view = layoutInflater.inflate(R.layout.fragment_favorite_quotes, viewGroup, false);
-
-
-
-
+        //Assign RecyclerView variables to associated Views
         mFavoriteQuotesRecyclerView = (RecyclerView) view.findViewById(R.id.favorite_quotes_recycler_view);
-        mNoFavoriteQuotesText = (TextView) view.findViewById(R.id.no_favorite_quotes_text);
-
-
-
-
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
-        mLinearLayoutManager.setReverseLayout(true);
-        mLinearLayoutManager.setStackFromEnd(true);
-
-
+        mLinearLayoutManager.setReverseLayout(true); //Reverse list order so that NEWER list items are at the TOP
+        mLinearLayoutManager.setStackFromEnd(true); //Reverse list order so that NEWER list items are at the TOP
         mFavoriteQuotesRecyclerView.setLayoutManager(mLinearLayoutManager);
-//        mFavoriteQuotesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mNoFavoriteQuotesText = (TextView) view.findViewById(R.id.no_favorite_quotes_text); //Assign TextView variable
 
 
+        getActivity().setTitle("Favorites"); //Set title of the (swipe tab) Fragment
 
 
-
-
-
-        getActivity().setTitle("Favorites");
-
-
-
+        //If there ARE Quotes in the Favorite Quots SQLite Database
         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
-            mNoFavoriteQuotesText.setVisibility(View.GONE);
+            mNoFavoriteQuotesText.setVisibility(View.GONE); //Remove the TextView indicating that there are no Quotes Favorited
         }
+        //If there are NO Quotes in the Favorite Quots SQLite Database
         else{
-            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
+            mNoFavoriteQuotesText.setVisibility(View.VISIBLE); //Show the TextView indicating that there are no Quotes Favorited
         }
 
+        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes(); //Obtain all Favorited Quotes from SQLiteDatabase of Favorite Quotes
 
-
-        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
-        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
-
-
-
-
-//        updateUI();
-
-
-
-
+        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes); //Set RecyclerView-Adapter to the Favorite Quotes
+        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter); //Set the RecyclerView to the RecyclerView-Adapter
 
         return view;
     }
@@ -145,291 +118,213 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-
-
+    //Helper method - called to update the UI - called every time a Favorite icon is pressed (to remove a Quote) OR when the "Remove All" options menu icon is pressed
     public void updateUI(){
-
-
 
         //Refresh the options menu every time a list item is added/removed, so we could re-evaluate whether the menu item "Remove all" is still appropriate
         getActivity().invalidateOptionsMenu();
 
 
-
+        //If there ARE Quotes in the Favorite Quots SQLite Database
         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
-            mNoFavoriteQuotesText.setVisibility(View.GONE);
+            mNoFavoriteQuotesText.setVisibility(View.GONE); //Remove the TextView indicating that there are no Quotes Favorited
         }
+        //If there are NO Quotes in the Favorite Quots SQLite Database
         else{
-            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
+            mNoFavoriteQuotesText.setVisibility(View.VISIBLE); //Show the TextView indicating that there are no Quotes Favorited
         }
 
+        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();  //Obtain all Favorited Quotes from SQLiteDatabase of Favorite Quotes
 
-        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
-//
-//        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-////
-//        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
-
-
-
-
-
-
-
-
-
-
-//        if (mFavoriteQuotesAdapter == null){
-//
-//            Log.i(TAG, "No Adapter");
-//
-//            mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-//
-//            mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter); //Resets the RecyclerView
-//        }
-//        else{
-//
-//
-            Log.i(TAG, "Adapter exists");
-
-            mFavoriteQuotesAdapter.setFavoriteQuotes(mFavoriteQuotes);
-//            mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-
-            mFavoriteQuotesAdapter.notifyDataSetChanged();
-//
-//        }
-
-
+        mFavoriteQuotesAdapter.setFavoriteQuotes(mFavoriteQuotes); //Set RecyclerView-Adapter to the Favorite Quotes
+        mFavoriteQuotesAdapter.notifyDataSetChanged(); //Set the RecyclerView to the RecyclerView-Adapter
     }
 
 
 
 
-
+    //Adapter for RecyclerView (RecyclerView-Adapter)
     private class FavoriteQuotesAdapter extends RecyclerView.Adapter<FavoriteQuotesViewHolder>{
 
-
-        private List<Quote> mFavoriteQuotes;
-
+        private List<Quote> mFavoriteQuotes; //List of Favorite Quotes
 
 
+        //Constructor
         public FavoriteQuotesAdapter(List<Quote> favoriteQuotes){
-            mFavoriteQuotes = favoriteQuotes;
-
-            Log.i(TAG, "ADAPTER - mFavoriteQuotes: " + mFavoriteQuotes);
-
+            mFavoriteQuotes = favoriteQuotes; //Stash the Favorite Quotes parameter to the instance variable
+            Log.i(TAG, "ADAPTER - mFavoriteQuotes: " + mFavoriteQuotes); //Log to Logcat
         }
 
+
+        //Override getItemCount() method
         @Override
         public int getItemCount(){
-            return mFavoriteQuotes.size();
+            return mFavoriteQuotes.size(); //Size of the List of Favorite Quotes
         }
 
 
+        //Override onCreateViewHolder(..) method
         @Override
         public FavoriteQuotesViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 
-            View view = layoutInflater.inflate(R.layout.list_item_favorite_quote, viewGroup, false);
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Instantiate LayoutInflater
+            View view = layoutInflater.inflate(R.layout.list_item_favorite_quote, viewGroup, false); //Inflate the Layout of the ViewHolder (i.e. list item)
+            mFavoriteQuotesViewHolder = new FavoriteQuotesViewHolder(view); //Instantiate the ViewHolder object with its view
 
-
-            mFavoriteQuotesViewHolder = new FavoriteQuotesViewHolder(view);
-
-
-            return mFavoriteQuotesViewHolder;
+            return mFavoriteQuotesViewHolder; //Return ViewHolder
         }
 
 
+        //Override onBindViewHolder(..) method
         @Override
         public void onBindViewHolder(FavoriteQuotesViewHolder favoriteQuotesViewHolder, int position){
-            Quote favoriteQuote = mFavoriteQuotes.get(position);
-            favoriteQuotesViewHolder.bind(favoriteQuote);
 
-            favoriteQuotesViewHolder.mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+            Quote favoriteQuote = mFavoriteQuotes.get(position); //Obtain Quote to be binded to ViewHolder
+            favoriteQuotesViewHolder.bind(favoriteQuote); //Bind Quote to ViewHolder
 
-            Log.i(TAG, "ADAPTER - favoriteQuote: " + favoriteQuote.getQuote());
+            favoriteQuotesViewHolder.mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on); //Set the ViewHolder Favorited icon to "on"
+
+            Log.i(TAG, "ADAPTER - favoriteQuote: " + favoriteQuote.getQuote()); //Log Qutoe to Logcat
         }
 
 
-
+        //Set the List of Favorite Quotes to the Adapter
         public void setFavoriteQuotes(List<Quote> favoriteQuotes){
-            mFavoriteQuotes = favoriteQuotes;
+            mFavoriteQuotes = favoriteQuotes; //Stash List parameter to instance variable
         }
 
     }
 
 
 
-
-
+    //Snackbar ref. variables relating to removing Quotes from the SQLiteDatabase of Favorited Quotes
     private Snackbar snackbar;
     private Snackbar snackbar1;
 
 
-
-
-
-
-
-
-
+    //ViewHolder for RecyclerView (RecyclerView-ViewHolder)
     private class FavoriteQuotesViewHolder extends RecyclerView.ViewHolder{
 
+        public Quote mFavoriteQuote; //Quote (that is binded to the ViewHolder)
 
-        public Quote mFavoriteQuote;
-
-        private LinearLayout mFavoriteQuoteBubbleLayout;
-
-        private TextView mFavoriteQuoteAuthorName;
-
-        private CheckBox mFavoriteQuoteFavoriteIcon;
-
-        private Button mFavoriteQuoteShareIcon;
-
-        private ProgressBar mFavoriteQuoteProgressBar;
-
-        private TextView mFavoriteQuoteQuote;
+        //View instance variables
+        private LinearLayout mFavoriteQuoteBubbleLayout; //Layout of ViewHolder
+        private TextView mFavoriteQuoteQuote; //TextView to display Quote
+        private TextView mFavoriteQuoteAuthorName; //TextView to display Author's name
+        private CheckBox mFavoriteQuoteFavoriteIcon; //Favorite Quote icon
+        private Button mFavoriteQuoteShareIcon; //Share icon
+        private ProgressBar mFavoriteQuoteProgressBar; //Progress Bar
 
 
 
+        //Constructor
         public FavoriteQuotesViewHolder(View view){
             super(view);
 
+            //Assign View instance variables to associated resource IDs
             mFavoriteQuoteBubbleLayout = (LinearLayout) view.findViewById(R.id.favorite_quote_category_bubble_layout);
-
             mFavoriteQuoteAuthorName = (TextView) view.findViewById(R.id.favorite_quote_author_name);
-
             mFavoriteQuoteFavoriteIcon = (CheckBox) view.findViewById(R.id.favorite_quote_favorite_icon);
-
             mFavoriteQuoteShareIcon = (Button) view.findViewById(R.id.favorite_quote_share_icon);
-
             mFavoriteQuoteQuote = (TextView) view.findViewById(R.id.favorite_quote_quote);
 
 
-
-
-//            mFavoriteQuoteBubbleLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.rectangle_round_edges));
-
-
-//            if (mFavoriteQuote.isFavorite() == true){
-//                mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-//            }
-//            else{
-//                mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-//            }
+            mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on); //Set drawable Favorite Icon to "on"
+            mFavoriteQuoteFavoriteIcon.setChecked(true); //Set Favorite Icon to 'checked'
 
 
 
-            mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-
-            mFavoriteQuoteFavoriteIcon.setChecked(true);
-
-
-
-
-
-
+            //Set listener for Favorite Icon
             mFavoriteQuoteFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+                //Override onCheckedChanged(..) method
                 @Override
                 public void onCheckedChanged(final CompoundButton compoundButton, boolean isChecked) {
-//                    mFavoriteQuote.setFavorite(false);
-                    //mFavoriteQuote.setFavorite(isChecked);
+
+                    //Set drawable of the Favorite Icon based on whether it is in the SQLiteDatabase of Favorited Quotes
+                    // NOTE: If it is a Favorited Quote, then IT must be "on" anyway. This line is redundant
                     compoundButton.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
-
+                    //If the Favorite Icon is 'unchecked' (... then remove the Quote from the Favorited Quotes SQLiteDatabase, and from the RecyclerView List)
                     if (isChecked == false){
 
-
-                        final Quote favoriteQuote = mFavoriteQuote;
-
-                        mFavoriteQuote.setFavorite(false);
-                        FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mFavoriteQuote);
-                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mFavoriteQuote);
+                        final Quote favoriteQuote = mFavoriteQuote; //Assign instance variable to local variable
 
 
+                        mFavoriteQuote.setFavorite(false); //Set the Favorited Quote's Favorite member variable to 'false'
+                        FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mFavoriteQuote); //Remove the Favorited Quote from the Favorited Quotes SQLiteDatabase
+                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mFavoriteQuote); //Update the Favorited Quotes SQLiteDatabase
 
 
+                        //If the Favorited Quote DOES NOT exist in the SQLiteDatabase of Favorited Quotes (as it has just been removed)
+                        // ... then.. Display a Snackbar to allow user to "UNDO" the removal of this Favorited Quote (i.e. re-add it to SQLiteDatabase of Favorited Quotes)
                         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mFavoriteQuote.getId()) == null){
-                            compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
+
+                            compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_off); //Change the Favorite Icon drawable to "off"
 
 
+                            final Handler handler = new Handler(); //Create a HandlerThread to display the Snackbar to allow the user to "UNDO" the removal of this Favorited Quote
 
-                            final Handler handler = new Handler();
+                            //Run the HandlerThread
                             handler.postDelayed(new Runnable() {
-                                //What to do AFTER the 300ms delay
+
+                                //What to do AFTER the 100ms delay
                                 @Override
                                 public void run() {
-                                    updateUI();
+
+                                    updateUI(); //Update the Fragment to take into account the fact that the Favorited Quote has been removed
+
+                                    //Create a Snackar to allow the user to "UNDO" the removal of the Favorited Quote
                                     snackbar = Snackbar
-                                            .make(mFavoriteQuotesRecyclerView, Html.fromHtml("<font color=\"#ffffff\">Quote has been removed from Favorites</font>"), Snackbar.LENGTH_LONG)
+                                            .make(mFavoriteQuotesRecyclerView, Html.fromHtml("<font color=\"#ffffff\">Quote has been removed from Favorites</font>"), Snackbar.LENGTH_LONG) //Make the Snackbar
 
-
+                                            //Set the "UNDO" action button for the SnackBar
                                             .setAction("UNDO", new View.OnClickListener() {
+
+                                                //Override onClick(..) method to set listener for "UNCO" action button
                                                 @Override
                                                 public void onClick(View view) {
-                                                    snackbar1 = Snackbar.make(view, Html.fromHtml("<font color=\"#ffffff\">Quote has been re-added to Favorites!</font>"), Snackbar.LENGTH_LONG);
+                                                    snackbar1 = Snackbar.make(view, Html.fromHtml("<font color=\"#ffffff\">Quote has been re-added to Favorites!</font>"), Snackbar.LENGTH_LONG); //Make new Snackbar
 
-
+                                                    //Configure View of the 'response' Snackbar
                                                     View snackBarActionView = snackbar1.getView();
                                                     snackBarActionView.setMinimumHeight(150);
                                                     snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
 
-                                                    snackbar1.show();
+                                                    snackbar1.show(); //Show the 'response' Snackbar
 
+                                                    mFavoriteQuote.setFavorite(true); //Set drawable of the  Favorite Icon to "on"
+                                                    FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(favoriteQuote); //Add the Quote back to the SQliteDatabase of Favorited Quotes
 
-                                                    mFavoriteQuote.setFavorite(true);
-                                                    FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(favoriteQuote);
-
-//                                                    mFavoriteQuote.setFavorite(true);
-//                                                    mFavoriteQuoteFavoriteIcon.setChecked(true);
-                                                    compoundButton.setChecked(true);
-                                                    //Log.i(TAG, "UNDO called");
-//                                                    bind(mFavoriteQuote);
-//                                                    updateUI();
-
-
-
+                                                    compoundButton.setChecked(true); //Set the Favorite Icon to 'checked'
                                                 }
                                             });
 
-
+                                    //Configure View of the 'response' Snackbar
                                     View snackBarView = snackbar.getView();
                                     snackBarView.setMinimumHeight(150);
                                     snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
-
                                     snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarUndoAction));
 
-                                    snackbar.show();
+                                    snackbar.show(); //Show the Snackbar
                                 }
-                            }, 100);
+                            }, 100); //Set delay of the Handler to 100ms (i.e. the Handler ONLY RUNS 100ms AFTER the Favorite Icon having been 'unchecked')
                         }
                     }
 
-
+                    //If the Favorite Icon is 'checked' (this block is redundant, since all of the Quotes in the RecyclerView already have their Favorite Icons 'checked')
                     if (isChecked == true){
-                        //                        bind(mFavoriteQuote);
-                        mFavoriteQuote.setFavorite(true);
-                        compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
 
-//                        compoundButton.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-//                        Log.i(TAG, "HELOOOOOOOOOOOOOO " + Boolean.toString(mFavoriteQuote.isFavorite()));
+                        mFavoriteQuote.setFavorite(true); //Set mFavorite member variable of the Quote to 'true'
+                        compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_on); //Set drawable of the Favorite Icon to "on"
 
-                        updateUI();
-                        compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-
-
-
+                        updateUI(); //Update the RecyclerView List
+                        compoundButton.setButtonDrawable(R.drawable.ic_imageview_favorite_on); //Set drawable of the Favorite Icon to "on"
                     }
-
-
-
 
                 }
             });
-
-
-
 
 
 
