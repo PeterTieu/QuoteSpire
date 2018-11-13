@@ -70,7 +70,7 @@ public class FavoriteQuotesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate() called"); //Log in Logcat
-        setHasOptionsMenu(true); //Declare that the fragme3nt has an options menu
+        setHasOptionsMenu(true); //Declare that the fragment has an options menu
     }
 
 
@@ -98,11 +98,11 @@ public class FavoriteQuotesFragment extends Fragment {
         getActivity().setTitle("Favorites"); //Set title of the (swipe tab) Fragment
 
 
-        //If there ARE Quotes in the Favorite Quots SQLite Database
+        //If there ARE Quotes in the Favorite Quotes SQLiteDatabase
         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
             mNoFavoriteQuotesText.setVisibility(View.GONE); //Remove the TextView indicating that there are no Quotes Favorited
         }
-        //If there are NO Quotes in the Favorite Quots SQLite Database
+        //If there are NO Quotes in the Favorite Quotes SQLiteDatabase
         else{
             mNoFavoriteQuotesText.setVisibility(View.VISIBLE); //Show the TextView indicating that there are no Quotes Favorited
         }
@@ -328,102 +328,71 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-
-
+            //Set listener for Share Icon
             mFavoriteQuoteShareIcon.setOnClickListener(new View.OnClickListener(){
 
+                //Override onClick(..) method
                 @Override
                 public void onClick(View view){
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
-                    shareIntent.setType("text/plain");
-
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Favorite Quote");
-
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, getFavoriteQuoteShareString());
-
-                    shareIntent = Intent.createChooser(shareIntent, "Share Quote via");
-
-                    startActivity(shareIntent);
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND); //Create explicit Intent with SEND action
+                    shareIntent.setType("text/plain"); //Set Intent type to "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Favorite Quote"); //Set Intent subject
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getFavoriteQuoteShareString()); //Set Intent text to the Quote and Author
+                    shareIntent = Intent.createChooser(shareIntent, "Share Quote via"); //Set Intent chooser title
+                    startActivity(shareIntent); //Start Intent
                 }
-
             });
-
-
         }
 
 
 
-
-
-
-        //TODO: After releasing the app and upon releasing the next revision, add the URL string to the app on the Google Play store
-        //TODO: ...at the bottom of the Share string!
+        //Helper method - the text (to be used by the Share Intent) to include the Quote and the Author
         private String getFavoriteQuoteShareString(){
-            String favoriteQuoteQuoteString = "\"" + mFavoriteQuote.getQuote() + "\"";
-
-            String quoteOfTheDayQuoteAuthorString = " - " + mFavoriteQuote.getAuthor();
-
-            return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
+            String favoriteQuoteQuoteString = "\"" + mFavoriteQuote.getQuote() + "\""; //Quote
+            String quoteOfTheDayQuoteAuthorString = " - " + mFavoriteQuote.getAuthor(); //Author
+            return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString; //Return String including Quote and Author
         }
 
 
 
-
+        //Bind the Quote to the ViewHolder
         public void bind(Quote favoriteQuote){
 
-            mFavoriteQuote = favoriteQuote;
+            mFavoriteQuote = favoriteQuote; //Stash the parameter variable to the instance variable
+            mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on); //Set drawable of the Favorite Icon to "on"
 
-            mFavoriteQuoteFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
+            Log.i(TAG, "VIEWHOLDER - mFavoriteQuote: " + mFavoriteQuote.getQuote()); //Log Quote to the Logcat
 
-
-            Log.i(TAG, "VIEWHOLDER - mFavoriteQuote: " + mFavoriteQuote.getQuote());
-
-//            if (mFavoriteQuote.getQuote() != null){
-//            }
-
-//            mFavoriteQuoteAuthorName.setText(mFavoriteQuote.getAuthor());
-
+            //If the Author does NOT exist
             if (mFavoriteQuote.getAuthor().length() == 0){
-                mFavoriteQuoteAuthorName.setText("* No Author *");
+                mFavoriteQuoteAuthorName.setText("* No Author *"); //Indicate that there is no Author in the Author TextView
                 mFavoriteQuoteAuthorName.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
             }
+            //If the Author EXISTS
             else{
-                mFavoriteQuoteAuthorName.setText(mFavoriteQuote.getAuthor());
+                mFavoriteQuoteAuthorName.setText(mFavoriteQuote.getAuthor()); //Display the name of the Author in the Author TextView
                 mFavoriteQuoteAuthorName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
             }
 
 
+            mFavoriteQuoteFavoriteIcon.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off); //Set Favorite button drawable to whether it is Favorited or not
 
 
-
-            mFavoriteQuoteFavoriteIcon.setButtonDrawable(mFavoriteQuote.isFavorite() ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
-
-//            mFavoriteQuoteShareIcon
-
-
-//            mFavoriteQuoteQuote.setText("\"" + mFavoriteQuote.getQuote() + "\"");
-
-
+            //If the Quote does NOT exist
             if (mFavoriteQuote.getQuote().length() == 0){
-                mFavoriteQuoteQuote.setText("* No Quote Text *");
+                mFavoriteQuoteQuote.setText("* No Quote Text *"); //Indicate that there is no Quote in the Quote TextView
                 mFavoriteQuoteQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
             }
+            //If the Quote EXISTS
             else{
-                mFavoriteQuoteQuote.setText("\"" + mFavoriteQuote.getQuote() + "\"");
+                mFavoriteQuoteQuote.setText("\"" + mFavoriteQuote.getQuote() + "\""); //Display the Quote in the Quote TextView
                 mFavoriteQuoteQuote.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
             }
 
         }
 
-
-
-
-
     }
-
-
-
 
 
 
@@ -434,13 +403,11 @@ public class FavoriteQuotesFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
         super.onCreateOptionsMenu(menu, menuInflater);
 
-        //Log lifecycle callback
-        Log.i(TAG, "onCreateOptionsMenu(..) called");
+        Log.i(TAG, "onCreateOptionsMenu(..) called"); //Log lifecycle callback
 
         //If there are one or more FavoriteQuotes in the list (i.e. one or more list items)
         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0) {
-            //Inflate a menu hierarchy from specified resource
-            menuInflater.inflate(R.menu.fragment_favorite_quotes, menu);
+            menuInflater.inflate(R.menu.fragment_favorite_quotes, menu); //Inflate a menu hierarchy from specified resource
         }
     }
 
@@ -451,18 +418,14 @@ public class FavoriteQuotesFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
-        //Log lifecycle callback
-        Log.i(TAG, "onOptionsItemsSelected(..) called");
+        Log.i(TAG, "onOptionsItemsSelected(..) called"); //Log lifecycle callback
 
         //Check through all menuItems
         switch(menuItem.getItemId()){
 
             //Check the "New Pix" menu item
             case (R.id.remove_all_favorite_quotes):
-
-
-                removeAllFavoriteQuotesConfirmationDialog();
-
+                removeAllFavoriteQuotesConfirmationDialog(); //Display Confirmation AlertDialog to remove all Favorite Quotes
                 return true;
 
             default:
@@ -473,17 +436,12 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-
-
-
+    //Helper method - Display Confirmation AlertDialog to remove all Favorite Quotes
     private void removeAllFavoriteQuotesConfirmationDialog(){
 
+        View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_remove_all_favorite_quotes_confirmation, null); //Inflate View for AlertDialog
 
-
-        View dialogFragmentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_remove_all_favorite_quotes_confirmation, null);
-
-        TextView removeAllFavoriteQuotesConfirmationDialogFragmenMessage = (TextView) dialogFragmentView.findViewById(R.id.dialog_fragment_remove_all_favorite_quotes_confirmation_message);
-
+        TextView removeAllFavoriteQuotesConfirmationDialogFragmenMessage = (TextView) dialogFragmentView.findViewById(R.id.dialog_fragment_remove_all_favorite_quotes_confirmation_message); //Assign TextView ref. variable to associated resource ID
 
 
         //Set-up custom title to display in the dialog
@@ -495,48 +453,34 @@ public class FavoriteQuotesFragment extends Fragment {
         dialogTitle.setTextColor(getResources().getColor(R.color.dialogFragmentTitleText)); //Set curentDescriptionEditTextString color
         dialogTitle.setBackgroundColor(getResources().getColor(R.color.dialogFragmentTitleBackground)); //Set curentDescriptionEditTextString background color
 
-        int favoriteQuotesDatabaseSize = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size();
 
+        int favoriteQuotesDatabaseSize = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size(); //Siz of the SQLiteDatabase of Favorited Quotes
 
-//        String dialogMessage = null;
-//        if (favoriteQuotesDatabaseSize == 1){
-//            dialogMessage = "Are you sure you want to remove this Quote from Favorites?";
-//        }
-//        else if (favoriteQuotesDatabaseSize == 2){
-//            dialogMessage = "Are you sure you want to remove these 2 Quotes from Favorites?";
-//        }
-//        else if (favoriteQuotesDatabaseSize > 1){
-//            dialogMessage = "Are you sure you want to remove all " + favoriteQuotesDatabaseSize + " Quotes from Favorites?";
-//        }
-
-
-
-
+        //If there is ONE Favorited Quote
         if (favoriteQuotesDatabaseSize == 1){
             removeAllFavoriteQuotesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove this Quote from Favorites?");
         }
+        //If there are TWO Favorited Quotes
         else if (favoriteQuotesDatabaseSize == 2){
             removeAllFavoriteQuotesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove these 2 Quotes from Favorites?");
         }
+        //If there are MORE THAN two Favorited Quotes
         else if (favoriteQuotesDatabaseSize > 1){
             removeAllFavoriteQuotesConfirmationDialogFragmenMessage.setText("Are you sure you want to remove all " + favoriteQuotesDatabaseSize + " Quotes from Favorites?");
         }
 
 
-//        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_remove_all_favorite_quotes, null);
-
+        //Display the AlertDialog
         final AlertDialog alertDialog = new AlertDialog
-                .Builder(getActivity())
-                .setView(dialogFragmentView)
-                .setCustomTitle(dialogTitle)
-//                .setMessage(dialogMessage)
-                .setNegativeButton(android.R.string.cancel, null)
-
-                .setPositiveButton(android.R.string.yes,
+                .Builder(getActivity()) //Call Builder
+                .setView(dialogFragmentView) //Set View
+                .setCustomTitle(dialogTitle) //Set Title
+                .setNegativeButton(android.R.string.cancel, null) //Set NEGATIVE button and listener
+                .setPositiveButton(android.R.string.yes, //Set POSITIVE button and listener
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                removeAllFavoriteQuotes();
+                                removeAllFavoriteQuotes(); //Remove all Favorite Quotes
                             }
                         })
                 .create();
@@ -554,15 +498,8 @@ public class FavoriteQuotesFragment extends Fragment {
 
 
 
-        alertDialog.show();
-
-
-
-
-
+        alertDialog.show(); //Show AlertDialog
     }
-
-
 
 
 
@@ -571,167 +508,97 @@ public class FavoriteQuotesFragment extends Fragment {
     private List<Quote> tempFavoriteQuotes;
 
 
-
+    //Helper method - Remove all Favorite Quotes
     private void removeAllFavoriteQuotes(){
 
 
-        int databaseIndex = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size();
+        int databaseIndex = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size(); //Int for indexing through the SQLiteDatabase of Favorited Quotes
 
-//        tempFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
-
+        //Index through the SQLiteDatabase of Favorited Quotes and remove one Favorited Quote at a time
         while (databaseIndex > 0) {
 
+            List<Quote> favoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes(); //Obtain List of Favorited Quotes from the SQLiteDatabase
 
+            Quote favoriteQuote = favoriteQuotes.get(0); //Obtain the last Quote in the List
 
-            List<Quote> favoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
+            favoriteQuote.setFavorite(false); //Set the Favorited Quote to 'false'
+            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(favoriteQuote); //Remove the Favorited Quote from the SQLiteDatabse of Favorited Quotes
 
-            Quote favoriteQuote = favoriteQuotes.get(0);
-
-            favoriteQuote.setFavorite(false);
-            FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(favoriteQuote);
-
-//            updateUI();
-
-
-            databaseIndex--;
-
-
-
+            databaseIndex--; //Decrement the index
         }
 
-        updateUI();
+        updateUI(); //Update the Fragment to account for the removal of all Favorited Quotes
 
 
-
-
-
+        //Display Nsackbar indicating all Quotes have been removed from Favorited Quotes
         Snackbar snackbar = Snackbar.make(mFavoriteQuotesRecyclerView, Html.fromHtml("<font color=\"#ffffff\">All Quotes removed from Favorites!</font>"), Snackbar.LENGTH_LONG);
 
-//                .setAction("UNDO", new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//
-//                        int tempDatabaseIndex = tempFavoriteQuotes.size();
-//
-//
-//                        while (tempDatabaseIndex > 0){
-//
-//                            Quote tempQuote = tempFavoriteQuotes.get(0);
-//
-//                            FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(tempQuote);
-//
-//                            tempDatabaseIndex--;
-//                        }
-//
-//                        mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
-//
-//                        updateUI();
-//
-//
-//
-//
-//                        Snackbar snackbar1 = Snackbar.make(view, "All Favorited Quote re-added to Favorites!", Snackbar.LENGTH_SHORT);
-//
-//                        View snackBarActionView = snackbar1.getView();
-//                        snackBarActionView.setMinimumHeight(150);
-//                        snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
-//
-//                        snackbar1.show();
-//
-//                    }
-//                });
-
+        //Configure View for Snackbar
         View snackBarView = snackbar.getView();
         snackBarView.setMinimumHeight(150);
         snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
 
-
-        snackbar.show();
-
-
-
+        snackbar.show(); //Show the Snackbar
     }
 
 
 
 
-
-
-
-
-
+    //Override onStart() fragment lifecycle callback method
     @Override
     public void onStart(){
         super.onStart();
-
-        Log.i(TAG, "onStart() called");
+        Log.i(TAG, "onStart() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onResume() fragment lifecycle callback method
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "onResume() called");
-
-
-
-
-//        if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes().size() > 0){
-//            mNoFavoriteQuotesText.setVisibility(View.GONE);
-//        }
-//        else{
-//            mNoFavoriteQuotesText.setVisibility(View.VISIBLE);
-//        }
-//
-//
-//
-//        final List<Quote> mFavoriteQuotes = FavoriteQuotesManager.get(getActivity()).getFavoriteQuotes();
-//        mFavoriteQuotesAdapter = new FavoriteQuotesAdapter(mFavoriteQuotes);
-//        mFavoriteQuotesRecyclerView.setAdapter(mFavoriteQuotesAdapter);
+        Log.i(TAG, "onResume() called"); //Log to Logcat
     }
 
 
 
 
-
-
-
+    //Override onPause() fragment lifecycle callback method
     @Override
     public void onPause(){
         super.onPause();
 
+        //Try risky task - SnackBar.setAction(..) could throw NullPointerException
+        //IF the Snackbar that shows up when a Faovirted Quote is 'unfavorited', AND the user toggles away from the fragment... THEN... remove this Snackbar
         try{
-
-            snackbar.setAction(null, null);
+            snackbar.setAction(null, null); //Remove the Snackbar
         }
         catch (NullPointerException npe){
             Log.e(TAG, "Hmmm");
         }
 
-
-        Log.i(TAG, "onPause() called");
-
-
+        Log.i(TAG, "onPause() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onStop() fragment lifecycle callback method
     @Override
     public void onStop(){
         super.onStop();
-
         Log.i(TAG, "onStop() called");
     }
 
 
 
+
+    //Override onDestroy() fragment lifecycle callback method
     @Override
     public void onDestroy(){
         super.onDestroy();
-
-        Log.i(TAG, "onDestroy() called");
+        Log.i(TAG, "onDestroy() called"); //Log to Logcat
     }
-
-
 
 }
