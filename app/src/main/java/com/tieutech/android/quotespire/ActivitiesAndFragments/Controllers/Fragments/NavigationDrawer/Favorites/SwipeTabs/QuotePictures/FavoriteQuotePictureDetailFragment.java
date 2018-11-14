@@ -40,63 +40,59 @@ import java.io.IOException;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+
+//Fragment for displaying the detail view of a Quote Picture (from the Favorited Quote Pictures SQLiteDatabase)
+    //Called by FavoriteQuotePictureViewPagerActivity, which pages between the FavoriteQuotePictureDetailFragment fragments
 public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
-    private final static String TAG = "FavQPicFragment";
+    //================= INSTANCE VARIABLES ==============================================================
+
+    private final static String TAG = "FavQPicFragment"; //Log to Logcat
 
 
-    private QuotePicture mQuotePicture = new QuotePicture();
+    private QuotePicture mQuotePicture = new QuotePicture(); //Quote Picture to display
 
-    private String mQuotePictureBitmapFilePath;
-    private String mQuotePictureID;
-    private int mViewPagerPosition;
+    private String mQuotePictureBitmapFilePath; //Path to the Bitmap of the QuotePicture
+    private String mQuotePictureID; //Unique ID of the Quote Picture
+    private int mViewPagerPosition; //Position of the Quote Picture
 
-    private Bitmap mQuotePictureBitmap;
+    private Bitmap mQuotePictureBitmap; //Bitmap obtained from the Bitmap File Path of the Quote Picture (sent from the FavoriteQuotePictureViewPagerActivity
     private Drawable mQuotePictureDrawable;
 
-    private CheckBox mQuotePictureFavoriteIcon;
-    private Button mQuotePictureShareIcon;
-    private Button mQuotePictureDownloadIcon;
-    private ImageView mQuotePictureImageView;
-    private Button mQuotePicturePreviousButton;
-    private Button mQuotePictureNextButton;
+    //View variables
+    private CheckBox mQuotePictureFavoriteIcon; //Favorite Icon
+    private Button mQuotePictureShareIcon; //Share Icon
+    private Button mQuotePictureDownloadIcon; //Download picture Icon
+    private ImageView mQuotePictureImageView; //ImageView to display the Quote Picture
+    private Button mQuotePicturePreviousButton; //Previous Button to toggle to FavoriteQuotePictureDetailFragment in the ViewPagerActivity containing the previous Quote Picture
+    private Button mQuotePictureNextButton; //Next Button to toggle to FavoriteQuotePictureDetailFragment in the ViewPagerActivity containing the next Quote Picture
 
+    //Snackbars
     private Snackbar snackbar;
     private Snackbar snackbar1;
-
-
 
     private PhotoViewAttacher mPhotoViewAttacher; //Adds Zoom-Effect to ImageView
 
 
 
+
+    //================= METHODS ==============================================================
+
+    //Encapsulating constructor - called by FavoriteQuotePictureDetailFragment
     public static FavoriteQuotePictureDetailFragment newInstance(String quotePictureBitmapFilePath, String quotePictureID){
 
-        //Create argument-bundle to pass data to QuotePictureDetailFragment
-        Bundle argumentBundle = new Bundle();
+        Bundle argumentBundle = new Bundle(); //Create argument-bundle to pass data to QuotePictureDetailFragment
 
-//        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID_KEY, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
-//        argumentBundle.putByteArray(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY, quotePictureByteArray); //Add Quote Picture Byte Array (byte[]) to the argument-bundle
-
-        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH, quotePictureBitmapFilePath);
+        argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH, quotePictureBitmapFilePath); //Add File Path to the Bitmap of the Quote Picture
         argumentBundle.putString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID, quotePictureID); //Add Quote Picture ID (String) to the argument-bundle
 
-        //Create QuotePictureDetailFragment
-        FavoriteQuotePictureDetailFragment favoriteQuotePictureDetailFragment = new FavoriteQuotePictureDetailFragment();
+        FavoriteQuotePictureDetailFragment favoriteQuotePictureDetailFragment = new FavoriteQuotePictureDetailFragment(); //Create QuotePictureDetailFragment
 
-        //Link the argument-bundle to the QuotePictureDetailFragment object
-        favoriteQuotePictureDetailFragment.setArguments(argumentBundle);
+        favoriteQuotePictureDetailFragment.setArguments(argumentBundle); //Link the argument-bundle to the QuotePictureDetailFragment object
 
-        //Return the QuotePictureDetailFragment
-        return favoriteQuotePictureDetailFragment;
+        return favoriteQuotePictureDetailFragment; //Return the QuotePictureDetailFragment
     }
-
-
-
-
-
-
 
 
 
@@ -106,12 +102,8 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     public void onAttach(Context context){
         super.onAttach(context);
 
-        //Log to Logcat
-        Log.i(TAG, "onAttach(..) called");
-
-
+        Log.i(TAG, "onAttach(..) called"); //Log to Logcat
     }
-
 
 
 
@@ -121,90 +113,33 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     public void onCreate(Bundle onSaveInstanceState){
         super.onCreate(onSaveInstanceState);
 
-        //Log to Logcat
-        Log.i(TAG, "onCreate(..) called");
+        Log.i(TAG, "onCreate(..) called"); //Log to Logcat
 
         setRetainInstance(true); //Retain data even when the view has changed (i.e. screen rotation)
-
         setHasOptionsMenu(true); //Declare that there is an opeionts menu
 
 
         //If arguments passed to CategoryChooserFragment from CategoryChooserActivity exists
         if (getArguments() != null){
 
-//            Log.i(TAG, "ID: " + mQuotePicture.getId());
+            mQuotePictureBitmapFilePath = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH); //Obtain File Path to the Bitmap of the Quote Picture
+            mQuotePictureID = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID); //Obtain the unique ID of the Quote Picture
 
 
-//            mQuotePictureID = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID_KEY);
-//            mQuotePictureByteArray = getArguments().getByteArray(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BYTE_ARRAY_KEY);
-
-            mQuotePictureBitmapFilePath = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_BITMAP_FILE_PATH);
-            mQuotePictureID = getArguments().getString(FavoriteQuotePictureViewPagerActivity.QUOTE_PICTURE_ID);
-//            mViewPagerPosition = getArguments().getInt(FavoriteQuotePictureViewPagerActivity.VIEW_PAGER_POSITION);
-
-
-
-
-
-
-//            Log.i(TAG, "mQuotePicture.getQuotePictureBitmapByteArray(): " + mQuotePicture.getQuotePictureBitmapByteArray());
-
-
-            //Set ID and Bitmap for the mQuotePicture
-
-
+            //Set ID and Bitmap for the mQuotePicture (redundant, as they were already done)
             mQuotePicture.setQuotePictureBitmapFilePath(mQuotePictureBitmapFilePath);
             mQuotePicture.setId(mQuotePictureID);
 
-
             Log.i(TAG, "mQuotePicture.getID(): " + mQuotePicture.getId());
-
-
-
-//            FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(0);
-
-
-
-
-//            FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(FavoriteQuotePictureViewPagerActivity.sViewPager.getCurrentItem()+1);
-
-
-//            Log.i(TAG, "FavoriteQuotePictureViewPagerActivity.sViewPagerPositionSelected: " + FavoriteQuotePictureViewPagerActivity.sViewPager.getCurrentItem());
-
-
-
-
         }
 
 
-//        mCallbacks.scrollViewPagerForward();
-
-
-
-
-
-
-
-
-
-
-        //If permission for location tracking HAS been granted at runtime (by user)
+        //If permission for location tracking HAS NOT been granted at runtime (by user)
         if (hasWriteExternalStoragePermission() == false){
-            //Request (user) for storage permissions - as they are 'dangerous' permissions (and therefore must be requested)
-            requestPermissions(STORAGE_PERMISSIONS, REQUEST_CODE_FOR_STORAGE_PERMISSIONS);
+            requestPermissions(STORAGE_PERMISSIONS, REQUEST_CODE_FOR_STORAGE_PERMISSIONS); //Request (user) for storage permissions - as they are 'dangerous' permissions (and therefore must be requested)
         }
-
-
-
-//        //Declare that this fragment participates in populating menus
-//        setHasOptionsMenu(true);
-
-        //Reset options menu
-//        getActivity().invalidateOptionsMenu();
 
     }
-
-
 
 
 
@@ -217,19 +152,13 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-
-
-
-
-
-
     private static final String[] STORAGE_PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_CODE_FOR_STORAGE_PERMISSIONS = 1; //Request code to WRITE to external storage
 
 
 
 
-    //Check if STORAGE permissions have been granted at runtime (by user)
+    //Helper method - Check if STORAGE permissions have been granted at runtime (by user)
     private boolean hasWriteExternalStoragePermission(){
 
         //If permission is granted, result = PackageManager.PERMISSION_GRANTED (else, PackageManager.PERMISSION_DENIED).
@@ -248,34 +177,21 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         super.onCreateView(layoutInflater, viewGroup, savedInstanceState);
 
-        //Log lifecycle callback
-        Log.i(TAG, "onCreateView(..) called");
-
-
-        //Log lifecycle callback
-//        Log.i(TAG, "ID: " + mQuotePicture.getId());
-
-
+        Log.i(TAG, "onCreateView(..) called"); //Log lifecycle callback
 
 
         //Obtain View from the layout of the CategoryChooserFragment
         View view = layoutInflater.inflate(R.layout.fragment_favorite_quote_picture_detail, viewGroup, false);
 
+        //Assign View variables to the associated resource IDs
         mQuotePictureFavoriteIcon = (CheckBox) view.findViewById(R.id.favorite_quote_picture_detail_fragment_favorite_icon);
         mQuotePictureShareIcon = (Button) view.findViewById(R.id.favorite_quote_picture_detail_fragment_share_icon);
         mQuotePictureDownloadIcon = (Button) view.findViewById(R.id.favorite_quote_picture_detail_fragment_download_icon);
-
-
         mQuotePictureImageView = (ImageView) view.findViewById(R.id.favorite_quote_picture_detail_fragment_quote_image_view);
-
         mQuotePicturePreviousButton = (Button) view.findViewById(R.id.favorite_quote_picture_detail_fragment_previous_button);
         mQuotePictureNextButton = (Button) view.findViewById(R.id.favorite_quote_picture_detaill_fragment_next_button);
 
-
-
-
-
-
+        //Use the File Path of the Bitmap of the Quote Picture to obtain the Bitmap, and then set the mQuotePictureImageView to this Bitmap
         loadImageFromStorage(mQuotePicture.getQuotePictureBitmapFilePath(), mQuotePicture.getId());
 
         //Add zoom-effect to the ImageView
@@ -283,131 +199,102 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
         mPhotoViewAttacher.update();
 
 
-
-
-
+        //Set drawable for the Favorite Icon, based on whether or not the Quote Picture is in the Favorited Quote Pictures SQLiteDatabase
         mQuotePictureFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_quote_picture_favorite_off);
-
 
         //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
         if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePicture(mQuotePictureID) != null) {
-
-//            mRandomQuote.setFavorite(true);
             mQuotePictureFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_quote_picture_favorite_on);
-
         }
+        //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'inactive'
         if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePicture(mQuotePictureID) == null) {
-
-//            mRandomQuote.setFavorite(false);
             mQuotePictureFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_quote_picture_favorite_off);
-
         }
 
 
-
-
+        //Set listener for Favorite Icon
         mQuotePictureFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-
+                //Set Drawable based on 'checked' state of the Button
                 mQuotePictureFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_quote_picture_favorite_on: R.drawable.ic_imageview_quote_picture_favorite_off);
 
-
+                //If the Button is 'checked'
                 if (isChecked == true){
 
+                    //If the Quote Picture is in the database
                     if (FavoriteQuotePicturesManager.get(getActivity()).getFavoriteQuotePicture(mQuotePictureID) == null){
 
-                        String quotePictureID = mQuotePicture.getId();
-                        String quotePictureBitmapFilePath = saveToInternalStorage(mQuotePictureBitmap, quotePictureID);
-                        mQuotePicture.setQuotePictureBitmapFilePath(quotePictureBitmapFilePath);
-                        Log.i(TAG, "ID: " + mQuotePicture.getId());
-                        Log.i(TAG, "Quote Picture Bitmap path: " + mQuotePicture.getQuotePictureBitmapFilePath());
+                        String quotePictureID = mQuotePicture.getId(); //Get the IDE of the Quote Picture
+                        String quotePictureBitmapFilePath = saveToInternalStorage(mQuotePictureBitmap, quotePictureID); //Save the File Path of the Bitmap to the internal storage
+                        mQuotePicture.setQuotePictureBitmapFilePath(quotePictureBitmapFilePath); //Set the File Path to the mQuotePictureBitmapFilePath member variable of the Quote Picture
 
+                        Log.i(TAG, "ID: " + mQuotePicture.getId()); //Log to Logcat
+                        Log.i(TAG, "Quote Picture Bitmap path: " + mQuotePicture.getQuotePictureBitmapFilePath()); //Log to Logcat
 
-
-                        FavoriteQuotePicturesManager.get(getActivity()).addFavoriteQuotePicture(mQuotePicture);
-                        FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture);
-
+                        FavoriteQuotePicturesManager.get(getActivity()).addFavoriteQuotePicture(mQuotePicture); //Add the Quote Picture to the Favorited Quote Pictures SQLiteDatabase
+                        FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture); //Update the database
                     }
                     else{
                         //Do nothing
                     }
-
                 }
 
+                //If the Button is 'unchecked'
                 if (isChecked == false){
-                    FavoriteQuotePicturesManager.get(getActivity()).deleteFavoriteQuotePicture(mQuotePicture);
-                    FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture);
+                    FavoriteQuotePicturesManager.get(getActivity()).deleteFavoriteQuotePicture(mQuotePicture); //Remove the Quote Picture from the Favorited Quote Pictures SQLiteDatabase
+                    FavoriteQuotePicturesManager.get(getActivity()).updateFavoriteQuotePicturesDatabase(mQuotePicture); //Update the database
 
 
-
-
-
-
-
-
-
+                    //Create Handler to perform concurrent thread - to display Snackbar indicating that the Quote Picture has been removed from the database
                     final Handler handler = new Handler();
+
+                    //Perform Runnable after 100ms delay
                     handler.postDelayed(new Runnable() {
-                        //What to do AFTER the 300ms delay
+
                         @Override
                         public void run() {
+
+                            //Creat 'parent' Snackbar to indicate removal of Quote Picture from the database
                             snackbar = Snackbar
                                     .make(mQuotePictureImageView, Html.fromHtml("<font color=\"#ffffff\">Quote Picture has been removed from Favorites</font>"), Snackbar.LENGTH_LONG)
 
-
+                                    //Create "UNDO Snackbar and set a listener to it (i.e. Snackbar that is activated by pressing the "UNDO" button)
                                     .setAction("UNDO", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
+
+                                            //Create Snackbar to "UNDO" the action of removing the Quote Picture from the database
                                             snackbar1 = Snackbar.make(view, Html.fromHtml("<font color=\"#ffffff\">Quote Picture has been re-added to Favorites!</font>"), Snackbar.LENGTH_LONG);
 
-
+                                            //Configure Snackbar View
                                             View snackBarActionView = snackbar1.getView();
                                             snackBarActionView.setMinimumHeight(150);
                                             snackBarActionView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.light_teal));
 
-                                            snackbar1.show();
+                                            snackbar1.show(); //Show the 'action' Snackbar
 
+                                            FavoriteQuotePicturesManager.get(getActivity()).addFavoriteQuotePicture(mQuotePicture); //Re-add the Quote Picture to the database
 
-                                            FavoriteQuotePicturesManager.get(getActivity()).addFavoriteQuotePicture(mQuotePicture);
-
-//                                                    mFavoriteQuote.setFavorite(true);
-//                                                    mFavoriteQuoteFavoriteIcon.setChecked(true);
-                                            //Log.i(TAG, "UNDO called");
-//                                                    bind(mFavoriteQuote);
-//                                                    updateUI();
-
-                                            mQuotePictureFavoriteIcon.setChecked(true);
-
-
-
+                                            mQuotePictureFavoriteIcon.setChecked(true); //Set the Favorite Icon to 'checked'
                                         }
                                     });
 
-
+                            //Configure 'parent' Snackbar View
                             View snackBarView = snackbar.getView();
                             snackBarView.setMinimumHeight(150);
                             snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
-
                             snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackBarUndoAction));
 
-                            snackbar.show();
+                            snackbar.show(); //Show the 'parent' Snackbar
                         }
+
                     }, 100);
-
-
-
                 }
-
-
             }
         });
-
-
-
-
-
 
 
 
@@ -416,98 +303,61 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
             @Override
             public void onClick(View view){
-
-                //Save Quote Picture Bitmap as cache data in the FileProvider
-                Uri quotePictureBitmapURI = saveBitmap(mQuotePictureBitmap);
-
-                //Share the Quote Picture Bitmap
-                shareQuotePictureBitmap(quotePictureBitmapURI);
-
+                Uri quotePictureBitmapURI = saveBitmap(mQuotePictureBitmap); //Save Quote Picture Bitmap as cache data in the FileProvider
+                shareQuotePictureBitmap(quotePictureBitmapURI); //Share the Quote Picture Bitmap
             }
         });
 
 
 
-
-
-
+        //Set listener for Download Icon
         mQuotePictureDownloadIcon.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view){
+                String fileName = "quote_picture"; //Set string for filename
 
-
-                //Set string for filename
-                String fileName = "quote_picture";
-
-                //Insert image to Gallery. Also, return a URL String - If the image failed to be saved in Gallery, the URL would be null
+                //Save image to Gallery. Also, return a URL String - If the image failed to be saved in Gallery, the URL would be null
                 String savedImageUrl = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), mQuotePictureBitmap, fileName, "Quote Search");
 
                 //If the image file failed to be saved in Gallery
                 if (savedImageUrl == null) {
-                    Toast.makeText(getActivity(), "Unable to save Picture.\nCheck Storage Permissions", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Unable to save Picture.\nCheck Storage Permissions", Toast.LENGTH_LONG).show(); //Display toast for unsuccessful save
                 }
                 //If the image file is SUCCESSFULLY saved to Gallery
                 else {
-                    //Display toast for successful save
-                    Toast.makeText(getActivity(), "Picture saved to internal storage", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Picture saved to internal storage", Toast.LENGTH_LONG).show(); //Display toast for successful save
                 }
-
-
-
-
             }
         });
 
 
 
-
-
-
-
-
-
-
-
+        // For scrolling to PREVIOUS item
         mQuotePicturePreviousButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-
                 mQuotePicturePreviousButton.setEnabled(true);
-
-                FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(getNextPossibleItemIndex(-1), true);
-
-
+                FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(getNextPossibleItemIndex(-1), true); //Scroll to the next fragment hosted by the ViewPagerActivity
             }
         });
 
 
 
-
-
-
-        // For scrolling to next item
+        // For scrolling to NEXT item
         mQuotePictureNextButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(getNextPossibleItemIndex(1), true);
+                FavoriteQuotePictureViewPagerActivity.sViewPager.setCurrentItem(getNextPossibleItemIndex(1), true); //Scroll to the next fragment hosted by the ViewPagerActivity
             }
         });
 
 
-
-
-
-        setHasOptionsMenu(true);
-
-        getActivity().invalidateOptionsMenu();
-
-
-
-        getActivity().setTitle("Quote Picture");
-
+        setHasOptionsMenu(true); //Declare that the options menu will be available
+        getActivity().invalidateOptionsMenu(); //Update the options menu
+        getActivity().setTitle("Quote Picture"); //Set title of the fragment
 
         return view;
     }
@@ -515,8 +365,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-
-
+    //Helper method - obtain the previous/next fragment hosted by the ViewPagerActivity
     private int getNextPossibleItemIndex (int change) {
 
         int currentIndex = FavoriteQuotePictureViewPagerActivity.sViewPager.getCurrentItem();
@@ -532,8 +381,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-
-
+    //Helper method - use the File Path of the Bitmap of the Quote Picture to obtain the Bitmap
     private void loadImageFromStorage(String path, String quotePictureID) {
 
         try {
@@ -587,6 +435,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
+    //Helper method - save the File Path of the Bitmap to the internal storage
     /**
      * Saves the image as PNG to the app's cache directory.
      * @param quotePictureBitmap Bitmap to save.
@@ -612,6 +461,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
         } catch (IOException IOException) {
             Log.d(TAG, "IOException while trying to write file for sharing: " + IOException.getMessage());
         }
+
         return savedBitmapURI;
     }
 
@@ -634,25 +484,11 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     //Override onStart() fragment lifecycle callback method
     @Override
     public void onStart(){
         super.onStart();
-
-        //Log to Logcat
-        Log.i(TAG, "onStart() called");
+        Log.i(TAG, "onStart() called"); //Log to Logcat
     }
 
 
@@ -662,15 +498,8 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     @Override
     public void onResume(){
         super.onResume();
-
-        //Log to Logcat
-        Log.i(TAG, "onResume() called");
+        Log.i(TAG, "onResume() called"); //Log to Logcat
     }
-
-
-
-
-
 
 
 
@@ -679,7 +508,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     @Override
     public void onPause(){
         super.onPause();
-        Log.i(TAG, "onPause() called");
+        Log.i(TAG, "onPause() called"); //Log to Logcat
     }
 
 
@@ -689,7 +518,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     @Override
     public void onStop(){
         super.onStop();
-        Log.i(TAG, "onStop() called");
+        Log.i(TAG, "onStop() called"); //Log to Logcat
     }
 
 
@@ -698,7 +527,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        Log.i(TAG, "onDestroyView() called");
+        Log.i(TAG, "onDestroyView() called"); //Log to Logcat
     }
 
 
@@ -708,7 +537,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.i(TAG, "onDestroy() called");
+        Log.i(TAG, "onDestroy() called"); //Log to Logcat
     }
 
 
@@ -720,6 +549,7 @@ public class FavoriteQuotePictureDetailFragment extends Fragment{
         super.onDetach();
 
         //Log in Logcat
-        Log.i(TAG, "onDetach() called");
+        Log.i(TAG, "onDetach() called"); //Log to Logcat
     }
+
 }
