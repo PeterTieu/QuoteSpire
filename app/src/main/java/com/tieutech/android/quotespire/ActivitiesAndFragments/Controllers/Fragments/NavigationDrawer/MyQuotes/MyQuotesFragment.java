@@ -33,72 +33,55 @@ import com.tieutech.android.quotespire.R;
 
 import java.util.List;
 
+
+//Fragment for displaying all the Quotes created by the user - stored in the MyQuotes SQLiteDatabase
 public class MyQuotesFragment extends Fragment{
 
 
+    //================= INSTANCE VARIABLES ==============================================================
     private final String TAG = "MyQuotesFragment"; //Log for Logcat
 
+    //View variables
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerView mMyQuotesRecyclerView;
     private TextView mNoMyQuotesTextView;
-
     private MyQuotesAdapter mMyQuotesAdapter;
     private MyQuoteViewHolder mMyQuoteViewHolder;
 
 
-
-
-//    private List<Quote> mMyQuotesList = new ArrayList<>();
-//    private List<Quote> mMyQuotesList = MyQuotesManager.get(getContext()).
-
-
+    //Request code and identifier variables
     private static final int REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = 1;   //Request code for receiving results from dialog fragment to ADD MyQuote
     private static final String IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT = "AddNewMyQuoteDialogFragment"; //Identifier of AddMyQuoteDialogFragment
 
     private static final int REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT = 2; //Request code for receiving results from dialog on whether user confirmed REMOVE ALL of MyQuotes
     private static final String  IDENTIFIER_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT = "RemoveAllMyQuotesConfirmationDialogFragment"; //Identifier of RemoveAllMyQuotesConfirmationDialogFragment
 
-
     private static final int REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT = 3; //Request code for receiving results from dialog fragment to EDIT MyQuote
     private static final String IDENTIFIER_EDIT_MY_QUOTE_DIALOG_FRAGMENT = "EditMyQuoteDialogFragment"; //Identifier of EditMyQuoteDialogFragment
-
 
     private static final int REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = 4; //Request code for receiving boolean result on whether user confirmed DELETION of the Quote
     private static final String IDENTIFIER_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT = "DeleteMyQuoteConfrmationDialogFragment"; //Identifier of dialog fragment of RemoveMyQuoteConfirmationDialogFragment
 
 
 
+    //================= METHODS ==============================================================
 
-
-
-
-
-
-
-
-
-
+    //Override onAttach(..) fragment lifecycle callback method
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-
-        Log.i(TAG, "onAttach() called");
-
-
+        Log.i(TAG, "onAttach() called"); //Log to Logcat
     }
 
 
+    //Override onCreate(..) fragment lifecycle callback method
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate() called"); //Log to Logcat
 
-        Log.i(TAG, "onCreate() called");
-
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true); //Declare that the fragment has an option menu
     }
-
-
-
 
 
 
@@ -110,33 +93,23 @@ public class MyQuotesFragment extends Fragment{
 
         Log.i(TAG, "onCreateView(..) called"); //Log in Logcat
 
+        View view = layoutInflater.inflate(R.layout.fragment_my_quotes, viewGroup, false); //Instantiate fragment view
 
-        View view = layoutInflater.inflate(R.layout.fragment_my_quotes, viewGroup, false);
-
-
-
+        //Assign View variables to associated resource IDs
         mMyQuotesRecyclerView = (RecyclerView) view.findViewById(R.id.my_quotes_recycler_view);
         mNoMyQuotesTextView = (TextView) view.findViewById(R.id.no_my_quotes_text);
 
-
-
+        //Configure View variables
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setReverseLayout(true);
         mLinearLayoutManager.setStackFromEnd(true);
         mMyQuotesRecyclerView.setLayoutManager(mLinearLayoutManager);
 
+        mMyQuotesAdapter = new MyQuotesAdapter(MyQuotesManager.get(getActivity()).getMyQuotes()); //Obtain the SQLiteDatabase of My Quotes and link it to the Adapter
+        mMyQuotesRecyclerView.setAdapter(mMyQuotesAdapter); //Link to the RecyclerView to the Adapter
 
 
-
-
-
-
-        mMyQuotesAdapter = new MyQuotesAdapter(MyQuotesManager.get(getActivity()).getMyQuotes());
-        mMyQuotesRecyclerView.setAdapter(mMyQuotesAdapter);
-
-
-
-
+        //Display the message indicating that there is no Quote objects IF the size of the SQLiteDatabase of My Quotes is zero
         if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
             mNoMyQuotesTextView.setVisibility(View.VISIBLE);
             mMyQuotesRecyclerView.setVisibility(View.GONE);
@@ -146,12 +119,7 @@ public class MyQuotesFragment extends Fragment{
             mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
         }
 
-
-
-        getActivity().setTitle("My Quotes");
-
-
-
+        getActivity().setTitle("My Quotes"); //Set title for the fragment
 
         return view;
     }
@@ -159,82 +127,68 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-
-
-
-
+    //RecyclerView Adapter
     private class MyQuotesAdapter extends RecyclerView.Adapter<MyQuoteViewHolder> {
 
+        private List<Quote> mMyQuotesList; //
 
-        private List<Quote> mMyQuotesList;
 
-
+        //Constructor
         public MyQuotesAdapter(List<Quote> quotesList){
-            mMyQuotesList = quotesList;
-
+            mMyQuotesList = quotesList; //Assign the List instance variable to the same object referred to by the local variable
         }
 
 
+        //Set any new Lists to the Adapter
         public void setMyQuotesList(List<Quote> quotesList){
             mMyQuotesList = quotesList;
         }
 
 
-
+        //Override getItemCount() method
         @Override
         public int getItemCount(){
-            return mMyQuotesList.size();
-
+            return mMyQuotesList.size(); //Size of the List
         }
 
 
+        //Override onCreateViewHolder(..) method
         @Override
         public MyQuoteViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
 
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity()); //Obtain LayoutInflater
+            View view = layoutInflater.inflate(R.layout.list_item_my_quote, viewGroup, false); //Obtain layout of the ViewHolder
+            mMyQuoteViewHolder = new MyQuoteViewHolder(view); //Instantiate ViewHolder based on the layout
 
-            View view = layoutInflater.inflate(R.layout.list_item_my_quote, viewGroup, false);
-
-            mMyQuoteViewHolder = new MyQuoteViewHolder(view);
-
-            return mMyQuoteViewHolder;
+            return mMyQuoteViewHolder; //Return the ViewHolder
         }
 
 
+        //Override onBindViewHolder(..) method
         @Override
         public void onBindViewHolder(MyQuoteViewHolder myQuoteViewHolder, int position){
 
-            Quote myQuote = mMyQuotesList.get(position);
+            Quote myQuote = mMyQuotesList.get(position); //Quote in the List of My Quote objects
 
+            String ID = myQuote.getId(); //ID of the Quote
+            String author = myQuote.getAuthor(); //Author of the Quote
+            String quote = myQuote.getQuote(); //Quote of the Quote
 
-            String ID = myQuote.getId();
-            String author = myQuote.getAuthor();
-            String quote = myQuote.getQuote();
-
-
-            myQuoteViewHolder.bindToQuote(myQuote, position);
-
-
-
+            myQuoteViewHolder.bindToQuote(myQuote, position); //Bind the Quote and position of the Quote to the ViewHolder
         }
-
     }
-
-
-
-
-
-
 
 
 
     boolean mConfirmDelete = false;
 
 
+
+
+    //RecyclerView ViewHolder
     private class MyQuoteViewHolder extends RecyclerView.ViewHolder{
 
-
+        //List item View variables
         TextView mAuthorTextView;
         CheckBox mFavoriteIcon;
         Button mShareIcon;
@@ -440,10 +394,6 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-
-
-
         private String getFavoriteQuoteShareString() {
             String favoriteQuoteQuoteString = "\"" + mMyQuote.getQuote() + "\"";
 
@@ -483,20 +433,7 @@ public class MyQuotesFragment extends Fragment{
         }
 
 
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
 
 
 
@@ -613,15 +550,6 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-
-
-
-
-
-
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
 
@@ -685,12 +613,6 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-
-
-
-
-
         if (requestCode == REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT){
             boolean shouldRemoveAllMyQuotes = intent.getBooleanExtra(RemoveAllMyQuotesConfirmationDialogFragment.EXTRA_SHOULD_REMOVE_ALL_MY_QUOTES, false);
 
@@ -698,11 +620,6 @@ public class MyQuotesFragment extends Fragment{
                 removeAllMyQuotes();
             }
         }
-
-
-
-
-
 
 
 
@@ -728,17 +645,6 @@ public class MyQuotesFragment extends Fragment{
             mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
             mMyQuotesAdapter.notifyDataSetChanged();
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -790,10 +696,6 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-
-
-
     private void removeAllMyQuotes() {
 
         List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes();
@@ -829,11 +731,6 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
-
-
-
-
     @Override
     public void onStart(){
         super.onStart();
@@ -847,14 +744,6 @@ public class MyQuotesFragment extends Fragment{
         super.onResume();
         Log.i(TAG, "onResume() called");
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -889,4 +778,5 @@ public class MyQuotesFragment extends Fragment{
 
         Log.i(TAG, "onDestroy() called");
     }
+
 }
