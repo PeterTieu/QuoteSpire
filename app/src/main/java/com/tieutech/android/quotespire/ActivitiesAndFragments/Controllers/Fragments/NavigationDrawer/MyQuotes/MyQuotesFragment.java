@@ -190,44 +190,41 @@ public class MyQuotesFragment extends Fragment{
 
         //List item View variables
         TextView mAuthorTextView;
+        TextView mQuoteTextView;
         CheckBox mFavoriteIcon;
         Button mShareIcon;
         Button mEditIcon;
         Button mDeleteIcon;
 
-        TextView mQuoteTextView;
+        Quote mMyQuote; //My Quote
+        int mPosition; //Position of the Quote in the RecyclerView view
 
 
-        Quote mMyQuote;
-        int mPosition;
-
-
-
-
+        //Constructor
         public MyQuoteViewHolder(View view){
             super(view);
 
-
+            //Assign View variables to the associated resource IDs
             mAuthorTextView = (TextView) view.findViewById(R.id.my_quote_author_name);
+            mQuoteTextView = (TextView) view.findViewById(R.id.my_quote_quote);
             mFavoriteIcon = (CheckBox) view.findViewById(R.id.my_quote_favorite_icon);
             mShareIcon = (Button) view.findViewById(R.id.my_quote_share_icon);
-            mQuoteTextView = (TextView) view.findViewById(R.id.my_quote_quote);
             mEditIcon = (Button) view.findViewById(R.id.my_quote_edit_icon);
             mDeleteIcon = (Button) view.findViewById(R.id.my_quote_delete_icon);
-
-
-
-
         }
 
 
+        //Bind method - binds the ViewHolder (i.e. list item) to the data (to be displayed)
         public void bindToQuote(Quote myQuote, int position){
 
+            //Assign instance variables to objects pointed to by the parameters
             mMyQuote = myQuote;
             mPosition = position;
 
 
             //============ mAuthorTextView ===========================
+
+            //Display the Quote Author based on whether or not it exists
             if (mMyQuote.getAuthor().length() == 0){
                 mAuthorTextView.setText("* No Author *");
                 mAuthorTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
@@ -239,94 +236,89 @@ public class MyQuotesFragment extends Fragment{
 
 
 
+            //============ mQuoteTextView ===========================
+
+            //Display the Quote text based on whether or not it exists
+            if (mMyQuote.getQuote().length() == 0){
+                mQuoteTextView.setText("* No Quote Text *");
+                mQuoteTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
+            }
+            else{
+                mQuoteTextView.setText("\"" + myQuote.getQuote() + "\"");
+                mQuoteTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            }
 
 
 
             //============ mFavoriteIcon ===========================
 
+            //Display the relevant 'on'/'off' Favorite drawable based on whether the Quote exists in the SQLiteDatabase of My Quotes
+            //NOTE: mMyQuote could throw NullPointerException if it does not exist
+            //NOTE: Since this fragment displays only Quotes in the My Quotes database, then all Favorite drawables are already going to be 'on' by default
             try {
-                //If the Quote is in the FavoriteQuotes SQLite database, then display the favorite icon to 'active'
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mMyQuote.getId()) != null) {
-
                     mFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_on);
-
                 }
                 if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mMyQuote.getId()) == null) {
-
                     mFavoriteIcon.setButtonDrawable(R.drawable.ic_imageview_favorite_off);
-
                 }
-
-
             }
+            //If mMyQuote does NOT exist. IOW, there are no Quote objects in the SQLiteDatabase of Quote objects
             catch (NullPointerException npe){
-
                 mAuthorTextView.setVisibility(View.GONE);
                 mFavoriteIcon.setVisibility(View.GONE);
                 mShareIcon.setVisibility(View.GONE);
                 mQuoteTextView.setVisibility(View.GONE);
-
-
                 mNoMyQuotesTextView.setVisibility(View.VISIBLE);
-
             }
 
 
-
-
-
+            //Set listener for Favorite Icon
             mFavoriteIcon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
-
+                    //Set Favorite Icon drawable based on the 'check' state of the CheckBox
                     mFavoriteIcon.setButtonDrawable(isChecked ? R.drawable.ic_imageview_favorite_on: R.drawable.ic_imageview_favorite_off);
 
 
+                    //If the Favorite Icon is 'checked'
                     if (isChecked == true){
-
+                        //If the Quote is NOT in the SQLiteDatabase of My Quote objects
                         if (FavoriteQuotesManager.get(getActivity()).getFavoriteQuote(mMyQuote.getId()) == null){
-                            FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mMyQuote);
-                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mMyQuote);
+                            FavoriteQuotesManager.get(getActivity()).addFavoriteQuote(mMyQuote); //Add the Quote to the My Quotes database
+                            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mMyQuote); //Update the My Quotes database
                         }
                         else{
                             //Do nothing
                         }
 
                     }
-
+                    //If the Favorite Icon is 'unchecked'
                     if (isChecked == false){
-                        FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mMyQuote);
-                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mMyQuote);
-
+                        FavoriteQuotesManager.get(getActivity()).deleteFavoriteQuote(mMyQuote); //Remove the Qutoe from the My Quotes database
+                        FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(mMyQuote); //Update the My Quotes database
                     }
                 }
             });
 
 
 
-
-
             //============ mShareIcon ===========================
 
+            //Set listener for Share Icon
             mShareIcon.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view){
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-
-                    shareIntent.setType("text/plain");
-
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Favorite Quote");
-
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, getFavoriteQuoteShareString());
-
-                    shareIntent = Intent.createChooser(shareIntent, "Share Quote via");
-
-                    startActivity(shareIntent);
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND); //Create implicit intent with SEND action
+                    shareIntent.setType("text/plain"); //Set intent type to "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Favorite Quote"); //Add Extra: subject of the intent
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, getFavoriteQuoteShareString()); //Add Extra: text of the intent
+                    shareIntent = Intent.createChooser(shareIntent, "Share Quote via"); //Create chooser and title
+                    startActivity(shareIntent); //Start implicit intent to share
                 }
-
             });
 
 
@@ -365,23 +357,6 @@ public class MyQuotesFragment extends Fragment{
                 }
 
             });
-
-
-
-
-
-
-
-            //============ mQuoteTextView ===========================
-            if (mMyQuote.getQuote().length() == 0){
-                mQuoteTextView.setText("* No Quote Text *");
-                mQuoteTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.orange));
-            }
-            else{
-                mQuoteTextView.setText("\"" + myQuote.getQuote() + "\"");
-                mQuoteTextView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-            }
-
 
 
 
