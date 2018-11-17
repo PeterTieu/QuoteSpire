@@ -327,14 +327,12 @@ public class MyQuotesFragment extends Fragment{
 
             //============ mEditIcon ===========================
 
+            //Set listener for Edit Icon
             mEditIcon.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view){
-
-
-                    editMyQuoteDialogFragment(mMyQuote.getAuthor(), mMyQuote.getQuote(), mMyQuote.getId(), mPosition);
-
+                    editMyQuoteDialogFragment(mMyQuote.getAuthor(), mMyQuote.getQuote(), mMyQuote.getId(), mPosition); //Open DialogFragment to edit the My Quote
                 }
 
             });
@@ -345,71 +343,58 @@ public class MyQuotesFragment extends Fragment{
 
 
             //============ mDeleteIcon ===========================
-            mDeleteIcon.setOnClickListener(new View.OnClickListener(){
 
+            //Set listener for Delete Icon
+            mDeleteIcon.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
-
-
                     deleteMyQuoteConfirmationDialogFragment(mMyQuote.getAuthor(), mMyQuote.getQuote(), mPosition); //Open DialogFragment to confirm Quote deletion
-
-
                 }
-
             });
 
-
-
-
         }
 
 
 
 
-
-
-
+        //Helper method - obtain Share string of the My Quote
         private String getFavoriteQuoteShareString() {
-            String favoriteQuoteQuoteString = "\"" + mMyQuote.getQuote() + "\"";
 
-            String quoteOfTheDayQuoteAuthorString = " - " + mMyQuote.getAuthor();
+            String favoriteQuoteQuoteString = "\"" + mMyQuote.getQuote() + "\""; //Quote Text
+            String quoteOfTheDayQuoteAuthorString = " - " + mMyQuote.getAuthor(); //Quote Author
 
-            return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString;
+            return favoriteQuoteQuoteString + quoteOfTheDayQuoteAuthorString; //Overral String to be shared
         }
 
 
 
 
-
-
+        //Helper method - open DialogFragment to edit My Quote
         private void editMyQuoteDialogFragment(String author, String quote, String ID, int position){
-            FragmentManager fragmentManager = getFragmentManager();
 
-            EditMyQuoteDialogFragment editMyQuoteDialogFragment = EditMyQuoteDialogFragment.newInstance(author, quote, ID);
+            FragmentManager fragmentManager = getFragmentManager(); //Create FragmentManager object
 
-            editMyQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT);
+            EditMyQuoteDialogFragment editMyQuoteDialogFragment = EditMyQuoteDialogFragment.newInstance(author, quote, ID); //Create Instance to open up DialogFragment
+            editMyQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT); //Set the DialogFragment as the target fragment
 
-            editMyQuoteDialogFragment.show(fragmentManager, IDENTIFIER_EDIT_MY_QUOTE_DIALOG_FRAGMENT);
+            editMyQuoteDialogFragment.show(fragmentManager, IDENTIFIER_EDIT_MY_QUOTE_DIALOG_FRAGMENT); //Show the DialogFragment
         }
-
 
 
 
 
         //Helper method - open DialogFramgent to confirm Quote deletion
         private void deleteMyQuoteConfirmationDialogFragment(String author, String quote, int position){
-            FragmentManager fragmentManager = getFragmentManager();
 
-            RemoveMyQuoteConfirmationDialogFragment removeMyQuoteConfirmationDialogFragment = RemoveMyQuoteConfirmationDialogFragment.newInstance(author, quote, position);
+            FragmentManager fragmentManager = getFragmentManager(); //Create FragmentManager object
 
-            removeMyQuoteConfirmationDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT);
+            RemoveMyQuoteConfirmationDialogFragment removeMyQuoteConfirmationDialogFragment = RemoveMyQuoteConfirmationDialogFragment.newInstance(author, quote, position); //Create instance to open up DialogFragment
+            removeMyQuoteConfirmationDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT); //Set the DialogFragment as the target fragment
 
-            removeMyQuoteConfirmationDialogFragment.show(fragmentManager, IDENTIFIER_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT);
+            removeMyQuoteConfirmationDialogFragment.show(fragmentManager, IDENTIFIER_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT); //Show the DialogFragment
         }
 
-
     }
-
 
 
 
@@ -419,31 +404,25 @@ public class MyQuotesFragment extends Fragment{
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
         super.onCreateOptionsMenu(menu, menuInflater);
 
-        //Log lifecycle callback
-        Log.i(TAG, "onCreateOptionsMenu(..) called");
+        Log.i(TAG, "onCreateOptionsMenu(..) called"); //Log lifecycle callback
 
+        menuInflater.inflate(R.menu.fragment_my_quotes, menu); //Inflate the options menu
 
-        menuInflater.inflate(R.menu.fragment_my_quotes, menu);
-
-
-        MenuItem addNewQuoteItem = menu.findItem(R.id.menu_item_add_new_quote);
-
-//        refreshItem.setEnabled(true); //Enable the "Refresh" menu item button
+        MenuItem addNewQuoteItem = menu.findItem(R.id.menu_item_add_new_quote); //Refer to the "Add New Quote" button
         addNewQuoteItem.getIcon().setAlpha(255); //Set the "Refresh" menu item button to 'full color' (i.e. white)
 
 
-        MenuItem removeAllMyQuotes = menu.findItem(R.id.menu_item_remove_all_my_quotes);
+        MenuItem removeAllMyQuotes = menu.findItem(R.id.menu_item_remove_all_my_quotes); //Refer to the "Remove All Quotes" button
 
 
-
+        //If there are NO Quote objects in the My Quotes SQLiteDatabase
         if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
-            removeAllMyQuotes.setVisible(false);
+            removeAllMyQuotes.setVisible(false); //Make the "Remove All Quotes" button invisible
         }
+        //If there ARE Quote objects in the My Quotes SQLiteDatabase
         else{
-            removeAllMyQuotes.setVisible(true);
+            removeAllMyQuotes.setVisible(true); //Show the "Remove All Quotes" button
         }
-
-
     }
 
 
@@ -453,30 +432,18 @@ public class MyQuotesFragment extends Fragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem){
 
-
         Log.i(TAG, "onOptionsItemsSelected(..) called"); //Log lifecycle callback
 
         //Check through all menuItems
         switch(menuItem.getItemId()){
 
-            //Check the "New Pix" menu item
             case (R.id.menu_item_add_new_quote):
-
-
-
-                addMyQuoteDialogFragment();
-
+                addMyQuoteDialogFragment(); //Show the DialogFragment to create a new My Quote
                 return true;
-
 
             case (R.id.menu_item_remove_all_my_quotes):
-
-
-                removeAllMyQuotesConfirmationDialogFragment();
-//                removeAllMyQuotes();
-
+                removeAllMyQuotesConfirmationDialogFragment(); //Show the Confirmation AlertDialog to remove all Qutoes from the My Quotes SQLiteDatabase
                 return true;
-
 
             default:
                 return super.onOptionsItemSelected(menuItem);
@@ -486,166 +453,142 @@ public class MyQuotesFragment extends Fragment{
 
 
 
-
+    //Helper method - show the DialogFragment to create a new My Quote
     private void addMyQuoteDialogFragment() {
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager(); //Create FragmentManager object
 
-        AddNewMyQuoteDialogFragment addNewMyQuoteDialogFragment = AddNewMyQuoteDialogFragment.newInstance();
+        AddNewMyQuoteDialogFragment addNewMyQuoteDialogFragment = AddNewMyQuoteDialogFragment.newInstance(); //Create instance to open up DialogFragment
+        addNewMyQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT); //Set the DialogFragment as the target fragment
 
-        addNewMyQuoteDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT);
-
-
-        addNewMyQuoteDialogFragment.show(fragmentManager, IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT);
-
-
+        addNewMyQuoteDialogFragment.show(fragmentManager, IDENTIFIER_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT); //Show the DialogFragment
     }
 
 
 
 
-
+    //Helper method - show the Confirmation AlertDialog to remove all Qutoes from the My Quotes SQLiteDatabase
     public void removeAllMyQuotesConfirmationDialogFragment(){
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager(); //Create FragmentManager object
 
-        int myQuotesListSize = MyQuotesManager.get(getActivity()).getMyQuotes().size();
+        int myQuotesListSize = MyQuotesManager.get(getActivity()).getMyQuotes().size(); //Obtain number of Quotes in the database
 
-        RemoveAllMyQuotesConfirmationDialogFragment removeAllMyQuotesConfirmationDialogFragment = RemoveAllMyQuotesConfirmationDialogFragment.newInstance(myQuotesListSize);
+        RemoveAllMyQuotesConfirmationDialogFragment removeAllMyQuotesConfirmationDialogFragment = RemoveAllMyQuotesConfirmationDialogFragment.newInstance(myQuotesListSize); //Create instance to open up DialogFragment
+        removeAllMyQuotesConfirmationDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT); //Set the DialogFragment as the target fragment
 
-        removeAllMyQuotesConfirmationDialogFragment.setTargetFragment(MyQuotesFragment.this, REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT);
-
-        removeAllMyQuotesConfirmationDialogFragment.show(fragmentManager, IDENTIFIER_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT);
+        removeAllMyQuotesConfirmationDialogFragment.show(fragmentManager, IDENTIFIER_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT); //Show the DialogFragment
     }
 
 
 
 
-
-
-
-
+    //Override onActivityResult(..) - called by sendResult(..) method (inherited from DialogFragment) from the associated DialogFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
 
         Log.i(TAG, "onActivityResult(..) called"); //Log in Logcat
 
 
+        //Exit if the result code is NOT "RESULT_OK"
         if (resultCode != Activity.RESULT_OK){
             return;
         }
 
 
-
-
+        //If a result is returned from the "Add New My Quote" DialogFragment (i.e. a new My Quote is created by the user)
         if (requestCode == REQUEST_CODE_ADD_NEW_MY_QUOTE_DIALOG_FRAGMENT){
 
-            String ID = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_ID);
-            String author = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_AUTHOR);
-            String quote = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_QUOTE);
+            String ID = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_ID); //Obtain ID for the new My Quote
+            String author = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_AUTHOR); //Obtain Author for the new My Quote
+            String quote = intent.getStringExtra(AddNewMyQuoteDialogFragment.EXTRA_QUOTE); //Obtain Quote for the new My Quote
 
+            //Log to Logcat
             Log.i(TAG, "onActivityResult(..) ID: " + ID);
             Log.i(TAG, "onActivityResult(..) AUTHOR: " + author);
             Log.i(TAG, "onActivityResult(..) QUOTE: " + quote);
 
+            Quote myQuote = new Quote(ID); //Instatiate a Quote based on the Quote ID
+            myQuote.setAuthor(author); //Set Author to the Quote
+            myQuote.setQuote(quote); //Set Quote to the Quote
 
-            Quote myQuote = new Quote(ID);
-            myQuote.setAuthor(author);
-            myQuote.setQuote(quote);
+            MyQuotesManager.get(getActivity()).addMyQuote(myQuote); //Add the new My Quote to the database
 
-
-
-            MyQuotesManager.get(getActivity()).addMyQuote(myQuote);
-
-
-
-            mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
-            mMyQuotesAdapter.notifyDataSetChanged();
+            mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes()); //Set the Adapter to the updated List of My Quotes
+            mMyQuotesAdapter.notifyDataSetChanged(); //Call the Adapter to create a new set of RecyclerView ViewHolders to be displayed
 
 
+            Toast toast = Toast.makeText(getContext(), "Added new Quote", Toast.LENGTH_LONG); //Create a toast to indicate a new My Quote is created
+            toast.setGravity(Gravity.BOTTOM, 0, 0); //Set position of the Toast to the bottom
+            toast.show(); //Show the Toast
 
 
-            Toast toast = Toast.makeText(getContext(), "Added new Quote", Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.BOTTOM, 0, 0);
-            toast.show();
-
-
-
-
+            //If there are NO Quotes in the database, remove the RecyclerView and show message prompt
             if (MyQuotesManager.get(getActivity()).getMyQuotes().size() == 0){
                 mNoMyQuotesTextView.setVisibility(View.VISIBLE);
                 mMyQuotesRecyclerView.setVisibility(View.GONE);
             }
+            //If there IS/ARE Quote(s) in the database, show the RecyclerView and remove the message prompt
             else{
                 mNoMyQuotesTextView.setVisibility(View.GONE);
                 mMyQuotesRecyclerView.setVisibility(View.VISIBLE);
             }
 
-
-            getActivity().invalidateOptionsMenu();
-
+            getActivity().invalidateOptionsMenu(); //Update the options menu
         }
 
 
-
+        //If a result is returned from the "Remove All My Quotes" DialogFragment
         if (requestCode == REQUEST_CODE_REMOVE_ALL_MY_QUOTES_CONFIRMATION_DIALOG_FRAGMENT){
-            boolean shouldRemoveAllMyQuotes = intent.getBooleanExtra(RemoveAllMyQuotesConfirmationDialogFragment.EXTRA_SHOULD_REMOVE_ALL_MY_QUOTES, false);
 
+            boolean shouldRemoveAllMyQuotes = intent.getBooleanExtra(RemoveAllMyQuotesConfirmationDialogFragment.EXTRA_SHOULD_REMOVE_ALL_MY_QUOTES, false); //Obtain result
+
+            //If the result is 'true', remove all Quotes
             if (shouldRemoveAllMyQuotes){
-                removeAllMyQuotes();
+                removeAllMyQuotes(); //Remove all Quotes from the My Quotes SQLiteDatabase
             }
         }
 
 
-
-
-
-
+        //If a result is returned from the "Edit My Quote" DialogFragment
         if (requestCode == REQUEST_CODE_EDIT_MY_QUOTE_DIALOG_FRAGMENT) {
 
-            String author = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_AUTHOR);
-            String quote = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_QUOTE);
-            String ID = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_ID);
+            String author = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_AUTHOR); //Obtain Author for the new My Quote
+            String quote = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_QUOTE); //Obtain Author for the new My Quote
+            String ID = intent.getStringExtra(EditMyQuoteDialogFragment.EXTRA_ID); //Obtain ID for the new My Quote
 
 
-            Quote editedQuote = new Quote(ID);
-            editedQuote.setAuthor(author);
-            editedQuote.setQuote(quote);
+            Quote editedQuote = new Quote(ID); //Instatiate a Quote based on the Quote ID
+            editedQuote.setAuthor(author); //Set Author to the Quote
+            editedQuote.setQuote(quote); //Set Quote to the Quote
 
 
-            MyQuotesManager.get(getActivity()).updateMyQuotesDatabase(editedQuote);
-            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(editedQuote);
+            MyQuotesManager.get(getActivity()).updateMyQuotesDatabase(editedQuote); //Update the My Quotes database as per the updated updated Quote
+            FavoriteQuotesManager.get(getActivity()).updateFavoriteQuotesDatabase(editedQuote); //Update the Favorite Quotes database as per the updated updated Quote
 
-
-            mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes());
-            mMyQuotesAdapter.notifyDataSetChanged();
+            mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes()); //Set the Adapter to the updated List of My Quotes
+            mMyQuotesAdapter.notifyDataSetChanged(); //Call the Adapter to create a new set of RecyclerView ViewHolders to be displayed
         }
 
 
 
 
-
-
-
+        //If a result is returned from the confirmation dialog to "Remove All My Quotes"
         if (requestCode == REQUEST_CODE_DELETE_MY_QUOTE_CONFIRMATION_DIALOG_FRAGMENT){
 
-            boolean confirmDelete = intent.getBooleanExtra(RemoveMyQuoteConfirmationDialogFragment.EXTRA_SHOULD_DELETE_MY_QUOTE_ID, false);
-            int position = intent.getIntExtra(RemoveMyQuoteConfirmationDialogFragment.EXTRA_POSITION_ID, 0);
+            boolean confirmDelete = intent.getBooleanExtra(RemoveMyQuoteConfirmationDialogFragment.EXTRA_SHOULD_DELETE_MY_QUOTE_ID, false); //Obtain boolean result
+            int position = intent.getIntExtra(RemoveMyQuoteConfirmationDialogFragment.EXTRA_POSITION_ID, 0); //Obtain the position of the Quote
 
-
-
-
+            //If the user confirmed the removal of the Quote from the My Quote database
             if (confirmDelete){
 
                 //=========== Delete the Quote =====================================================
                 List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes(); //Get full list of Quotes
                 MyQuotesManager.get(getActivity()).deleteMyQuote(myQuotesList.get(position)); //Delete the Quote based on its position in the list
 
-
                 //=========== Update RecyclerView Adapter =====================================================
                 mMyQuotesAdapter.setMyQuotesList(MyQuotesManager.get(getActivity()).getMyQuotes()); //
-                mMyQuotesAdapter.notifyDataSetChanged();
-
+                mMyQuotesAdapter.notifyDataSetChanged(); //Call the Adapter to create a new set of RecyclerView ViewHolders to be displayed
 
                 //=========== Configure View =====================================================
                 //If NO Quotes are present, show the Text saying "There are no Quotes..."
@@ -654,104 +597,93 @@ public class MyQuotesFragment extends Fragment{
                     mMyQuotesRecyclerView.setVisibility(View.GONE);
                 }
 
-
                 ///=========== Show Toast =====================================================
                 Toast quoteDeleteToast = Toast.makeText(getActivity(), "Quote Removed", Toast.LENGTH_LONG);
                 quoteDeleteToast.show();
             }
-
         }
-
-
-
-
     }
 
 
 
 
 
+    //Helper method - remove all Quotes from the My Quotes SQLiteDatabase
     private void removeAllMyQuotes() {
 
-        List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes();
+        List<Quote> myQuotesList = MyQuotesManager.get(getActivity()).getMyQuotes(); //Obtain complete List of Quote objects from the SQLiteDatabase of My Quotes
 
+        //Scan through the entire list
         for (Quote myQuote : myQuotesList){
-            MyQuotesManager.get(getActivity()).deleteMyQuote(myQuote);
+            MyQuotesManager.get(getActivity()).deleteMyQuote(myQuote); //Remove the Quote
         }
 
+        mMyQuotesAdapter.setMyQuotesList(myQuotesList); //Update the Adapter
+        mMyQuotesAdapter.notifyDataSetChanged(); //Call the Adapter to create a new set of RecyclerView ViewHolders to be displayed
 
-        mMyQuotesAdapter.setMyQuotesList(myQuotesList);
-        mMyQuotesAdapter.notifyDataSetChanged();
+        mNoMyQuotesTextView.setVisibility(View.VISIBLE); //Show prompt indicating that there are no My Quotes
+        mMyQuotesRecyclerView.setVisibility(View.GONE); //Remove the RecyclerView
 
+        getActivity().invalidateOptionsMenu(); //Update the options menu
 
-        mNoMyQuotesTextView.setVisibility(View.VISIBLE);
-        mMyQuotesRecyclerView.setVisibility(View.GONE);
+        Snackbar snackbar = Snackbar.make(mMyQuotesRecyclerView, "All Quotes removed from My Quotes", Snackbar.LENGTH_LONG); //Show Snackbar indicating there are no My Quotes
 
-
-        getActivity().invalidateOptionsMenu();
-
-
-        Snackbar snackbar = Snackbar.make(mMyQuotesRecyclerView, "All Quotes removed from My Quotes", Snackbar.LENGTH_LONG);
-
+        //Configure Snackbar View
         View snackBarView = snackbar.getView();
         snackBarView.setMinimumHeight(150);
         snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.teal));
 
-        snackbar.show();
-
-
+        snackbar.show(); //Show the Snackbar
     }
 
 
 
 
-
+    //Override onStart() fragment lifecycle callback method
     @Override
     public void onStart(){
         super.onStart();
-
-        Log.i(TAG, "onStart() called");
+        Log.i(TAG, "onStart() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onResume() fragment lifecycle callback method
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(TAG, "onResume() called");
+        Log.i(TAG, "onResume() called"); //Log to Logcat
     }
 
 
 
 
-
-
-
-
-
+    //Override onPause() fragment lifecycle callback method
     @Override
     public void onPause(){
         super.onPause();
-
-        Log.i(TAG, "onPause() called");
-
-
+        Log.i(TAG, "onPause() called"); //Log to Logcat
     }
 
 
+
+
+    //Override onStop() fragment lifecycle callback method
     @Override
     public void onStop(){
         super.onStop();
-
-        Log.i(TAG, "onStop() called");
+        Log.i(TAG, "onStop() called"); //Log to Logcat
     }
 
 
 
+
+    //Override onDestroy() fragment lifecycle callback method
     @Override
     public void onDestroy(){
         super.onDestroy();
-
-        Log.i(TAG, "onDestroy() called");
+        Log.i(TAG, "onDestroy() called"); //Log to Logcat
     }
 
 }
